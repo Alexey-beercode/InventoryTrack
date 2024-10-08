@@ -33,4 +33,15 @@ public class UserRepository:BaseRepository<User>,IUserRepository
             .Where(userRole => userRole.UserId == user.Id && !userRole.IsDeleted)
             .ExecuteUpdateAsync(s => s.SetProperty(userRole => userRole.IsDeleted, true), cancellationToken);
     }
+
+    public async Task<User> GetByNameAsync(string firstName, string lastName, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.FirstOrDefaultAsync(
+            user => !user.IsDeleted && user.FirstName == firstName && user.LastName == lastName, cancellationToken);
+    }
+
+    public async Task<IEnumerable<User>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.Where(user => !user.IsDeleted && user.CompanyId == companyId).ToListAsync(cancellationToken);
+    }
 }

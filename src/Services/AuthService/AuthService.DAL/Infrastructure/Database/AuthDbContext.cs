@@ -1,4 +1,5 @@
-﻿using AuthService.Domain.Enities;
+﻿using AuthService.DAL.Infrastructure.Database.Configuration;
+using AuthService.Domain.Enities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.DAL.Infrastructure.Database;
@@ -18,7 +19,9 @@ public class AuthDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
     }
 }
