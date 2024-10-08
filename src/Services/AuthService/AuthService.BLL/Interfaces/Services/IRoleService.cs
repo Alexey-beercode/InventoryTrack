@@ -9,4 +9,5 @@ public interface IRoleService
     Task SetRoleToUserAsync(UserRoleDTO userRoleDto, CancellationToken cancellationToken=default);
     Task RemoveRoleFromUserAsync(UserRoleDTO userRoleDto, CancellationToken cancellationToken=default);
     Task<IEnumerable<RoleDTO>> GetAllAsync(CancellationToken cancellationToken=default);
+    Task<RoleDTO> GetByIdAsync(Guid roleId, CancellationToken cancellationToken = default);
 }

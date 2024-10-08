@@ -9,5 +9,5 @@ public class CompanyResponseDTO
     public string Unp { get; set; } 
     public string LegalAddress { get; set; }
     public string PostalAddress { get; set; }
-    public UserResponseDTO ResponsiblePerson { get; set; }
+    public User.UserRepsonseDTO ResponsiblePerson { get; set; }
 }

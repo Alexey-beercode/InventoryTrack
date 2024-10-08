@@ -5,6 +5,5 @@ namespace AuthService.BLL.Interfaces.Services;
 
 public interface ITokenService
 {
-    string GenerateAccessToken(IEnumerable<Claim> claims);
-    List<Claim> CreateClaims(User user,List<Role> roles);
+    string GenerateAccessToken(User user, IEnumerable<Role> roles);
 }
