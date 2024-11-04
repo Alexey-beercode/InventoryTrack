@@ -2,6 +2,7 @@
 using AuthService.BLL.DTOs.Implementations.Requests.User;
 using AuthService.BLL.DTOs.Implementations.Responses.User;
 using AuthService.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
@@ -17,6 +18,7 @@ namespace AuthService.Controllers
             _userService = userService;
         }
 
+        [Authorize("Accountant")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserRepsonseDTO>>> GetAll()
@@ -49,6 +51,7 @@ namespace AuthService.Controllers
             return Ok(result);
         }
 
+        [Authorize("Accountant")]
         [HttpGet("by-company/{companyId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserRepsonseDTO>>> GetByCompanyId(Guid companyId)
@@ -57,6 +60,7 @@ namespace AuthService.Controllers
             return Ok(result);
         }
 
+        [Authorize("Accountant")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> RegisterUserToCompany([FromBody] RegisterUserToCompanyDTO registerUserToCompanyDto)

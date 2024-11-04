@@ -1,10 +1,12 @@
 ﻿using AuthService.BLL.DTOs.Implementations.Requests.Company;
 using AuthService.BLL.DTOs.Implementations.Responses.Company;
 using AuthService.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
 {
+    [Authorize("Accountant")]
     [ApiController]
     [Route("api/companies")]
     public class CompanyController : ControllerBase
@@ -24,6 +26,7 @@ namespace AuthService.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> Create([FromBody] CreateCompanyDTO companyDto)

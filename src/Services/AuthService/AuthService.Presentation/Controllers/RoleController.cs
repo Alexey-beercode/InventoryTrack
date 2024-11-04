@@ -1,10 +1,12 @@
 ﻿using AuthService.BLL.DTOs.Implementations.Requests.UserRole;
 using AuthService.BLL.DTOs.Implementations.Responses.Role;
 using AuthService.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers;
 
+[Authorize("Accountant")]
 [ApiController]
 [Route("api/roles")]
 public class RoleController : ControllerBase

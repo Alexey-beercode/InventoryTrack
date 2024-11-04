@@ -137,7 +137,10 @@ public static class WebApplicationBuilderExtension
                 .RequireAuthenticatedUser()
                 .Build();
 
-            options.AddPolicy("Admin", policy => { policy.RequireRole("Admin"); });
+            options.AddPolicy("Accountant", policy => { policy.RequireRole("Accountant"); });
+            options.AddPolicy("Warehouse Manager", policy => { policy.RequireRole("Warehouse Manager"); });
+            options.AddPolicy("Department Head", policy => { policy.RequireRole("Department Head"); });
+            
         });
     }
 }
