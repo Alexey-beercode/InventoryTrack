@@ -1,4 +1,5 @@
-﻿using AuthService.DAL.Infrastructure.Database.Configuration;
+﻿using AuthService.DAL.Extensions;
+using AuthService.DAL.Infrastructure.Database.Configuration;
 using AuthService.Domain.Enities;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,5 +24,6 @@ public class AuthDbContext : DbContext
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+        modelBuilder.SeedUsersRolesData();
     }
 }

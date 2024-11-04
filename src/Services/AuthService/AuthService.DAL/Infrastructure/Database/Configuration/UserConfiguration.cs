@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AuthService.DAL.Infrastructure.Database.Configuration;
-
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
@@ -13,8 +11,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.LastName).IsRequired().HasMaxLength(100);
         builder.Property(e => e.Login).IsRequired().HasMaxLength(100);
         builder.Property(e => e.PasswordHash).IsRequired();
+
+        // Позволяем CompanyId быть null
         builder.HasOne<Company>()
             .WithMany()
-            .HasForeignKey(e => e.CompanyId);
+            .HasForeignKey(e => e.CompanyId)
+            .IsRequired(false); // Убедитесь, что это поле не обязательно
     }
 }
