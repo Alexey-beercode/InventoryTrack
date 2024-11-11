@@ -1,4 +1,5 @@
 ﻿using AuthService.BLL.DTOs.Implementations.Requests.Company;
+using AuthService.BLL.DTOs.Implementations.Responses.Company;
 using AuthService.BLL.DTOs.Implementations.Responses.User;
 using AuthService.BLL.Exceptions;
 using AuthService.BLL.Interfaces.Services;
@@ -39,13 +40,13 @@ public class CompanyService:ICompanyService
             throw new AlreadyExistsException("Company");
         }
 
-        var responsibleUser = await _unitOfWork.Users.GetByIdAsync(companyDto.ResponsiblePersonId, cancellationToken);
+        var responsibleUser = await _unitOfWork.Users.GetByIdAsync(companyDto.ResponsibleUserId, cancellationToken);
         if (responsibleUser == null)
         {
-            throw new EntityNotFoundException("User", companyDto.ResponsiblePersonId);
+            throw new EntityNotFoundException("User", companyDto.ResponsibleUserId);
         }
         
-        var company = _mapper.Map<Company>(companyFromDb);
+        var company = _mapper.Map<Company>(companyDto);
         
         await _unitOfWork.Companies.CreateAsync(company, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -70,10 +71,10 @@ public class CompanyService:ICompanyService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<UserRepsonseDTO>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<CompanyResponseDTO>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var companies = await _unitOfWork.Companies.GetAllAsync(cancellationToken);
-        return companies.Select(company => _mapper.Map<UserRepsonseDTO>(company)).ToList();
+        return _mapper.Map<List<CompanyResponseDTO>>(companies);
     }
 
     public async Task DeleteAsync(Guid companyId, CancellationToken cancellationToken = default)
@@ -86,5 +87,17 @@ public class CompanyService:ICompanyService
         
         await _unitOfWork.Companies.DeleteAsync(company, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<CompanyResponseDTO> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var company = await _unitOfWork.Companies.GetByUserIdAsync(userId, cancellationToken);
+
+        if (company is null)
+        {
+            throw new EntityNotFoundException("Company", userId);
+        }
+
+        return _mapper.Map<CompanyResponseDTO>(company);
     }
 }

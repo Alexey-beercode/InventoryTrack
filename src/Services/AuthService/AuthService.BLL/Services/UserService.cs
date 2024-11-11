@@ -2,6 +2,7 @@
 using AuthService.BLL.DTOs.Implementations.Requests.User;
 using AuthService.BLL.DTOs.Implementations.Responses.User;
 using AuthService.BLL.Exceptions;
+using AuthService.BLL.Helpers;
 using AuthService.BLL.Interfaces.Services;
 using AuthService.DAL.Interfaces;
 using AuthService.Domain.Enities;
@@ -107,6 +108,7 @@ public class UserService:IUserService
         }
 
         var newUser = _mapper.Map<User>(registerUserToCompanyDto);
+        newUser.PasswordHash = PasswordHelper.HashPassword(registerUserToCompanyDto.Password);
         await _unitOfWork.Users.CreateAsync(newUser, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

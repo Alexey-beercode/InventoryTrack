@@ -1,7 +1,7 @@
 export interface CreateCompanyDTO {
-  companyName: string;
+  name: string;
   unp: number;
   legalAddress: string;
   postalAddress: string;
-  responsiblePersonId: string;
+  responsibleUserId: string;
 }

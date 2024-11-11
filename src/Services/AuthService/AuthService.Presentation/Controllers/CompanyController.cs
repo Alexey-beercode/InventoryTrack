@@ -58,5 +58,14 @@ namespace AuthService.Controllers
             await _companyService.DeleteAsync(id);
             return Ok();
         }
+
+        [HttpGet("by-user-id/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var company = await _companyService.GetByUserIdAsync(userId, cancellationToken);
+            return Ok(company);
+        }
+        
     }
 }

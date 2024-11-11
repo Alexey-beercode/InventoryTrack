@@ -19,10 +19,7 @@ public class RegisterUserToCompanyDTOValidator : AbstractValidator<RegisterUserT
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Пароль обязателен")
-            .MinimumLength(6).WithMessage("Минимальная длина пароля 6 символов")
-            .Matches("[A-Z]").WithMessage("Пароль должен содержать хотя бы одну заглавную букву")
-            .Matches("[a-z]").WithMessage("Пароль должен содержать хотя бы одну строчную букву")
-            .Matches("[0-9]").WithMessage("Пароль должен содержать хотя бы одну цифру");
+            .MinimumLength(6).WithMessage("Минимальная длина пароля 6 символов");
 
         RuleFor(x => x.CompanyId)
             .NotEmpty().WithMessage("ID компании обязателен");

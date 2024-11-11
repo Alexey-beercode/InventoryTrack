@@ -84,5 +84,14 @@ namespace AuthService.Controllers
             await _userService.DeleteAsync(id);
             return Ok();
         }
+
+        [HttpPost("user-to-company")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddUserToCompanyAsync(
+            [FromBody] RegisterUserToCompanyDTO registerUserToCompanyDto, CancellationToken cancellationToken = default)
+        {
+            await _userService.RegisterUserToCompany(registerUserToCompanyDto, cancellationToken);
+            return Ok();
+        }
     }
 }

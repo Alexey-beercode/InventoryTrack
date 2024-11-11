@@ -1,0 +1,69 @@
+<div class="users-container">
+  <div class="users-header">
+    <a class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>Назад
+    </a>
+    <h1>Работники</h1>
+  </div>
+
+  <div class="table-item">
+    <button (click)="showAddUserModal = true" class="btn">Добавить в компанию</button>
+  </div>
+
+  <div class="users-table">
+    <div class="table-header">
+      <div class="table-header-item">Имя</div>
+      <div class="table-header-item">Фамилия</div>
+      <div class="table-header-item">Логин</div>
+      <div class="table-header-item">Роль</div>
+    </div>
+
+    <div class="table-body">
+      <div *ngFor="let user of users" class="table-row">
+        <div class="table-item">{{ user.firstName }}</div>
+        <div class="table-item">{{ user.lastName }}</div>
+        <div class="table-item">{{ user.login }}</div>
+        <div class="table-item">
+          <select [(ngModel)]="user.selectedRoleId" class="role-select">
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для добавления работника -->
+  <div class="modal" *ngIf="showAddUserModal">
+    <div class="modal-content">
+      <h2>Добавление работника в компанию</h2>
+      <form (ngSubmit)="addUserToCompany()">
+        <div class="form-group">
+          <label>Имя</label>
+          <input [(ngModel)]="newUser.firstName" name="firstName" required placeholder="Имя" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Фамилия</label>
+          <input [(ngModel)]="newUser.lastName" name="lastName" required placeholder="Фамилия" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Логин</label>
+          <input [(ngModel)]="newUser.login" name="login" required placeholder="Логин" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input [(ngModel)]="newUser.password" name="password" type="password" required placeholder="Пароль" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Роль</label>
+          <select [(ngModel)]="newUser.roleId" name="roleId" required class="role-select">
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="save-button">Сохранить</button>
+          <button type="button" class="cancel-button" (click)="showAddUserModal = false">Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

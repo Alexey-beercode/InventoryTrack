@@ -22,13 +22,11 @@ export class CompanyService {
 
   create(companyDto: CreateCompanyDTO): Observable<void> {
     return this.http.post<void>(this.apiUrl, companyDto, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
   update(companyDto: UpdateCompanyDTO): Observable<void> {
     return this.http.put<void>(this.apiUrl, companyDto, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
@@ -38,5 +36,9 @@ export class CompanyService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getByUserId(userId: string | null): Observable<CompanyResponseDTO> {
+    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}/by-user-id/${userId}`);
   }
 }
