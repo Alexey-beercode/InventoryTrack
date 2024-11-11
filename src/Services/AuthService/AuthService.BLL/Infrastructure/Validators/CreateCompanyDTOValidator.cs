@@ -5,7 +5,7 @@ public class CreateCompanyDTOValidator : AbstractValidator<CreateCompanyDTO>
 {
     public CreateCompanyDTOValidator()
     {
-        RuleFor(x => x.CompanyName)
+        RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Название компании обязательно")
             .Length(2, 100).WithMessage("Длина названия компании должна быть от 2 до 100 символов");
 
@@ -21,7 +21,7 @@ public class CreateCompanyDTOValidator : AbstractValidator<CreateCompanyDTO>
             .NotEmpty().WithMessage("Почтовый адрес обязателен")
             .MaximumLength(200).WithMessage("Максимальная длина почтового адреса 200 символов");
 
-        RuleFor(x => x.ResponsiblePersonId)
+        RuleFor(x => x.ResponsibleUserId)
             .NotEmpty().WithMessage("ID ответственного лица обязателен");
     }
 }

@@ -1,0 +1,104 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <a class="logout-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Назад
+    </a>
+    <div class="profile-info">
+      <h1>{{ user?.firstName }} {{user?.lastName}}</h1>
+      <p *ngIf="companyByUser">Ваша компания : {{companyByUser?.name}}</p>
+      <p *ngIf="!companyByUser">Компания еще не была добавлена</p>
+    </div>
+    <button class="logout-button" *ngIf="!companyByUser" (click)="showCompanyModal()">
+      <i></i> Дабавить компанию
+    </button>
+    <button class="logout-button" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Выйти
+    </button>
+  </div>
+  <div *ngIf="companyByUser" class="profile-content">
+    <div class="profile-section">
+      <h2>Работники</h2>
+      <a (click)="getWorkers()" class="btn" >Работники</a>
+    </div>
+    <div class="profile-section">
+      <h2>Склады</h2>
+      <a  class="btn">Просмотр складов</a>
+    </div>
+    <div class="profile-section">
+      <h2>Списание мат. ценностей</h2>
+      <a  class="btn"></a>
+    </div>
+    <div class="profile-section">
+      <h2>Мат. ценности</h2>
+      <a class="btn">Добавление мат. ценностей</a>
+    </div>
+  </div>
+  <div class="modal" *ngIf="showCreateModal">
+    <div class="modal" *ngIf="showCreateModal">
+      <div class="modal-content">
+        <h2>Создание компании</h2>
+        <form #companyForm="ngForm" (ngSubmit)="createCompany(companyForm)">
+          <div class="form-group">
+            <label>Название компании</label>
+            <input
+              [(ngModel)]="newCompany.name"
+              name="companyName"
+              placeholder="Название компании"
+              required
+            />
+            <div *ngIf="companyForm.controls['companyName']?.invalid && (!companyForm.controls['companyName']?.untouched || submitted)" class="error">
+              Название компании обязательно.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>УНП</label>
+            <input
+              type="text"
+              [(ngModel)]="newCompany.unp"
+              name="unp"
+              placeholder="УНП"
+              required
+              minlength="9"
+              maxlength="9"
+            />
+            <div *ngIf="companyForm.controls['unp']?.invalid && (!companyForm.controls['unp']?.untouched || submitted)" class="error">
+              УНП должен состоять из 9 цифр.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Юридический адрес</label>
+            <textarea
+              [(ngModel)]="newCompany.legalAddress"
+              name="legalAddress"
+              placeholder="Юридический адрес"
+              required
+            ></textarea>
+            <div *ngIf="companyForm.controls['legalAddress']?.invalid && (!companyForm.controls['legalAddress']?.untouched || submitted)" class="error">
+              Юридический адрес обязателен.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Почтовый адрес</label>
+            <textarea
+              [(ngModel)]="newCompany.postalAddress"
+              name="postalAddress"
+              placeholder="Почтовый адрес"
+              required
+            ></textarea>
+            <div *ngIf="companyForm.controls['postalAddress']?.invalid && (!companyForm.controls['postalAddress']?.untouched || submitted)" class="error">
+              Почтовый адрес обязателен.
+            </div>
+          </div>
+<p class="error">{{errorMessage}}</p>
+          <div class="modal-buttons">
+            <button type="submit" class="btn-primary">Сохранить</button>
+            <button type="button" class="btn-primary" (click)="showCreateModal = false">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>

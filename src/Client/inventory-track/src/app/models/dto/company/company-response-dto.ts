@@ -2,7 +2,7 @@ import { UserResponseDTO } from '../user/user-response-dto';
 
 export interface CompanyResponseDTO {
   id: string;
-  companyName: string;
+  name: string;
   unp: string;
   legalAddress: string;
   postalAddress: string;

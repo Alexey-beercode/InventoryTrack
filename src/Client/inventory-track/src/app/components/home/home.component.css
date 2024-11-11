@@ -1,0 +1,208 @@
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --accent-color: #A9CFF3; /* Светлый синий для акцентов */
+  --text-color: #333; /* Цвет текста */
+  --background-color: #f0f4f8; /* Мягкий фон */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.profile-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-info h1 {
+  margin: 0;
+  color: var(--accent-color);
+}
+
+.profile-info p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.logout-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.profile-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.profile-section {
+  flex: 1 1 300px;
+  background-color: var(--accent-color);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.profile-section h2 {
+  margin-top: 0;
+  color: var(--primary-dark);
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+}
+/* Стили для модального окна */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease; /* Плавный переход при открытии/закрытии */
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow); /* Используйте переменную для тени */
+  max-width: 600px; /* Увеличиваем максимальную ширину модального окна */
+  width: 90%; /* Все еще делаем ширину адаптивной для мобильных устройств */
+  margin: 0 20px; /* Отступы для мобильных устройств */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px; /* Уменьшено с 10px до 8px */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px; /* Уменьшение размера шрифта */
+}
+
+.form-group textarea {
+  height: 80px; /* Задайте фиксированную высоту для текстовой области */
+  resize: none; /* Запретите изменение размера текстовой области пользователем */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+  gap: 10px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #4caf50;
+}
+
+.btn-secondary {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #bbb;
+}
+.error {
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .back-button {
+    margin-top: 20px;
+    height: 50px;
+    width: auto;
+  }
+
+  .logout-button {
+    margin-top: 20px;
+    height: 50px;
+    width: auto;
+  }
+  .modal-content {
+    width: 90%; /* Увеличиваем ширину модального окна на мобильных устройствах */
+  }
+}
+

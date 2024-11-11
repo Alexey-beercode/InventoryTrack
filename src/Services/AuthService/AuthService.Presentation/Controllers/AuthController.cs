@@ -1,6 +1,7 @@
 ﻿using AuthService.BLL.DTOs.Implementations.Requests.Auth;
 using AuthService.BLL.DTOs.Implementations.Responses.Auth;
 using AuthService.BLL.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
@@ -40,6 +41,13 @@ namespace AuthService.Controllers
             var result = await _authService.LoginAsync(loginDto);
             _logger.LogInformation("User with login {Login} logged in successfully", loginDto.Login);
             return Ok(result);
+        }
+        
+        [Authorize]
+        [HttpGet("token-status")]
+        public async Task<IActionResult> GetTokenStatusAsync()
+        {
+            return Ok("Token is valid");
         }
     }
 }

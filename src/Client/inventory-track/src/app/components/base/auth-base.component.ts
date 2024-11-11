@@ -23,10 +23,15 @@ export abstract class AuthBaseComponent implements OnDestroy {
   }
 
   private checkAuth(): void {
-    const isAuthorized = this.tokenService.isLoggedIn();
-    if (!isAuthorized) {
-      this.router.navigate(['/login']);
-    }
+    this.tokenService.checkTokenStatus()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (isValid) => {
+          if (!isValid) {
+            this.router.navigate(['/login']);
+          }
+        }
+      });
   }
 
   protected handleError(error: any): void {

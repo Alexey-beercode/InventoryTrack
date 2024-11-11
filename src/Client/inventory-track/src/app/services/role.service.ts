@@ -23,7 +23,7 @@ export class RoleService {
     return this.http.get<RoleDTO>(`${this.apiUrl}/${id}`);
   }
 
-  getRolesByUserId(userId: string): Observable<RoleDTO[]> {
+  getRolesByUserId(userId: string | null): Observable<RoleDTO[]> {
     return this.http.get<RoleDTO[]>(`${this.apiUrl}/by-user/${userId}`);
   }
 

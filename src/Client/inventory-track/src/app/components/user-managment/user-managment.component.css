@@ -1,0 +1,236 @@
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --accent-color: #A9CFF3; /* Светлый синий для акцентов */
+  --text-color: #333; /* Цвет текста */
+  --background-color: #f0f4f8; /* Мягкий фон */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+.users-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.users-table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  border-radius: var(--border-radius);
+  overflow: hidden; /* Закругление углов */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для глубины */
+}
+
+.table-header {
+  display: flex;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+.table-header-item {
+  flex: 1;
+  padding: 15px; /* Увеличенное пространство для заголовков */
+  font-weight: bold;
+  text-align: center; /* Центрирование текста */
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease; /* Плавный переход фона */
+}
+
+.table-row:hover {
+  background-color: rgba(0, 0, 0, 0.05); /* Подсветка строки при наведении */
+}
+
+.table-item {
+  flex: 1;
+  padding: 12px; /* Уменьшенное пространство для ячеек */
+  text-align: center; /* Центрирование текста */
+}
+
+.role-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  border: 1px solid #ccc;
+}
+
+.add-button {
+  padding: 6px 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-button, .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: black;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+}
+/* Стили для модального окна */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease; /* Плавный переход при открытии/закрытии */
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow); /* Используйте переменную для тени */
+  max-width: 600px; /* Увеличиваем максимальную ширину модального окна */
+  width: 90%; /* Все еще делаем ширину адаптивной для мобильных устройств */
+  margin: 0 20px; /* Отступы для мобильных устройств */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px; /* Уменьшено с 10px до 8px */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px; /* Уменьшение размера шрифта */
+}
+
+.form-group textarea {
+  height: 80px; /* Задайте фиксированную высоту для текстовой области */
+  resize: none; /* Запретите изменение размера текстовой области пользователем */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+  gap: 10px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #4caf50;
+}
+
+.btn-secondary {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

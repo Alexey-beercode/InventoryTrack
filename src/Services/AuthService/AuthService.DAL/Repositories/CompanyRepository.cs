@@ -30,4 +30,17 @@ public class CompanyRepository:BaseRepository<Company>,ICompanyRepository
             .Where(user => user.Id == company.ResponsibleUserId && !user.IsDeleted)
             .ExecuteUpdateAsync(s => s.SetProperty(user => user.IsDeleted, true), cancellationToken);
     }
+
+    public async Task<Company> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var company = await (from user in _dbContext.Users
+                join c in _dbSet
+                    on user.CompanyId equals c.Id
+                where user.Id == userId
+                select c)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return company;
+    }
+
 }

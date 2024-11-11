@@ -1,0 +1,61 @@
+<div class="login-wrapper">
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>Регистрация</h2>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+
+        <label for="firstName">Имя</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          placeholder="Введите ваше имя"
+        />
+        <div *ngIf="isFieldInvalid('firstName')" class="error-message">
+          Требуется имя
+        </div>
+
+        <label for="lastName">Фамилия</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          placeholder="Введите вашу фамилию"
+        />
+        <div *ngIf="isFieldInvalid('lastName')" class="error-message">
+          Требуется фамилия
+        </div>
+
+        <label for="username">Имя пользователя</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="login"
+        placeholder="Введите имя пользователя"
+        />
+        <div *ngIf="isFieldInvalid('login')" class="error-message">
+          Требуется имя пользователя
+        </div>
+
+        <label for="password">Пароль</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Введите пароль"
+        />
+        <div *ngIf="isFieldInvalid('password')" class="error-message">
+          Пароль должен содержать минимум 6 символов
+        </div>
+
+        <button type="submit" class="btn-submit">Зарегистрироваться</button>
+      </form>
+
+      <p class="login-link">
+        Уже есть аккаунт? <a [routerLink]="['/login']">Войти</a>
+      </p>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </div>
+  </div>
+</div>
