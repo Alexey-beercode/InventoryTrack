@@ -12,7 +12,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Response\" />
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
     </ItemGroup>
 
 </Project>

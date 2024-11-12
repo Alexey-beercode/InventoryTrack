@@ -1,5 +1,5 @@
-﻿using System.Reflection.Metadata;
-using InventoryService.Domain.Common;
+﻿using InventoryService.Domain.Common;
+using InventoryService.Domain.Enums;
 
 namespace InventoryService.Domain.Entities;
 
@@ -14,6 +14,7 @@ public class InventoryItem : BaseEntity
     public Guid WarehouseId { get; set; }
     public DateTime DeliveryDate { get; set; }
     public Guid DocumentId { get; set; }
+    public InventoryItemStatus Status { get; set; }
 
     public Supplier Supplier { get; set; }
     public Warehouse Warehouse { get; set; }

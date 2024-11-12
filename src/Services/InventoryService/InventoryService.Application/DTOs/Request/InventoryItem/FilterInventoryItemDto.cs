@@ -3,8 +3,9 @@
 public class FilterInventoryItemDto
 {
    public string Name { get; set; }
-   public Guid? supplierId {get;set;}
-   public Guid? warehouseId { get; set; }
-   public DateTime? expirationDateFrom { get; set; }
-   public DateTime? expirationDateTo { get; set; }
+   public Guid? SupplierId {get;set;}
+   public Guid? WarehouseId { get; set; }
+   public DateTime? ExpirationDateFrom { get; set; }
+   public DateTime? ExpirationDateTo { get; set; }
+   public decimal EstimatedValue { get; set; }
 }

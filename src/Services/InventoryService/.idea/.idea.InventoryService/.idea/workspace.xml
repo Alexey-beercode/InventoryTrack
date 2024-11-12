@@ -16,7 +16,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/InventoryService.Domain.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/InventoryService.Domain.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +35,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 6
 }]]></component>
@@ -158,14 +168,26 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731357381778</updated>
-      <workItem from="1731357381818" duration="8415000" />
+      <workItem from="1731357381818" duration="13817000" />
     </task>
+    <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
+      <option name="closed" value="true" />
+      <created>1731366511735</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1731366511736</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Added domain, infrastructure layers in InventoryService" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added domain, infrastructure layers in InventoryService" />
   </component>
 </project>

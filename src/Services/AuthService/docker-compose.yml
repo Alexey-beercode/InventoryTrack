@@ -7,9 +7,8 @@ services:
       dockerfile: ./AuthService.Presentation/Dockerfile
     ports:
       - "8080:8080"
-      - "8081:8081"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__ConnectionString=Host=db;Port=5432;Database=inventory_track_auth_service;Username=postgres;Password=CHEATS145
     depends_on:
       - db

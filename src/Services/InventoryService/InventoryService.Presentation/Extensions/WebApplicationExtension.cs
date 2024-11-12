@@ -1,12 +1,12 @@
-﻿using AuthService.Middleware;
+﻿using InventoryService.Middleware;
 
-namespace AuthService.Extensions;
+namespace InventoryService.Extensions;
 
 public static class WebApplicationExtension
 {
     public static void AddSwagger(this WebApplication app)
     {
-        if (app.Environment.IsProduction())
+        if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -19,8 +19,7 @@ public static class WebApplicationExtension
         
         app.UseCors(builder =>
         {
-            builder
-                .WithOrigins("http://localhost:4200")
+            builder.AllowAnyOrigin() 
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -32,7 +31,5 @@ public static class WebApplicationExtension
         app.MapControllers();
         
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-        
-        
     }
 }
