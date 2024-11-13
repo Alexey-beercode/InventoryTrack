@@ -11,5 +11,5 @@ public class MovementRequest : BaseEntity
     public long Quantity { get; set; }
     public MovementRequestStatus Status { get; set; }
     public DateTime RequestDate { get; set; }
-    public Guid ApprovedByUserId { get; set; }
+    public Guid? ApprovedByUserId { get; set; }
 }
