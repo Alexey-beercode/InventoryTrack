@@ -1,31 +1,28 @@
-# Используем базовый образ Node.js
+# Build stage
 FROM node:20-alpine as builder
 
-# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-# Копируем package.json и package-lock.json (если он есть)
+# Копируем файлы зависимостей
 COPY package*.json ./
 
 # Устанавливаем зависимости
 RUN npm install
 
-# Копируем остальную часть клиентского кода
+# Копируем исходный код
 COPY . .
 
-# Собираем Angular приложение
-RUN npm run build --prod
+# Собираем приложение
+RUN npm run build
 
-# Устанавливаем сервер Angular CLI
-FROM node:20-alpine
+# Production stage
+FROM nginx:alpine
 
-WORKDIR /app
+# Копируем собранные файлы из build stage
+COPY --from=builder /app/dist/inventory-track/browser /usr/share/nginx/html
 
-# Копируем файлы сборки из предыдущего этапа
-COPY --from=builder /app/dist/inventory-track /app
+# Открываем порт
+EXPOSE 80
 
-# Устанавливаем Angular CLI
-RUN npm install -g @angular/cli
-
-# Запускаем Angular сервер
-CMD ["ng", "serve"]
+# Запускаем nginx
+CMD ["nginx", "-g", "daemon off;"]

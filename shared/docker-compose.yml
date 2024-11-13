@@ -1,15 +1,24 @@
-﻿version: '3.8'
+﻿services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - client
+      - auth-service
+      - inventory-service
+      - movement-service
 
-services:
   client:
     build:
-      context: ../src/Client/inventory-track/ 
-      dockerfile: Dockerfile 
-    ports:
-      - "4200:4200"  # Expose port 4200 (standard Angular dev server port)
+      context: ../src/Client/inventory-track/
+      dockerfile: Dockerfile
     depends_on:
-      - auth-service # Or other services the client depends on, if any
-      - inventory-service # Add any other backend services here
+      - auth-service
+      - inventory-service
+
   auth-service:
     build:
       context: ../src/Services/AuthService/
@@ -41,6 +50,22 @@ services:
       depends_on:
         - inventory-db
         - rabbitmq
+    
+  movement-service:
+    build:
+      context: ../src/Services/MovementService/
+      dockerfile: MovementService.Presentation/Dockerfile
+    ports:
+      - "5112:5112"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__ConnectionString=Host=inventory-db;Port=5432;Database=inventory_track_movement_service;Username=postgres;Password=CHEATS145
+      - RabbitMQ__Hostname=rabbitmq  # Use the service name for RabbitMQ
+      - RabbitMQ__Username=guest # Default RabbitMQ username
+      - RabbitMQ__Password=guest # Default RabbitMQ password
+    depends_on:
+      - movement-db
+      - rabbitmq
 
   auth-db:
     image: postgres:15
@@ -65,6 +90,18 @@ services:
       - inventory-postgres-data:/var/lib/postgresql/data
     ports:
       - "5434:5432" 
+  
+  movement-db:
+    image: postgres:15
+    container_name: movement-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: CHEATS145
+      POSTGRES_DB: inventory_track_movement_service
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
   
   rabbitmq:
     image: rabbitmq:3-management  # Use the management plugin for UI access

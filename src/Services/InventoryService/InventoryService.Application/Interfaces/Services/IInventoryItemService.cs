@@ -15,4 +15,7 @@ public interface IInventoryItemService
     Task<IEnumerable<InventoryItemResponseDto>> GetByStatusAsync(Domain.Enums.InventoryItemStatus status, CancellationToken cancellationToken = default);
     Task UpdateInventoryItemAsync(Guid id, UpdateInventoryItemDto dto, CancellationToken cancellationToken = default);
     Task DeleteInventoryItemAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task UpdateInventoryItemStatusAsync(ChangeInventoryItemStatusDto inventoryItemStatusDto,
+        CancellationToken cancellationToken = default);
 }

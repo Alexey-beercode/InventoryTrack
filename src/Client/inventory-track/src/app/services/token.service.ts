@@ -9,7 +9,7 @@ import {environment} from "../environments/environment";
 export class TokenService {
   private readonly ACCESS_TOKEN_KEY = 'accessToken';
   private readonly USER_ID_KEY = 'userId';
-  private readonly apiUrl = `${environment.apiUrl}/api/auth`;
+  private readonly apiUrl = `${environment.apiUrls.auth}/api/auth`;
   constructor(private http: HttpClient,) {
   }
 

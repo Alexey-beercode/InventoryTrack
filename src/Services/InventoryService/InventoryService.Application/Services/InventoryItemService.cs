@@ -122,4 +122,19 @@ public class InventoryItemService : IInventoryItemService
         _unitOfWork.InventoryItems.Delete(item);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task UpdateInventoryItemStatusAsync(ChangeInventoryItemStatusDto inventoryItemStatusDto,
+        CancellationToken cancellationToken = default)
+    {
+        var item = await _unitOfWork.InventoryItems.GetByIdAsync(inventoryItemStatusDto.InventoryItemId, cancellationToken);
+        if (item == null)
+        {
+            throw new EntityNotFoundException("InventoryItem", inventoryItemStatusDto.InventoryItemId);
+        }
+
+        item.Status = inventoryItemStatusDto.Status;
+        
+        _unitOfWork.InventoryItems.Update(item);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
 }

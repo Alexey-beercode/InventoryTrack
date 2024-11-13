@@ -12,7 +12,7 @@ import { CompanyResponseDTO } from '../models/dto/company/company-response-dto';
   providedIn: 'root',
 })
 export class CompanyService {
-  private apiUrl = `${environment.apiUrl}/api/companies`;
+  private apiUrl = `${environment.apiUrls.auth}/api/companies`;
 
   constructor(private http: HttpClient) {}
 

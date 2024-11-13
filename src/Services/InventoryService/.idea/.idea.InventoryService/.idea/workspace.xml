@@ -16,16 +16,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../shared/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../shared/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../shared/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/MovementService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/MovementService.Presentation.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,9 +46,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2oifaUTPvILkCtdTEUId6HO8GmU" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -47,28 +57,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.InventoryService: IIS Express.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.InventoryService: IIS Express.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\Алексей\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Алексей\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.InventoryService: IIS Express">
     <configuration name="InventoryService: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" />
@@ -182,7 +192,10 @@
       <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile" />
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
   </component>
@@ -195,6 +208,8 @@
       <option name="presentableId" value="Default" />
       <updated>1731357381778</updated>
       <workItem from="1731357381818" duration="20979000" />
+      <workItem from="1731529259595" duration="3375000" />
+      <workItem from="1731539514551" duration="27000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />
