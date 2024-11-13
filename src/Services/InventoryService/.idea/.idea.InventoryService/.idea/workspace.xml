@@ -16,16 +16,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/Docker/docker-compose.generated.override.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/docker-compose.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/InventoryService.Domain.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/InventoryService.Domain.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +49,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    ".NET Launch Settings Profile.InventoryService: IIS Express.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -68,7 +69,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.InventoryService: http">
+  <component name="RunManager" selected=".NET Launch Settings Profile.InventoryService: IIS Express">
     <configuration name="InventoryService: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -159,6 +160,31 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="InventoryService.Presentation/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="inventoryservice.presentation" />
+          <option name="containerName" value="inventoryservice.presentation" />
+          <option name="contextFolderPath" value="C:\ASProggs\InventoryTrack\src\Services\InventoryService" />
+          <option name="portBindings">
+            <list>
+              <DockerPortBindingImpl>
+                <option name="containerPort" value="8080" />
+                <option name="hostIp" value="127.0.0.1" />
+                <option name="hostPort" value="8080" />
+              </DockerPortBindingImpl>
+            </list>
+          </option>
+          <option name="sourceFilePath" value="InventoryService.Presentation/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -168,7 +194,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731357381778</updated>
-      <workItem from="1731357381818" duration="13817000" />
+      <workItem from="1731357381818" duration="20979000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />
@@ -178,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731366511736</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added dtos, interfaces, mappers, validators, services, config for InventoryService">
+      <option name="closed" value="true" />
+      <created>1731438178473</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1731438178473</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,6 +222,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Added domain, infrastructure layers in InventoryService" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added domain, infrastructure layers in InventoryService" />
+    <MESSAGE value="Added dtos, interfaces, mappers, validators, services, config for InventoryService" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added dtos, interfaces, mappers, validators, services, config for InventoryService" />
   </component>
 </project>

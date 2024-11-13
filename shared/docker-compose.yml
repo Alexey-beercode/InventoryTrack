@@ -1,0 +1,81 @@
+﻿version: '3.8'
+
+services:
+  client:
+    build:
+      context: ../src/Client/inventory-track/ 
+      dockerfile: Dockerfile 
+    ports:
+      - "4200:4200"  # Expose port 4200 (standard Angular dev server port)
+    depends_on:
+      - auth-service # Or other services the client depends on, if any
+      - inventory-service # Add any other backend services here
+  auth-service:
+    build:
+      context: ../src/Services/AuthService/
+      dockerfile: AuthService.Presentation/Dockerfile
+    ports:
+      - "5110:5110"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__ConnectionString=Host=auth-db;Port=5432;Database=inventory_track_auth_service;Username=postgres;Password=CHEATS145
+      - RabbitMQ__Hostname=rabbitmq  # Use the service name for RabbitMQ
+      - RabbitMQ__Username=guest # Default RabbitMQ username
+      - RabbitMQ__Password=guest # Default RabbitMQ password
+    depends_on:
+      - auth-db
+      - rabbitmq
+    
+  inventory-service:
+      build:
+        context: ../src/Services/InventoryService/
+        dockerfile: InventoryService.Presentation/Dockerfile
+      ports:
+        - "5111:5111"
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ConnectionStrings__ConnectionString=Host=inventory-db;Port=5432;Database=inventory_track_inventory_service;Username=postgres;Password=CHEATS145
+        - RabbitMQ__Hostname=rabbitmq  # Use the service name for RabbitMQ
+        - RabbitMQ__Username=guest # Default RabbitMQ username
+        - RabbitMQ__Password=guest # Default RabbitMQ password
+      depends_on:
+        - inventory-db
+        - rabbitmq
+
+  auth-db:
+    image: postgres:15
+    container_name: auth-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: CHEATS145
+      POSTGRES_DB: inventory_track_auth_service
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432" 
+
+  inventory-db: 
+    image: postgres:15
+    container_name: inventory-postgres 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: CHEATS145
+      POSTGRES_DB: inventory_track_inventory_service
+    volumes:
+      - inventory-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432" 
+  
+  rabbitmq:
+    image: rabbitmq:3-management  # Use the management plugin for UI access
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # Standard RabbitMQ port
+      - "15672:15672" # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      
+volumes:
+  auth-postgres-data:
+  inventory-postgres-data:
