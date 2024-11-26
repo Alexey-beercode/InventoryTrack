@@ -11,7 +11,7 @@ import { UserRoleDTO } from '../models/dto/user/user-role-dto';
   providedIn: 'root',
 })
 export class RoleService {
-  private apiUrl = `${environment.apiUrls.auth}/api/roles`;
+  private apiUrl = `${environment.apiUrls.role}`;
 
   constructor(private http: HttpClient) {}
 

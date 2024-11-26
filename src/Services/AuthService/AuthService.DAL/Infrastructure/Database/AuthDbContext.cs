@@ -10,7 +10,10 @@ public class AuthDbContext : DbContext
     public AuthDbContext(DbContextOptions<AuthDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+        if (!Database.CanConnect())
+        {
+            Database.Migrate();
+        }
     }
 
     public DbSet<User> Users { get; set; }
@@ -18,7 +21,7 @@ public class AuthDbContext : DbContext
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Company> Companies { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)  
     {
         modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());

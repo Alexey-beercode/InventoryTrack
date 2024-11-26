@@ -12,12 +12,12 @@ import { CompanyResponseDTO } from '../models/dto/company/company-response-dto';
   providedIn: 'root',
 })
 export class CompanyService {
-  private apiUrl = `${environment.apiUrls.auth}/api/companies`;
+  private apiUrl = `${environment.apiUrls.company}`;
 
   constructor(private http: HttpClient) {}
 
   getById(id: string): Observable<CompanyResponseDTO> {
-    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}${id}`);
   }
 
   create(companyDto: CreateCompanyDTO): Observable<void> {
@@ -35,10 +35,10 @@ export class CompanyService {
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}${id}`);
   }
 
   getByUserId(userId: string | null): Observable<CompanyResponseDTO> {
-    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}/by-user-id/${userId}`);
+    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}by-user-id/${userId}`);
   }
 }

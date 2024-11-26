@@ -16,26 +16,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../shared/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../shared/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../shared/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../shared/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../shared/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../../../shared/nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Interfaces/Services/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Interfaces/Services/IAuthService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Infrastructure/Database/AuthDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Infrastructure/Database/AuthDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/AuthDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/AuthDbContextModelSnapshot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/Class1.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/MovementService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/MovementService.Presentation.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,6 +205,8 @@
       <workItem from="1731357381818" duration="20979000" />
       <workItem from="1731529259595" duration="3375000" />
       <workItem from="1731539514551" duration="27000" />
+      <workItem from="1731871607221" duration="606000" />
+      <workItem from="1732560597899" duration="2209000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />

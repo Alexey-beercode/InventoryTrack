@@ -80,25 +80,25 @@ namespace AuthService.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b0a4c4d1-180a-4884-952b-3ebf51616af1"),
+                            Id = new Guid("123a0dd7-1881-4621-8b14-6f31515d4308"),
                             IsDeleted = false,
                             Name = "Resident"
                         },
                         new
                         {
-                            Id = new Guid("84299b0e-7ad1-4378-884e-7979c1d56978"),
+                            Id = new Guid("8697c755-c530-4a2e-b9d6-7744a9fa594f"),
                             IsDeleted = false,
                             Name = "Department Head"
                         },
                         new
                         {
-                            Id = new Guid("c478504c-142b-4fdc-b592-c3ff7273c1b6"),
+                            Id = new Guid("56e4822b-d29e-459f-ab2e-dd3499c2fdf3"),
                             IsDeleted = false,
                             Name = "Warehouse Manager"
                         },
                         new
                         {
-                            Id = new Guid("2e3a8e1c-f00b-4f6a-99d0-2d84c150313b"),
+                            Id = new Guid("372881bd-0bef-4230-a9d4-ddea9b05e08e"),
                             IsDeleted = false,
                             Name = "Accountant"
                         });

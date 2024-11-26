@@ -10,6 +10,8 @@
       - auth-service
       - inventory-service
       - movement-service
+    networks:
+      inventory-truck-network:
 
   client:
     build:
@@ -18,6 +20,8 @@
     depends_on:
       - auth-service
       - inventory-service
+    networks:
+      inventory-truck-network:
 
   auth-service:
     build:
@@ -25,15 +29,15 @@
       dockerfile: AuthService.Presentation/Dockerfile
     ports:
       - "5110:5110"
+    expose:
+      - "5110"
     environment:
+      - ASPNETCORE_URLS=http://+:5110
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__ConnectionString=Host=auth-db;Port=5432;Database=inventory_track_auth_service;Username=postgres;Password=CHEATS145
-      - RabbitMQ__Hostname=rabbitmq  # Use the service name for RabbitMQ
-      - RabbitMQ__Username=guest # Default RabbitMQ username
-      - RabbitMQ__Password=guest # Default RabbitMQ password
-    depends_on:
-      - auth-db
-      - rabbitmq
+    networks:
+      inventory-truck-network:
+
     
   inventory-service:
       build:
@@ -50,6 +54,8 @@
       depends_on:
         - inventory-db
         - rabbitmq
+      networks:
+        inventory-truck-network:
     
   movement-service:
     build:
@@ -57,6 +63,8 @@
       dockerfile: MovementService.Presentation/Dockerfile
     ports:
       - "5112:5112"
+    networks:
+      inventory-truck-network:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__ConnectionString=Host=inventory-db;Port=5432;Database=inventory_track_movement_service;Username=postgres;Password=CHEATS145
@@ -77,7 +85,9 @@
     volumes:
       - auth-postgres-data:/var/lib/postgresql/data
     ports:
-      - "5433:5432" 
+      - "5433:5432"
+    networks:
+      inventory-truck-network:
 
   inventory-db: 
     image: postgres:15
@@ -89,7 +99,9 @@
     volumes:
       - inventory-postgres-data:/var/lib/postgresql/data
     ports:
-      - "5434:5432" 
+      - "5434:5432"
+    networks:
+      inventory-truck-network:
   
   movement-db:
     image: postgres:15
@@ -99,9 +111,11 @@
       POSTGRES_PASSWORD: CHEATS145
       POSTGRES_DB: inventory_track_movement_service
     volumes:
-      - auth-postgres-data:/var/lib/postgresql/data
+      - movement-postgres-data:/var/lib/postgresql/data
     ports:
       - "5435:5432"
+    networks:
+      inventory-truck-network:
   
   rabbitmq:
     image: rabbitmq:3-management  # Use the management plugin for UI access
@@ -112,7 +126,14 @@
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
-      
+    networks:
+      inventory-truck-network:
+
 volumes:
   auth-postgres-data:
   inventory-postgres-data:
+  movement-postgres-data:
+
+networks:
+  inventory-truck-network:
+    driver: bridge

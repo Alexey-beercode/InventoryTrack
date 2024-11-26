@@ -21,8 +21,11 @@ FROM nginx:alpine
 # Копируем собранные файлы из build stage
 COPY --from=builder /app/dist/inventory-track/browser /usr/share/nginx/html
 
+# Копируем конфигурацию nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Открываем порт
-EXPOSE 80
+EXPOSE 4200
 
 # Запускаем nginx
 CMD ["nginx", "-g", "daemon off;"]

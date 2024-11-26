@@ -8,6 +8,4 @@ public interface IAuthService
 {
     Task<AuthReponseDTO> RegisterAsync(RegisterDTO registerDto,CancellationToken cancellationToken=default);
     Task<AuthReponseDTO> LoginAsync(LoginDTO loginDto,CancellationToken cancellationToken=default);
-
-    
 }

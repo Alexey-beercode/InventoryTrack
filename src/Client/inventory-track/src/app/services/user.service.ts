@@ -11,7 +11,7 @@ import {RegisterUserToCompanyDTO} from "../models/dto/user/register-user-to-comp
   providedIn: 'root'
 })
 export class UserService {
-  private readonly apiUrl = `${environment.apiUrls.auth}/api/users`;
+  private readonly apiUrl = `${environment.apiUrls.user}`;
 
   constructor(private http: HttpClient) {}
 
