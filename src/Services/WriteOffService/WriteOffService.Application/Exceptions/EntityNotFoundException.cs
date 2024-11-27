@@ -1,4 +1,4 @@
-namespace BookingService.Application.Exceptions;
+namespace WriteOffService.Application.Exceptions;
 
 public class EntityNotFoundException:Exception
 {

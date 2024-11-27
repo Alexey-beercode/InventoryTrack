@@ -20,4 +20,9 @@ public class DocumentRepository : BaseRepository<Document>,IDocumentRepository
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
+
+    public Task<Document> GetByNameAsync(string fileName, CancellationToken cancellationToken = default)
+    {
+        return _dbSet.FirstOrDefaultAsync(document => !document.IsDeleted && document.FileName == fileName,cancellationToken);
+    }
 }

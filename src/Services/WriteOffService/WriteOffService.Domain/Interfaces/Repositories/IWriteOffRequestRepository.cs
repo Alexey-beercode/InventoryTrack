@@ -21,4 +21,8 @@ public interface IWriteOffRequestRepository : IBaseRepository<WriteOffRequest>
         CancellationToken cancellationToken = default);
 
     Task<WriteOffRequest> GetByItemIdWithReasonAsync(Guid itemId, CancellationToken cancellationToken = default);
+
+    Task<WriteOffRequest> GetByDateAndItemIdAsync(Guid itemId, DateTime date,
+        CancellationToken cancellationToken = default);
+
 }
