@@ -16,12 +16,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Exceptions/AlreadyExistsException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Exceptions/AuthorizationException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Exceptions/BadRequestException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Exceptions/EntityNotFoundException.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/WriteOffService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/WriteOffService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Config/Database/WriteOffDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Config/Database/WriteOffDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/appsettings.Development.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +194,7 @@
       <workItem from="1731539514551" duration="27000" />
       <workItem from="1731871607221" duration="606000" />
       <workItem from="1732560597899" duration="3049000" />
+      <workItem from="1732690196340" duration="2472000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />
