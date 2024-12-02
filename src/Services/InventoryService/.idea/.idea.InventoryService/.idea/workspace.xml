@@ -16,8 +16,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Config/Database/WriteOffDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Config/Database/WriteOffDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../shared/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../shared/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/CompanyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/UserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Infrastructure/Database/AuthDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Infrastructure/Database/AuthDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241104112651_Initial.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241104112651_Initial.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241104113309_Updated_user_table.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241104113309_Updated_user_table.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241118094349_updated_tables.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241118094349_updated_tables.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/AuthDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Controllers/CompanyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Controllers/CompanyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/WriteOffService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/WriteOffService.Presentation.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,6 +214,9 @@
       <workItem from="1731871607221" duration="606000" />
       <workItem from="1732560597899" duration="3049000" />
       <workItem from="1732690196340" duration="2472000" />
+      <workItem from="1732699215254" duration="620000" />
+      <workItem from="1732709447314" duration="659000" />
+      <workItem from="1733179611520" duration="238000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />

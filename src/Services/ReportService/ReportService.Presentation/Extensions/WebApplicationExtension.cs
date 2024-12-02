@@ -1,6 +1,6 @@
-﻿using AuthService.Middleware;
+﻿using ReportService.Presentation.Middleware;
 
-namespace AuthService.Extensions;
+namespace ReportService.Presentation.Extensions;
 
 public static class WebApplicationExtension
 {
@@ -19,8 +19,7 @@ public static class WebApplicationExtension
         
         app.UseCors(builder =>
         {
-            builder
-                .WithOrigins("http://localhost:4200")
+            builder.WithOrigins("http://127.0.0.1:5500") 
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -32,7 +31,5 @@ public static class WebApplicationExtension
         app.MapControllers();
         
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-        
-        
     }
 }

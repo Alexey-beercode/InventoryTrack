@@ -1,11 +1,11 @@
 export const environment = {
-  production: false, // true for environment.prod.ts
+  production: false,
   apiUrls: {
-    auth: '/api/auth',
-    inventory: '/api/inventory',
-    movement: '/api/movement',
-    user: '/api/users',
-    company: '/api/companies/',
-    role: '/roles',
+    auth: `http://localhost:5110/api/auth/`,
+    inventory: `http://localhost:5111/api/inventory/`,
+    movement: `http://localhost:5112/api/movement/`,
+    user: `http://localhost:5110/api/users/`,
+    company: `http://localhost:5110/api/companies/`,
+    role: `http://localhost:5110/api/roles/`
   }
 };

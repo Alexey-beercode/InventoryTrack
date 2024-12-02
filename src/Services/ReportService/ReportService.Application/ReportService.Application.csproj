@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="UseCases\Report\Create\" />
+      <Folder Include="UseCases\Report\Delete\" />
+      <Folder Include="UseCases\Report\GetAll\" />
+      <Folder Include="UseCases\Report\GetByDateRange\" />
+      <Folder Include="UseCases\Report\GetByDateSelect\" />
+      <Folder Include="UseCases\Report\GetById\" />
+      <Folder Include="UseCases\Report\GetByType\" />
+      <Folder Include="UseCases\Report\GetPaginated\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ReportService.Domain\ReportService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+    </ItemGroup>
+
+</Project>

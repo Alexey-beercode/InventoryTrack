@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   login(loginDto: LoginDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${this.apiUrl}/login`, loginDto).pipe(
+    return this.http.post<AuthResponseDTO>(`${this.apiUrl}login`, loginDto).pipe(
       tap(response => {
         this.tokenService.setTokens(response.accessToken, response.userId.toString());
       })
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   register(registerDto: RegisterDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${this.apiUrl}/register`, registerDto).pipe(
+    return this.http.post<AuthResponseDTO>(`${this.apiUrl}register`, registerDto).pipe(
       tap(response => {
         this.tokenService.setTokens(response.accessToken, response.userId.toString());
       })

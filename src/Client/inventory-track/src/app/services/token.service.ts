@@ -52,7 +52,7 @@ export class TokenService {
       return of(false);
     }
 
-    return this.http.get(`${this.apiUrl}/token-status`, {
+    return this.http.get(`${this.apiUrl}token-status`, {
       headers: { 'Authorization': `Bearer ${accessToken}` },
       observe: 'response',
       responseType: 'text'

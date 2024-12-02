@@ -10,10 +10,7 @@ public class AuthDbContext : DbContext
     public AuthDbContext(DbContextOptions<AuthDbContext> options)
         : base(options)
     {
-        if (!Database.CanConnect())
-        {
-            Database.Migrate();
-        }
+        Database.Migrate();
     }
 
     public DbSet<User> Users { get; set; }

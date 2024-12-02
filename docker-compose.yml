@@ -1,34 +1,7 @@
-﻿services:
-  nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - client
-      - auth-service
-      - inventory-service
-      - movement-service
-      - write-off-service
-    networks:
-      inventory-truck-network:
-
-  client:
-    build:
-      context: ../src/Client/inventory-track/
-      dockerfile: Dockerfile
-    depends_on:
-      - auth-service
-      - inventory-service
-      - movement-service
-      - write-off-service
-    networks:
-      inventory-truck-network:
-
+services:
   auth-service:
     build:
-      context: ../src/Services/AuthService/
+      context: /src/Services/AuthService/
       dockerfile: AuthService.Presentation/Dockerfile
     ports:
       - "5110:5110"
@@ -43,7 +16,7 @@
 
   inventory-service:
     build:
-      context: ../src/Services/InventoryService/
+      context: /src/Services/InventoryService/
       dockerfile: InventoryService.Presentation/Dockerfile
     ports:
       - "5111:5111"
@@ -62,7 +35,7 @@
   
   movement-service:
     build:
-      context: ../src/Services/MovementService/
+      context: /src/Services/MovementService/
       dockerfile: MovementService.Presentation/Dockerfile
     ports:
       - "5112:5112"
@@ -81,7 +54,7 @@
 
   write-off-service:
     build:
-      context: ../src/Services/WriteOffService/
+      context: /src/Services/WriteOffService/
       dockerfile: WriteOffService.Presentation/Dockerfile
     ports:
       - "5113:5113"

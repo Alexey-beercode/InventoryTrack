@@ -3,6 +3,7 @@ using AuthService.BLL.DTOs.Implementations.Requests.User;
 using AuthService.BLL.DTOs.Implementations.Responses.User;
 using AuthService.BLL.Exceptions;
 using AuthService.BLL.Helpers;
+using AuthService.BLL.Interfaces.Facades;
 using AuthService.BLL.Interfaces.Services;
 using AuthService.DAL.Interfaces;
 using AuthService.Domain.Enities;
@@ -15,17 +16,25 @@ public class UserService:IUserService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserFacade _userFacade;
 
-    public UserService(IMapper mapper, IUnitOfWork unitOfWork)
+    public UserService(IMapper mapper, IUnitOfWork unitOfWork, IUserFacade userFacade)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _userFacade = userFacade;
     }
 
     public async Task<IEnumerable<UserRepsonseDTO>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var users = await _unitOfWork.Users.GetAllAsync(cancellationToken);
-        return users.Select(company => _mapper.Map<UserRepsonseDTO>(company)).ToList();
+        var usersDtos = new List<UserRepsonseDTO>();
+        foreach (var user in users)
+        {
+            usersDtos.Add(await _userFacade.GetFullDtoAsync(user,cancellationToken));
+        }
+
+        return usersDtos;
     }
 
     public async Task<UserRepsonseDTO> GetByIdAsync(Guid userId, CancellationToken cancellationToken = default)
@@ -36,7 +45,7 @@ public class UserService:IUserService
             throw new EntityNotFoundException("User", userId);
         }
 
-        return _mapper.Map<UserRepsonseDTO>(user);
+        return await _userFacade.GetFullDtoAsync(user, cancellationToken);
     }
 
     public async Task<UserRepsonseDTO> GetByLoginAsync(string login, CancellationToken cancellationToken = default)
@@ -47,7 +56,7 @@ public class UserService:IUserService
             throw new EntityNotFoundException($"User with login : {login} not found");
         }
 
-        return _mapper.Map<UserRepsonseDTO>(user);
+        return await _userFacade.GetFullDtoAsync(user, cancellationToken);
     }
 
     public async Task<UserRepsonseDTO> GetByNameAsync(GetUserByNameDTO getUserByNameDto, CancellationToken cancellationToken = default)
@@ -58,13 +67,19 @@ public class UserService:IUserService
             throw new EntityNotFoundException($"User with name : {getUserByNameDto.FirstName} {getUserByNameDto.LastName} not found");
         }
 
-        return _mapper.Map<UserRepsonseDTO>(user);
+        return await _userFacade.GetFullDtoAsync(user, cancellationToken);
     }
 
     public async Task<IEnumerable<UserRepsonseDTO>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
     {
         var users = await _unitOfWork.Users.GetByCompanyIdAsync(companyId, cancellationToken);
-        return users.Select(company => _mapper.Map<UserRepsonseDTO>(company)).ToList();
+        var usersDtos = new List<UserRepsonseDTO>();
+        foreach (var user in users)
+        {
+            usersDtos.Add(await _userFacade.GetFullDtoAsync(user,cancellationToken));
+        }
+
+        return usersDtos;
     }
 
     public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken = default)

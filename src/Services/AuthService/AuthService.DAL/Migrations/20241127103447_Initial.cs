@@ -52,7 +52,7 @@ namespace AuthService.DAL.Migrations
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Login = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -62,8 +62,7 @@ namespace AuthService.DAL.Migrations
                         name: "FK_Users_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -97,10 +96,10 @@ namespace AuthService.DAL.Migrations
                 columns: new[] { "Id", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("2b1b2203-e4bd-48b0-9008-478c9f214d56"), false, "Resident" },
-                    { new Guid("32b293fa-2336-4a20-b0bd-cbfaf7d117a9"), false, "Warehouse Manager" },
-                    { new Guid("f40cf8e0-bc49-4688-8ed9-89c91fd07fb1"), false, "Accountant" },
-                    { new Guid("fad5a4ab-c1f8-43fe-bf3e-f0b07ab4b442"), false, "Department Head" }
+                    { new Guid("31c5a831-d408-448a-908b-d4ff4622d406"), false, "Warehouse Manager" },
+                    { new Guid("3751ae74-73f8-4f2f-9b01-fae20c4ff215"), false, "Accountant" },
+                    { new Guid("63742a6e-a41a-4474-8ff4-12c0ddc7f6bd"), false, "Department Head" },
+                    { new Guid("ea7c82ae-7c91-44ef-8b11-0b364397972e"), false, "Resident" }
                 });
 
             migrationBuilder.CreateIndex(

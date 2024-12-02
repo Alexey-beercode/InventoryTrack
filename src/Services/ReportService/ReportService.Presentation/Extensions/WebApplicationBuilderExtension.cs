@@ -1,24 +1,18 @@
 using System.Text;
-using AuthService.BLL.Facades;
-using AuthService.BLL.Infrastructure.Mapper;
-using AuthService.BLL.Infrastructure.Validators;
-using AuthService.BLL.Interfaces.Facades;
-using AuthService.BLL.Interfaces.Services;
-using AuthService.BLL.Services;
-using AuthService.DAL.Infrastructure;
-using AuthService.DAL.Infrastructure.Database;
-using AuthService.DAL.Interfaces;
-using AuthService.DAL.Interfaces.Repositories;
-using AuthService.DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
+using ReportService.Application.MappingProfiles;
+using ReportService.Domain.Entities;
+using ReportService.Domain.Interfaces.Repositories;
+using ReportService.Infrastructure.Database;
+using ReportService.Infrastructure.Repositories;
 
-namespace AuthService.Extensions;
+namespace ReportService.Presentation.Extensions;
 
 public static class WebApplicationBuilderExtension
 {
@@ -61,32 +55,48 @@ public static class WebApplicationBuilderExtension
     public static void AddMapping(this WebApplicationBuilder builder)
     {
         builder.Services.AddAutoMapper(
-            typeof(UserProfile).Assembly,
-            typeof(RoleProfile).Assembly,
-            typeof(AuthProfile).Assembly,
-            typeof(CompanyProfile).Assembly
+            typeof(ReportProfile).Assembly
         );
     }
 
-    public static void AddDatabase(this WebApplicationBuilder builder)
+    public static void AddMongoDatabase(this WebApplicationBuilder builder)
     {
-        string? connectionString = builder.Configuration.GetConnectionString("ConnectionString");
-        builder.Services.AddDbContext<AuthDbContext>(options => { options.UseNpgsql(connectionString); });
-        builder.Services.AddScoped<AuthDbContext>();
+        var settings = builder.Configuration.GetSection("MongoDbSettings");
+        var connectionString = settings.GetValue<string>("ConnectionString");
+        var databaseName = settings.GetValue<string>("DatabaseName");
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new ArgumentException("MongoDB connection string is not configured");
+        }
+
+        if (string.IsNullOrEmpty(databaseName))
+        {
+            throw new ArgumentException("MongoDB database name is not configured");
+        }
+
+        builder.Services.Configure<Report>(settings);
+    
+        builder.Services.AddSingleton<IMongoClient>(new MongoClient(connectionString));
+        builder.Services.AddScoped<IMongoDatabase>(provider =>
+        {
+            var client = provider.GetRequiredService<IMongoClient>();
+            return client.GetDatabase(databaseName);
+        });
+    
+        builder.Services.AddScoped<IMongoCollection<Report>>(provider =>
+        {
+            var database = provider.GetRequiredService<IMongoDatabase>();
+            return database.GetCollection<Report>("reports");
+        });
+        
+
+        builder.Services.AddScoped<ReportDbContext>();
     }
 
     public static void AddServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-        builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-        builder.Services.AddScoped<IAuthService, BLL.Services.AuthService>();
-        builder.Services.AddScoped<IRoleService, RoleService>();
-        builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<ICompanyService, CompanyService>();
-        builder.Services.AddScoped<IUserFacade, UserFacade>();
+        builder.Services.AddScoped<IReportRepository, ReportRepository>();
         builder.Services.AddControllers();
     }
 
@@ -95,15 +105,6 @@ public static class WebApplicationBuilderExtension
         builder
             .Services.AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters();
-        builder.Services.AddValidatorsFromAssemblyContaining<CreateCompanyDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<GetUserByNameDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<RegisterDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserToCompanyDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<UpdateCompanyDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserDTOValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<UserRoleDTOValidator>();
-
     }
 
     public static void AddIdentity(this WebApplicationBuilder builder)
@@ -145,5 +146,11 @@ public static class WebApplicationBuilderExtension
             options.AddPolicy("Department Head", policy => { policy.RequireRole("Department Head"); });
             
         });
+    }
+    
+    public static void AddMediatr(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+        ));
     }
 }

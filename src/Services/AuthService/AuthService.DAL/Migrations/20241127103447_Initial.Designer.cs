@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthService.DAL.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20241104113309_Updated_user_table")]
-    partial class Updated_user_table
+    [Migration("20241127103447_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,25 +83,25 @@ namespace AuthService.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b0a4c4d1-180a-4884-952b-3ebf51616af1"),
+                            Id = new Guid("ea7c82ae-7c91-44ef-8b11-0b364397972e"),
                             IsDeleted = false,
                             Name = "Resident"
                         },
                         new
                         {
-                            Id = new Guid("84299b0e-7ad1-4378-884e-7979c1d56978"),
+                            Id = new Guid("63742a6e-a41a-4474-8ff4-12c0ddc7f6bd"),
                             IsDeleted = false,
                             Name = "Department Head"
                         },
                         new
                         {
-                            Id = new Guid("c478504c-142b-4fdc-b592-c3ff7273c1b6"),
+                            Id = new Guid("31c5a831-d408-448a-908b-d4ff4622d406"),
                             IsDeleted = false,
                             Name = "Warehouse Manager"
                         },
                         new
                         {
-                            Id = new Guid("2e3a8e1c-f00b-4f6a-99d0-2d84c150313b"),
+                            Id = new Guid("3751ae74-73f8-4f2f-9b01-fae20c4ff215"),
                             IsDeleted = false,
                             Name = "Accountant"
                         });

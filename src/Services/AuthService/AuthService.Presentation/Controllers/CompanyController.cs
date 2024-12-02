@@ -12,10 +12,12 @@ namespace AuthService.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
+        private readonly ILogger<CompanyController> _logger;
 
-        public CompanyController(ICompanyService companyService)
+        public CompanyController(ICompanyService companyService, ILogger<CompanyController> logger)
         {
             _companyService = companyService;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -64,6 +66,7 @@ namespace AuthService.Controllers
         public async Task<IActionResult> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             var company = await _companyService.GetByUserIdAsync(userId, cancellationToken);
+            Console.WriteLine(company.Name + company.Id);
             return Ok(company);
         }
         

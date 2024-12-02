@@ -22,22 +22,22 @@ export class UserService {
 
   // Получить пользователя по ID
   getById(id: string | null): Observable<UserResponseDTO> {
-    return this.http.get<UserResponseDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<UserResponseDTO>(`${this.apiUrl}${id}`);
   }
 
   // Получить пользователя по логину
   getByLogin(login: string): Observable<UserResponseDTO> {
-    return this.http.get<UserResponseDTO>(`${this.apiUrl}/by-login/${login}`);
+    return this.http.get<UserResponseDTO>(`${this.apiUrl}by-login/${login}`);
   }
 
   // Получить пользователя по имени
   getByName(getUserByNameDto: GetUserByNameDTO): Observable<UserResponseDTO> {
-    return this.http.post<UserResponseDTO>(`${this.apiUrl}/by-name`, getUserByNameDto);
+    return this.http.post<UserResponseDTO>(`${this.apiUrl}by-name`, getUserByNameDto);
   }
 
   // Получить пользователей по ID компании
   getByCompanyId(companyId: string): Observable<UserResponseDTO[]> {
-    return this.http.get<UserResponseDTO[]>(`${this.apiUrl}/by-company/${companyId}`);
+    return this.http.get<UserResponseDTO[]>(`${this.apiUrl}by-company/${companyId}`);
   }
 
   // Регистрация пользователя в компании
@@ -52,6 +52,6 @@ export class UserService {
 
   // Удаление пользователя
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}${id}`);
   }
 }
