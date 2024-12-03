@@ -1,4 +1,6 @@
-﻿using WriteOffService.Application.DTOs.Base;
+﻿using System;
+using System.Collections.Generic;
+using WriteOffService.Application.DTOs.Base;
 using WriteOffService.Application.DTOs.Response.Document;
 using WriteOffService.Application.DTOs.Response.RequestStatus;
 using WriteOffService.Application.DTOs.Response.WriteOffReason;

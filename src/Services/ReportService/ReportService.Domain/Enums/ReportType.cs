@@ -20,10 +20,5 @@ public enum ReportType
     /// <summary>
     /// История операций (поступления, перемещения, списания).
     /// </summary>
-    OperationHistory,
-
-    /// <summary>
-    /// Общий отчет, объединяющий данные о состоянии склада, перемещениях и списаниях.
-    /// </summary>
-    Summary
+    Items,
 }

@@ -11,25 +11,25 @@ public static class ModelBuilderExtension
         {
             Id = Guid.NewGuid(),
             IsDeleted = false,
-            Name = "Department Head"
+            Name = "Начальник подразделения"
         };
         var residentRole = new Role()
         {
             Id = Guid.NewGuid(),
             IsDeleted = false,
-            Name = "Resident"
+            Name = "Пользователь"
         };
         var warehouseManagerRole=new Role()
         {
             Id = Guid.NewGuid(),
             IsDeleted = false,
-            Name = "Warehouse Manager"
+            Name = "Начальник склада"
         };
         var accountantRole=new Role()
         {
             Id = Guid.NewGuid(),
             IsDeleted = false,
-            Name = "Accountant"
+            Name = "Бухгалтер"
         };
         modelBuilder.Entity<Role>().HasData(residentRole);
         modelBuilder.Entity<Role>().HasData(departmentHeadRole);

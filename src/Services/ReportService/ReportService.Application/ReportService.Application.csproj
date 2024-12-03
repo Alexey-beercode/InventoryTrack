@@ -7,22 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="UseCases\Report\Create\" />
-      <Folder Include="UseCases\Report\Delete\" />
-      <Folder Include="UseCases\Report\GetAll\" />
-      <Folder Include="UseCases\Report\GetByDateRange\" />
-      <Folder Include="UseCases\Report\GetByDateSelect\" />
-      <Folder Include="UseCases\Report\GetById\" />
-      <Folder Include="UseCases\Report\GetByType\" />
-      <Folder Include="UseCases\Report\GetPaginated\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ReportService.Domain\ReportService.Domain.csproj" />
+      <ProjectReference Include="..\ReportService.Infrastructure\ReportService.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="ClosedXML" Version="0.104.2" />
+      <PackageReference Include="MassTransit.Abstractions" Version="8.3.2" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
 </Project>

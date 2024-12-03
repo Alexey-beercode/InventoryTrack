@@ -1,5 +1,8 @@
 using System.Net;
+using System.Security.Authentication;
+using FluentValidation;
 using Newtonsoft.Json;
+using ReportService.Application.Exceptions;
 
 namespace ReportService.Presentation.Middleware;
 
@@ -32,7 +35,36 @@ public class ExceptionHandlingMiddleware
 
         var response = context.Response;
 
-        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        switch (exception)
+        {
+            case EntityNotFoundException:
+                response.StatusCode = (int)HttpStatusCode.NotFound;
+                break;
+            case FormatException:
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case ValidationException:
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case UnauthorizedAccessException:
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                break;
+            case AuthenticationException:
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                break;
+            case AuthorizationException:
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                break;
+            case BadRequestException:
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                break;
+            case AlreadyExistsException:
+                response.StatusCode = (int)HttpStatusCode.Conflict;
+                break;
+            default:
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                break;
+        }
 
         var result = JsonConvert.SerializeObject(new
         {

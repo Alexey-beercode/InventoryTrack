@@ -4,10 +4,10 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
       <Folder Include="Validators\" />
     </ItemGroup>
 
@@ -26,6 +26,12 @@
       <ProjectReference Include="..\ReportService.Application\ReportService.Application.csproj" />
       <ProjectReference Include="..\ReportService.Domain\ReportService.Domain.csproj" />
       <ProjectReference Include="..\ReportService.Infrastructure\ReportService.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

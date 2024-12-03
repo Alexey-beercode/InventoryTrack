@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthService.DAL.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20241127103447_Initial")]
+    [Migration("20241203005643_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -83,27 +83,27 @@ namespace AuthService.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ea7c82ae-7c91-44ef-8b11-0b364397972e"),
+                            Id = new Guid("badb222e-5f5b-49de-8dc0-37c5e33bd503"),
                             IsDeleted = false,
-                            Name = "Resident"
+                            Name = "Пользователь"
                         },
                         new
                         {
-                            Id = new Guid("63742a6e-a41a-4474-8ff4-12c0ddc7f6bd"),
+                            Id = new Guid("a6b1cc4e-7b01-4835-ac76-b7b907c3e3ab"),
                             IsDeleted = false,
-                            Name = "Department Head"
+                            Name = "Начальник подразделения"
                         },
                         new
                         {
-                            Id = new Guid("31c5a831-d408-448a-908b-d4ff4622d406"),
+                            Id = new Guid("61ee56c4-13f7-4dd5-aaa1-a5ae9073d864"),
                             IsDeleted = false,
-                            Name = "Warehouse Manager"
+                            Name = "Начальник склада"
                         },
                         new
                         {
-                            Id = new Guid("3751ae74-73f8-4f2f-9b01-fae20c4ff215"),
+                            Id = new Guid("76ec8d40-a206-4225-98cf-16187396b3a4"),
                             IsDeleted = false,
-                            Name = "Accountant"
+                            Name = "Бухгалтер"
                         });
                 });
 

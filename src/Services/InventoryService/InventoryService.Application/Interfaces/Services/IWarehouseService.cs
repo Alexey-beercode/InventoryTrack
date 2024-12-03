@@ -22,4 +22,12 @@ public interface IWarehouseService
         CancellationToken cancellationToken = default);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<WarehouseStateResponseDto>> GetAllWarehousesStateAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<WarehouseStateResponseDto> GetStateByIdAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<WarehouseStateResponseDto>> GetWarehousesStatesByCompanyIdAsync(Guid companyId,
+        CancellationToken cancellationToken = default);
 }

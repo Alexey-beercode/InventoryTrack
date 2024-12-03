@@ -78,4 +78,19 @@ public class WarehouseService : IWarehouseService
         _unitOfWork.Warehouses.Delete(warehouse);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<IEnumerable<WarehouseStateResponseDto>> GetAllWarehousesStateAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WarehouseStateResponseDto> GetStateByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<WarehouseStateResponseDto>> GetWarehousesStatesByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }
