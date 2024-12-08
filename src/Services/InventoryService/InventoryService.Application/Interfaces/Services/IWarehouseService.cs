@@ -1,4 +1,5 @@
-﻿using InventoryService.Application.DTOs.Response.Warehouse;
+﻿using InventoryService.Application.DTOs.Request.Warehouse;
+using InventoryService.Application.DTOs.Response.Warehouse;
 using InventoryService.Domain.Enums;
 
 namespace InventoryService.Application.Interfaces.Services;
@@ -30,4 +31,6 @@ public interface IWarehouseService
 
     Task<IEnumerable<WarehouseStateResponseDto>> GetWarehousesStatesByCompanyIdAsync(Guid companyId,
         CancellationToken cancellationToken = default);
+
+    Task CreateAsync(CreateWarehouseDto createWarehouseDto, CancellationToken cancellationToken = default);
 }

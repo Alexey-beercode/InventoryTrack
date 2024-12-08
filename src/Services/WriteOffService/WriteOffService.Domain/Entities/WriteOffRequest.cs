@@ -9,6 +9,7 @@ public class WriteOffRequest : BaseEntity
     public Guid WarehouseId { get; set; }
     public long Quantity { get; set; }
     public Guid ReasonId { get; set; }
+    public Guid CompanyId { get; set; }
     public RequestStatus Status { get; set; }
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }

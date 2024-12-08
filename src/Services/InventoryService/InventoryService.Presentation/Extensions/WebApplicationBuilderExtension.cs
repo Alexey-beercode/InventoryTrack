@@ -1,6 +1,8 @@
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using InventoryService.Application.Facades;
+using InventoryService.Application.Interfaces.Facades;
 using InventoryService.Application.Interfaces.Services;
 using InventoryService.Application.MapperProfiles;
 using InventoryService.Application.Services;
@@ -8,8 +10,10 @@ using InventoryService.Domain.Interfaces.Repositories;
 using InventoryService.Domain.Interfaces.UnitOfWork;
 using InventoryService.Infrastructure;
 using InventoryService.Infrastructure.Config.Database;
+using InventoryService.Infrastructure.Messaging.Consumers;
 using InventoryService.Infrastructure.Repositories;
 using InventoryService.Validators;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -78,12 +82,14 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
         builder.Services.AddScoped<IInventoryItemRepository, InventoryItemRepository>();
+        builder.Services.AddScoped<IInventoriesItemsWarehousesRepository, InventoriesItemsWarehousesRepository>();
         builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
         builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
         builder.Services.AddScoped<IDocumentService, DocumentService>();
         builder.Services.AddScoped<IInventoryItemService, InventoryItemService>();
         builder.Services.AddScoped<ISupplierService, SupplierService>();
         builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+        builder.Services.AddScoped<IInventoryItemFacade, InventoryItemFacade>();
         builder.Services.AddControllers();
     }
 
@@ -139,4 +145,64 @@ public static class WebApplicationBuilderExtension
             
         });
     }
+    
+    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    {
+        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+
+        builder.Services.AddMassTransit(x =>
+        {
+            // Регистрация всех Consumer
+            x.AddConsumer<GetItemConsumer>();
+            x.AddConsumer<GetWarehouseConsumer>();
+            x.AddConsumer<MovementsRequestConsumer>();
+            x.AddConsumer<ReportInventoryRequestConsumer>();
+            x.AddConsumer<WriteOffsRequestConsumer>();
+
+            // Регистрация IRequestClient для запросов
+            x.AddRequestClient<GetReportDataMessage>();
+            x.AddRequestClient<WriteOffInventoryMessage>();
+            x.AddRequestClient<MoveInventoryMessage>();
+
+            // Конфигурация RabbitMQ
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
+                {
+                    h.Username(rabbitMqSettings["Username"]);
+                    h.Password(rabbitMqSettings["Password"]);
+                });
+
+                // Конфигурация очередей для Consumer
+                cfg.ReceiveEndpoint("get-item-queue", e =>
+                {
+                    e.ConfigureConsumer<GetItemConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("get-warehouse-queue", e =>
+                {
+                    e.ConfigureConsumer<GetWarehouseConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("move-inventory-queue", e =>
+                {
+                    e.ConfigureConsumer<MovementsRequestConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("report-inventory-queue", e =>
+                {
+                    e.ConfigureConsumer<ReportInventoryRequestConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint("write-off-queue", e =>
+                {
+                    e.ConfigureConsumer<WriteOffsRequestConsumer>(context);
+                });
+            });
+        });
+
+        // Включение HostedService для MassTransit
+        builder.Services.AddMassTransitHostedService();
+    }
+
 }

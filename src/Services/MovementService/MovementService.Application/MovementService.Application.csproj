@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MovementService.Domain\MovementService.Domain.csproj" />
+      <ProjectReference Include="..\MovementService.Infrastructure\MovementService.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

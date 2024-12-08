@@ -18,4 +18,6 @@ public interface IMovementRequestRepository : IBaseRepository<MovementRequest>
 
     Task<IEnumerable<MovementRequest>> GetByStatusAsync(MovementRequestStatus status,
         CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<MovementRequest>> GetByDateRangeAsync(DateTime startDate, DateTime endDate,CancellationToken cancellationToken=default);
 }

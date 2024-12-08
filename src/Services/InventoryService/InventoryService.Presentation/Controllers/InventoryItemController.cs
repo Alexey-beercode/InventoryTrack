@@ -23,7 +23,7 @@ namespace InventoryService.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Warehouse Manager")]
+       // [Authorize(Policy = "Warehouse Manager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateInventoryItem([FromForm] CreateInventoryItemDto dto, 
@@ -79,16 +79,6 @@ namespace InventoryService.Controllers
             CancellationToken cancellationToken)
         {
             var item = await _inventoryItemService.GetByNameAsync(name, cancellationToken);
-            return Ok(item);
-        }
-
-        [HttpGet("by-code/{uniqueCode}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemResponseDto>> GetByUniqueCode(string uniqueCode, 
-            CancellationToken cancellationToken)
-        {
-            var item = await _inventoryItemService.GetByUniqueCodeAsync(uniqueCode, cancellationToken);
             return Ok(item);
         }
 

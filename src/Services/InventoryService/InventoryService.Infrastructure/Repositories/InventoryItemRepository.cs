@@ -15,7 +15,6 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
     public async Task<IEnumerable<InventoryItem>> GetFilteredItemsAsync(
         string name = null, 
         Guid? supplierId = null, 
-        Guid? warehouseId = null,
         DateTime? expirationDateFrom = null, 
         DateTime? expirationDateTo = null, 
         decimal estimatedValue = default)
@@ -27,9 +26,6 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
 
         if (supplierId.HasValue)
             query = query.Where(i => i.SupplierId == supplierId.Value);
-
-        if (warehouseId.HasValue)
-            query = query.Where(i => i.WarehouseId == warehouseId.Value);
 
         if (expirationDateFrom.HasValue)
             query = query.Where(i => i.ExpirationDate >= expirationDateFrom.Value);
@@ -43,25 +39,15 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
 
         query = query.Where(i => i.Status == InventoryItemStatus.Created);
         return await query.AsNoTracking()
-            .Include(i => i.Warehouse)
             .Include(i => i.Supplier)
             .ToListAsync();
     }
     
-    public async Task<IEnumerable<InventoryItem>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
-    {
-        return await _dbSet.AsNoTracking()
-            .Where(e => e.WarehouseId == warehouseId && !e.IsDeleted && e.Status==InventoryItemStatus.Created)
-            .Include(i => i.Warehouse)
-            .Include(i => i.Supplier)
-            .ToListAsync(cancellationToken);
-    }
     
     public async Task<InventoryItem> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await _dbSet.AsNoTracking()
-            .Where(i => i.Name == name && !i.IsDeleted && i.Status==InventoryItemStatus.Created)
-            .Include(i => i.Warehouse)
+            .Where(i => i.Name == name && !i.IsDeleted )
             .Include(i => i.Supplier)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -70,7 +56,6 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
     {
         return await _dbSet.AsNoTracking()
             .Where(i => i.UniqueCode == uniqueCode && !i.IsDeleted && i.Status==InventoryItemStatus.Created)
-            .Include(i => i.Warehouse)
             .Include(i => i.Supplier)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -80,17 +65,24 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
         return await _dbSet
             .AsNoTracking()
             .Where(i=>i.Status==status && !i.IsDeleted)
-            .Include(i => i.Warehouse)
             .Include(i => i.Supplier)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<InventoryItem> GetByIdCreatedAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(i=>i.Id==id && i.Status==InventoryItemStatus.Created)
+            .Include(i => i.Supplier)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public new async Task<IEnumerable<InventoryItem>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _dbSet
             .AsNoTracking()
-            .Where(item => !item.IsDeleted && item.Status==InventoryItemStatus.Created)
-            .Include(i=>i.Warehouse)
+            .Where(item => !item.IsDeleted)
             .Include(i=>i.Supplier)
             .ToListAsync(cancellationToken);
     }
@@ -99,8 +91,7 @@ public class InventoryItemRepository : BaseRepository<InventoryItem>,IInventoryI
     {
         return await _dbSet
             .AsNoTracking()
-            .Where(i=>i.Id==id && !i.IsDeleted && i.Status==InventoryItemStatus.Created)
-            .Include(i => i.Warehouse)
+            .Where(i=>i.Id==id)
             .Include(i => i.Supplier)
             .FirstOrDefaultAsync(cancellationToken);
     }

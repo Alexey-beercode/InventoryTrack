@@ -4,6 +4,7 @@ using AuthService.BLL.Infrastructure.Mapper;
 using AuthService.BLL.Infrastructure.Validators;
 using AuthService.BLL.Interfaces.Facades;
 using AuthService.BLL.Interfaces.Services;
+using AuthService.BLL.Messaging.Consumers;
 using AuthService.BLL.Services;
 using AuthService.DAL.Infrastructure;
 using AuthService.DAL.Infrastructure.Database;
@@ -12,6 +13,7 @@ using AuthService.DAL.Interfaces.Repositories;
 using AuthService.DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -146,4 +148,37 @@ public static class WebApplicationBuilderExtension
             
         });
     }
+    
+    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    {
+        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+
+        builder.Services.AddMassTransit(x =>
+        {
+            // Регистрация Consumer
+            x.AddConsumer<GetUserConsumer>();
+            
+            x.AddRequestClient<GetUserMessage>();
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
+                {
+                    h.Username(rabbitMqSettings["Username"]);
+                    h.Password(rabbitMqSettings["Password"]);
+                });
+
+                // Конфигурация очереди для Consumer
+                cfg.ReceiveEndpoint("get-user-queue", e =>
+                {
+                    e.ConfigureConsumer<GetUserConsumer>(context);
+                });
+            });
+        });
+
+        // Включение MassTransit как HostedService
+        builder.Services.AddMassTransitHostedService();
+    }
+
+
 }

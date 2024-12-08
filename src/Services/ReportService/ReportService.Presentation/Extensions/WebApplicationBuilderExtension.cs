@@ -1,16 +1,23 @@
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using ReportService.Application.MappingProfiles;
+using ReportService.Application.Services;
+using ReportService.Application.UseCases.Report.GetById;
 using ReportService.Domain.Entities;
 using ReportService.Domain.Interfaces.Repositories;
+using ReportService.Domain.Interfaces.Services;
 using ReportService.Infrastructure.Database;
+using ReportService.Infrastructure.Database.Configuration;
+using ReportService.Infrastructure.Messaging.Producers;
 using ReportService.Infrastructure.Repositories;
+using ReportService.Presentation.Validators;
 
 namespace ReportService.Presentation.Extensions;
 
@@ -61,35 +68,27 @@ public static class WebApplicationBuilderExtension
 
     public static void AddMongoDatabase(this WebApplicationBuilder builder)
     {
-        var settings = builder.Configuration.GetSection("MongoDbSettings");
-        var connectionString = settings.GetValue<string>("ConnectionString");
-        var databaseName = settings.GetValue<string>("DatabaseName");
+        var mongoSettingsSection = builder.Configuration.GetSection("MongoDbSettings");
+        builder.Services.Configure<NotificationDbSettings>(mongoSettingsSection);
 
-        if (string.IsNullOrEmpty(connectionString))
+        var mongoSettings = mongoSettingsSection.Get<NotificationDbSettings>();
+        if (mongoSettings == null || string.IsNullOrEmpty(mongoSettings.ConnectionString) || string.IsNullOrEmpty(mongoSettings.DatabaseName))
         {
-            throw new ArgumentException("MongoDB connection string is not configured");
+            throw new ArgumentException("MongoDB connection string or database name is not configured");
         }
 
-        if (string.IsNullOrEmpty(databaseName))
-        {
-            throw new ArgumentException("MongoDB database name is not configured");
-        }
-
-        builder.Services.Configure<Report>(settings);
-    
-        builder.Services.AddSingleton<IMongoClient>(new MongoClient(connectionString));
+        builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoSettings.ConnectionString));
         builder.Services.AddScoped<IMongoDatabase>(provider =>
         {
             var client = provider.GetRequiredService<IMongoClient>();
-            return client.GetDatabase(databaseName);
+            return client.GetDatabase(mongoSettings.DatabaseName);
         });
-    
+
         builder.Services.AddScoped<IMongoCollection<Report>>(provider =>
         {
             var database = provider.GetRequiredService<IMongoDatabase>();
             return database.GetCollection<Report>("reports");
         });
-        
 
         builder.Services.AddScoped<ReportDbContext>();
     }
@@ -97,7 +96,31 @@ public static class WebApplicationBuilderExtension
     public static void AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IReportRepository, ReportRepository>();
+        builder.Services.AddScoped<IExcelExportService, ExcelExportService>();
         builder.Services.AddControllers();
+    }
+
+    public static void AddMassTransit(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMassTransit(config =>
+        {
+            config.UsingRabbitMq((context, cfg) =>
+            {
+                var rabbitSettings = builder.Configuration.GetSection("RabbitMQ");
+                var host = rabbitSettings["Host"];
+                var username = rabbitSettings["Username"];
+                var password = rabbitSettings["Password"];
+
+                cfg.Host(host, h =>
+                {
+                    h.Username(username);
+                    h.Password(password);
+                });
+
+                // Добавляем запрос клиента
+                cfg.ConfigureEndpoints(context);
+            });
+        });
     }
 
     public static void AddValidation(this WebApplicationBuilder builder)
@@ -105,6 +128,7 @@ public static class WebApplicationBuilderExtension
         builder
             .Services.AddFluentValidationAutoValidation()
             .AddFluentValidationClientsideAdapters();
+        builder.Services.AddValidatorsFromAssemblyContaining<GetPaginatedReportsQueryValidator>();
     }
 
     public static void AddIdentity(this WebApplicationBuilder builder)
@@ -151,6 +175,42 @@ public static class WebApplicationBuilderExtension
     public static void AddMediatr(this WebApplicationBuilder builder)
     {
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+            typeof(GetReportByIdQuery).Assembly,
+            typeof(GetReportByIdQueryHandler).Assembly
         ));
     }
+    
+    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    {
+        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+
+        builder.Services.AddMassTransit(x =>
+        {
+            // Регистрация всех IRequestClient
+            x.AddRequestClient<GetReportDataMessage>();
+            x.AddRequestClient<GetUserMessage>();
+            x.AddRequestClient<GetItemMessage>();
+            x.AddRequestClient<GetWarehouseMessage>();
+
+            // Конфигурация RabbitMQ
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
+                {
+                    h.Username(rabbitMqSettings["Username"]);
+                    h.Password(rabbitMqSettings["Password"]);
+                });
+
+                // Конфигурация очередей и endpoint'ов
+                cfg.ConfigureEndpoints(context);
+            });
+        });
+
+        // Регистрация ReportProducer
+        builder.Services.AddScoped<ReportProducer>();
+
+        // Включение HostedService для MassTransit
+        builder.Services.AddMassTransitHostedService();
+    }
+
 }

@@ -1,44 +1,36 @@
-﻿using AutoMapper;
-using MassTransit;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using MediatR;
 using ReportService.Domain.Interfaces.Repositories;
-using ReportService.Infrastructure.Messaging.Messages;
+using ReportService.Infrastructure.Messaging.Producers;
 
-namespace ReportService.Application.UseCases.Report.Create
+namespace ReportService.Application.UseCases.Report.Create;
+
+public class CreateCommandHandler : IRequestHandler<CreateCommand>
 {
-    public class CreateCommandHandler : IRequestHandler<CreateCommand>
+    private readonly ReportProducer _reportProducer;
+    private readonly IReportRepository _reportRepository;
+
+    public CreateCommandHandler(ReportProducer reportProducer, IReportRepository reportRepository)
     {
-        private readonly IRequestClient<CreateReportMessage> _requestClient;
-        private readonly IReportRepository _reportRepository;
+        _reportProducer = reportProducer;
+        _reportRepository = reportRepository;
+    }
 
-        public CreateCommandHandler(IRequestClient<CreateReportMessage> requestClient, IReportRepository reportRepository)
+    public async Task Handle(CreateCommand request, CancellationToken cancellationToken)
+    {
+        // Запрашиваем данные отчета
+        var reportData = await _reportProducer.RequestReportDataAsync(request.CompanyId, request.ReportType, request.DateSelect);
+
+        // Создаем новый отчет
+        var report = new Domain.Entities.Report
         {
-            _requestClient = requestClient;
-            _reportRepository = reportRepository;
-        }
+            Name = $"{request.ReportType}_{DateTime.UtcNow:yyyyMMddHHmmss}",
+            Data = reportData,
+            ReportType = request.ReportType,
+            DateSelect = request.DateSelect,
+            CreatedAt = DateTime.UtcNow
+        };
 
-        public async Task Handle(CreateCommand request, CancellationToken cancellationToken)
-        {
-            // Формируем запрос
-            var response = await _requestClient.GetResponse<CreateReportResponse>(
-                new CreateReportMessage
-                {
-                    ReportType = request.ReportType.ToString()
-                });
-
-            var reportData = response.Message.Data;
-            var report = new Domain.Entities.Report()
-            {
-                CreatedAt = DateTime.UtcNow, 
-                Data = reportData, 
-                DateSelect = request.DateSelect,
-                ReportType = request.ReportType, 
-                Name = DateTime.UtcNow.ToString()
-            };
-
-            await _reportRepository.CreateAsync(report);
-        }
+        // Сохраняем отчет в базе данных
+        await _reportRepository.CreateAsync(report);
     }
 }

@@ -7,4 +7,5 @@ public class CreateCommand : IRequest
 {
     public ReportType ReportType { get; set; }
     public DateSelect DateSelect { get; set; }
+    public Guid CompanyId { get; set; }
 }

@@ -25,4 +25,6 @@ public interface IWriteOffRequestRepository : IBaseRepository<WriteOffRequest>
     Task<WriteOffRequest> GetByDateAndItemIdAsync(Guid itemId, DateTime date,
         CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<WriteOffRequest>> GetByCompanyIdAsync(Guid companyId,
+        CancellationToken cancellationToken = default);
 }

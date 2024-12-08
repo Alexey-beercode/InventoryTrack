@@ -6,6 +6,7 @@ using MovementService.Application.Interfaces.Services;
 using MovementService.Domain.Entities;
 using MovementService.Domain.Enums;
 using MovementService.Domain.Interfaces.UnitOfWork;
+using MovementService.Infrastructure.Messaging.Producers;
 
 namespace MovementService.Application.Services
 {
@@ -13,11 +14,13 @@ namespace MovementService.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly MovementRequestProducer _movementRequestProducer;
 
-        public MovementRequestService(IUnitOfWork unitOfWork, IMapper mapper)
+        public MovementRequestService(IUnitOfWork unitOfWork, IMapper mapper, MovementRequestProducer movementRequestProducer)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _movementRequestProducer = movementRequestProducer;
         }
 
         public async Task CreateMovementRequestAsync(CreateMovementRequestDto dto, CancellationToken cancellationToken = default)
@@ -55,10 +58,23 @@ namespace MovementService.Application.Services
             }
 
             movementRequest.Status = MovementRequestStatus.Completed;
+            movementRequest.ApprovedByUserId = changeStatusDto.UserId;
 
             _unitOfWork.MovementRequests.Update(movementRequest);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            // Отправляем сообщение в InventoryService
+            var moveMessage = new MoveInventoryMessage
+            {
+                ItemId = movementRequest.ItemId,
+                SourceWarehouseId = movementRequest.SourceWarehouseId,
+                DestinationWarehouseId = movementRequest.DestinationWarehouseId,
+                Quantity = movementRequest.Quantity
+            };
+
+            await _movementRequestProducer.SendMoveInventoryMessageAsync(moveMessage);
         }
+
 
         public async Task DeleteMovementRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
         {

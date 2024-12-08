@@ -8,13 +8,14 @@ public class InventoryDbContext : DbContext
 {
     public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
     
     public DbSet<Document> Documents { get; set; }
     public DbSet<InventoryItem> InventoryItems { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<InventoriesItemsWarehouses> InventoriesItemsWarehouses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,5 +23,6 @@ public class InventoryDbContext : DbContext
         modelBuilder.ApplyConfiguration(new InventoryItemConfiguration());
         modelBuilder.ApplyConfiguration(new SupplierConfiguration());
         modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+        modelBuilder.ApplyConfiguration(new InventoriesItemsWarehousesConfiguration());
     }
 }

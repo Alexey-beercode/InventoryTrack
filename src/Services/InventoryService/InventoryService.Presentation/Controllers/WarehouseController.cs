@@ -1,4 +1,5 @@
-﻿using InventoryService.Application.DTOs.Response.Warehouse;
+﻿using InventoryService.Application.DTOs.Request.Warehouse;
+using InventoryService.Application.DTOs.Response.Warehouse;
 using InventoryService.Application.Interfaces.Services;
 using InventoryService.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -97,5 +98,47 @@ namespace InventoryService.Controllers
             await _warehouseService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateWarehouse([FromBody] CreateWarehouseDto createWarehouseDto,
+            CancellationToken cancellationToken = default)
+        {
+            await _warehouseService.CreateAsync(createWarehouseDto, cancellationToken);
+            return Created();
+        }
+        
+        [HttpGet("states")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<WarehouseStateResponseDto>>> GetAllWarehousesStates(
+            CancellationToken cancellationToken)
+        {
+            var warehouseStates = await _warehouseService.GetAllWarehousesStateAsync(cancellationToken);
+            return Ok(warehouseStates);
+        }
+
+        [HttpGet("states/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WarehouseStateResponseDto>> GetWarehouseStateById(Guid id, 
+            CancellationToken cancellationToken)
+        {
+            var warehouseState = await _warehouseService.GetStateByIdAsync(id, cancellationToken);
+            if (warehouseState == null)
+            {
+                return NotFound();
+            }
+            return Ok(warehouseState);
+        }
+
+        [HttpGet("states/by-company/{companyId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<WarehouseStateResponseDto>>> GetWarehousesStatesByCompany(
+            Guid companyId, CancellationToken cancellationToken)
+        {
+            var warehouseStates = await _warehouseService.GetWarehousesStatesByCompanyIdAsync(companyId, cancellationToken);
+            return Ok(warehouseStates);
+        }
+
     }
 }

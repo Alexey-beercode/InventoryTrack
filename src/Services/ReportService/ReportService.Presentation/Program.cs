@@ -5,11 +5,12 @@ builder.AddIdentity();
 builder.AddMapping();
 builder.AddMediatr();
 builder.AddServices();
+builder.AddMassTransit();
 builder.AddValidation();
+builder.AddMassTransitWithRabbitMq();
 builder.AddMongoDatabase();
 builder.AddSwaggerDocumentation();
 var app = builder.Build();
-
 app.AddSwagger();
 app.AddApplicationMiddleware();
 

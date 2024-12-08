@@ -4,6 +4,7 @@ using WriteOffService.Application.DTOs.Request.WriteOffRequest;
 using WriteOffService.Application.DTOs.Response.WriteOffRequest;
 using WriteOffService.Application.Exceptions;
 using WriteOffService.Application.Interfaces.Services;
+using WriteOffService.Application.Messaging.Producers;
 using WriteOffService.Domain.Entities;
 using WriteOffService.Domain.Enums;
 using WriteOffService.Domain.Interfaces.UnitOfWork;
@@ -17,13 +18,15 @@ public class WriteOffRequestService : IWriteOffRequestService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDocumentService _documentService;
     private readonly IWriteOffReasonService _writeOffReasonService;
+    private readonly WriteOffsRequestProducer _writeOffsRequestProducer;
 
-    public WriteOffRequestService(IMapper mapper, IUnitOfWork unitOfWork, IDocumentService documentService, IWriteOffReasonService writeOffReasonService)
+    public WriteOffRequestService(IMapper mapper, IUnitOfWork unitOfWork, IDocumentService documentService, IWriteOffReasonService writeOffReasonService, WriteOffsRequestProducer writeOffsRequestProducer)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _documentService = documentService;
         _writeOffReasonService = writeOffReasonService;
+        _writeOffsRequestProducer = writeOffsRequestProducer;
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
@@ -85,13 +88,27 @@ public class WriteOffRequestService : IWriteOffRequestService
     public async Task UpdateAsync(UpdateWriteOffRequestDto updateWriteOffRequestDto, CancellationToken cancellationToken = default)
     {
         var request = await _unitOfWork.WriteOffRequests.GetByIdAsync(updateWriteOffRequestDto.Id, cancellationToken)
-            ?? throw new EntityNotFoundException("WriteOffRequest", updateWriteOffRequestDto.Id);
-        
+                      ?? throw new EntityNotFoundException("WriteOffRequest", updateWriteOffRequestDto.Id);
+    
         UpdateRequestStatus(request, updateWriteOffRequestDto);
 
         _unitOfWork.WriteOffRequests.Update(request);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Если запрос подтвержден, отправляем сообщение в InventoryService
+        if (request.Status == RequestStatus.Created)
+        {
+            var writeOffMessage = new WriteOffInventoryMessage
+            {
+                ItemId = request.ItemId,
+                WarehouseId = request.WarehouseId,
+                Quantity = request.Quantity,
+            };
+
+            await _writeOffsRequestProducer.SendWriteOffMessageAsync(writeOffMessage);
+        }
     }
+
     
 
     private async Task<IEnumerable<WriteOffRequestResponseDto>> AttachDocumentsToRequestsAsync(

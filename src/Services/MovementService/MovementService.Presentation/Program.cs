@@ -1,6 +1,15 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using MovementService.Presentation.Extensions;
 
-app.MapGet("/", () => "Hello World!");
+var builder = WebApplication.CreateBuilder(args);
+builder.AddDatabase();
+builder.AddIdentity();
+builder.AddMapping();
+builder.AddServices();
+builder.AddValidation();
+builder.AddSwaggerDocumentation();
+builder.AddMassTransitWithRabbitMq();
+var app = builder.Build();
+app.AddSwagger();
+app.AddApplicationMiddleware();
 
 app.Run();

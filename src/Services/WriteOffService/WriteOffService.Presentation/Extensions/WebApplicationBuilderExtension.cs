@@ -1,6 +1,7 @@
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WriteOffService.Application.Interfaces.Services;
 using WriteOffService.Application.MapperProfiles;
+using WriteOffService.Application.Messaging.Producers;
 using WriteOffService.Application.Services;
 using WriteOffService.Domain.Interfaces.Repositories;
 using WriteOffService.Domain.Interfaces.UnitOfWork;
 using WriteOffService.Infrastructure;
 using WriteOffService.Infrastructure.Config.Database;
+using WriteOffService.Infrastructure.Messaging.Consumers;
 using WriteOffService.Infrastructure.Repositories;
 using WriteOffService.Presentation.Validators;
 
@@ -136,4 +139,38 @@ public static class WebApplicationBuilderExtension
             
         });
     }
+    
+    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    {
+        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+
+        builder.Services.AddMassTransit(x =>
+        {
+            // Регистрация Consumer
+            x.AddConsumer<ReportWriteOffsRequestConsumer>();
+
+            // Регистрация Producer через IPublishEndpoint
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
+                {
+                    h.Username(rabbitMqSettings["Username"]);
+                    h.Password(rabbitMqSettings["Password"]);
+                });
+
+                // Конфигурация очереди для Consumer
+                cfg.ReceiveEndpoint("report-write-offs-queue", e =>
+                {
+                    e.ConfigureConsumer<ReportWriteOffsRequestConsumer>(context);
+                });
+            });
+        });
+
+        // Регистрация IPublishEndpoint для Producer
+        builder.Services.AddScoped<WriteOffsRequestProducer>();
+
+        // Включение MassTransit как HostedService
+        builder.Services.AddMassTransitHostedService();
+    }
+
 }

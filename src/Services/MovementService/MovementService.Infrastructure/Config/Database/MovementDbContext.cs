@@ -8,7 +8,7 @@ public class MovementDbContext : DbContext
 {
     public MovementDbContext(DbContextOptions<MovementDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
     
     public DbSet<MovementRequest> MovementRequests { get; set; }

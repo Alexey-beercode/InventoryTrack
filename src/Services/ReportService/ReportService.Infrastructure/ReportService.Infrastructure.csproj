@@ -15,15 +15,16 @@
     <ItemGroup>
       <ProjectReference Include="..\ReportService.Domain\ReportService.Domain.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-        <Compile Include="..\..\..\..\shared\Contracts\CreateReportMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\CreateReportResponse.cs" />
-    </ItemGroup>
-
 
     <ItemGroup>
-      <Folder Include="Messaging\Consumers\" />
+        <Compile Include="..\..\..\..\shared\Contracts\GetReportDataMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\ReportDataResponseMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\GetUserMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\GetItemMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\GetWarehouseMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\UserResponseMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\ItemResponseMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\WarehouseResponseMessage.cs" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using InventoryService.Application.DTOs.Base;
+using InventoryService.Application.DTOs.Response.Document;
 using InventoryService.Application.DTOs.Response.InventoryItemStatus;
 using InventoryService.Application.DTOs.Response.Supplier;
 using InventoryService.Application.DTOs.Response.Warehouse;
@@ -14,8 +15,9 @@ public class InventoryItemResponseDto : BaseDto
     public decimal EstimatedValue { get; set; }
     public DateTime ExpirationDate { get; set; }
     public SupplierResponseDto Supplier { get; set; }
-    public WarehouseResponseDto Warehouse { get; set; }
     public DateTime DeliveryDate { get; set; }
     public Guid DocumentId { get; set; }
     public InventoryItemStatusResponseDto Status { get; set; }
+    public List<WarehouseDetailsDto> WarehouseDetails { get; set; }
+    public DocumentInfoResponseDto DocumentInfo { get; set; }
 }

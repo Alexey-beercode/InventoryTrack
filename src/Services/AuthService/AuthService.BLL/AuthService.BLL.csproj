@@ -15,6 +15,7 @@
       <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.3" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.1" />
     </ItemGroup>
@@ -22,6 +23,11 @@
     <ItemGroup>
       <ProjectReference Include="..\AuthService.DAL\AuthService.DAL.csproj" />
       <ProjectReference Include="..\AuthService.Domain\AuthService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\..\..\shared\Contracts\GetUserMessage.cs" />
+        <Compile Include="..\..\..\..\shared\Contracts\UserResponseMessage.cs" />
     </ItemGroup>
 
 </Project>

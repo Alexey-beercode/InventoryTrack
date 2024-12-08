@@ -1,8 +1,4 @@
-﻿using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using MongoDB.Bson;
 using ReportService.Domain.Entities;
 using ReportService.Domain.Interfaces.Services;
@@ -32,7 +28,7 @@ namespace ReportService.Application.Services
                     GenerateItemsHistorySheet(worksheet, report.Data);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Unknown report type: {report.ReportType}");
+                    throw new ArgumentOutOfRangeException($"Неизвестный тип отчета: {report.ReportType}");
             }
 
             // Сохраняем документ в массив байтов
@@ -41,11 +37,10 @@ namespace ReportService.Application.Services
             return stream.ToArray();
         }
 
-        private void GenerateStockStateSheet(IXLWorksheet worksheet, BsonDocument data)
+        public void GenerateStockStateSheet(IXLWorksheet worksheet, BsonDocument data)
         {
             var items = data["Items"].AsBsonArray;
 
-            // Заголовки
             worksheet.Cell(1, 1).Value = "Наименование";
             worksheet.Cell(1, 2).Value = "Уникальный код";
             worksheet.Cell(1, 3).Value = "Количество";
@@ -61,23 +56,21 @@ namespace ReportService.Application.Services
                 var bsonItem = item.AsBsonDocument;
                 worksheet.Cell(row, 1).Value = bsonItem["Name"].AsString; // Наименование
                 worksheet.Cell(row, 2).Value = bsonItem["UniqueCode"].AsString; // Уникальный код
-                worksheet.Cell(row, 3).Value = bsonItem["Quantity"].AsInt64; // Количество
-                worksheet.Cell(row, 4).Value = bsonItem["EstimatedValue"].AsDecimal; // Оценочная стоимость
+                worksheet.Cell(row, 3).Value = bsonItem["Quantity"].ToInt32(); // Количество
+                worksheet.Cell(row, 4).Value = bsonItem["EstimatedValue"].ToDecimal(); // Оценочная стоимость
                 worksheet.Cell(row, 5).Value = bsonItem["ExpirationDate"].ToUniversalTime(); // Срок годности
-                worksheet.Cell(row, 6).Value = bsonItem["Supplier"]["Name"].AsString; // Поставщик
-                worksheet.Cell(row, 7).Value = bsonItem["Warehouse"]["Name"].AsString; // Склад
+                worksheet.Cell(row, 6).Value = bsonItem["SupplierName"].AsString; // Поставщик
+                worksheet.Cell(row, 7).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString; // Склад
                 worksheet.Cell(row, 8).Value = bsonItem["DeliveryDate"].ToUniversalTime(); // Дата поступления
                 row++;
             }
 
-            // Автоматическое форматирование столбцов
             worksheet.Columns().AdjustToContents();
         }
 
-
         private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
         {
-            var items = data["Movements"].AsBsonArray;
+            var movements = data["Movements"].AsBsonArray;
 
             worksheet.Cell(1, 1).Value = "Наименование";
             worksheet.Cell(1, 2).Value = "Склад отправления";
@@ -87,25 +80,24 @@ namespace ReportService.Application.Services
             worksheet.Cell(1, 6).Value = "Статус";
 
             int row = 2;
-            foreach (var item in items)
+            foreach (var movement in movements)
             {
-                var bsonItem = item.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonItem["Name"].AsString; // Наименование
-                worksheet.Cell(row, 2).Value = bsonItem["SourceWarehouse"]["Name"].AsString; // Склад отправления
-                worksheet.Cell(row, 3).Value = bsonItem["DestinationWarehouse"]["Name"].AsString; // Склад назначения
-                worksheet.Cell(row, 4).Value = bsonItem["Quantity"].AsInt64; // Количество
-                worksheet.Cell(row, 5).Value = bsonItem["RequestDate"].ToUniversalTime(); // Дата запроса
-                worksheet.Cell(row, 6).Value = bsonItem["Status"]["Name"].AsString; // Статус
+                var bsonMovement = movement.AsBsonDocument;
+                worksheet.Cell(row, 1).Value = bsonMovement["Name"].AsString;
+                worksheet.Cell(row, 2).Value = bsonMovement["SourceWarehouseId"].AsString; // Склад отправления
+                worksheet.Cell(row, 3).Value = bsonMovement["DestinationWarehouseId"].AsString; // Склад назначения
+                worksheet.Cell(row, 4).Value = bsonMovement["Quantity"].ToInt32(); // Количество
+                worksheet.Cell(row, 5).Value = bsonMovement["RequestDate"].ToUniversalTime(); // Дата запроса
+                worksheet.Cell(row, 6).Value = bsonMovement["Status"].AsString; // Статус
                 row++;
             }
 
             worksheet.Columns().AdjustToContents();
         }
 
-
         private void GenerateWriteOffsSheet(IXLWorksheet worksheet, BsonDocument data)
         {
-            var items = data["WriteOffs"].AsBsonArray;
+            var writeOffs = data["WriteOffs"].AsBsonArray;
 
             worksheet.Cell(1, 1).Value = "Наименование";
             worksheet.Cell(1, 2).Value = "Склад";
@@ -115,25 +107,24 @@ namespace ReportService.Application.Services
             worksheet.Cell(1, 6).Value = "Утверждено пользователем";
 
             int row = 2;
-            foreach (var item in items)
+            foreach (var writeOff in writeOffs)
             {
-                var bsonItem = item.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonItem["Name"].AsString; // Наименование
-                worksheet.Cell(row, 2).Value = bsonItem["Warehouse"]["Name"].AsString; // Склад
-                worksheet.Cell(row, 3).Value = bsonItem["Quantity"].AsInt64; // Количество
-                worksheet.Cell(row, 4).Value = bsonItem["Reason"]["Reason"].AsString; // Причина
-                worksheet.Cell(row, 5).Value = bsonItem["RequestDate"].ToUniversalTime(); // Дата запроса
-                worksheet.Cell(row, 6).Value = bsonItem["ApprovedByUserId"].ToString(); // Утверждено пользователем
+                var bsonWriteOff = writeOff.AsBsonDocument;
+                worksheet.Cell(row, 1).Value = bsonWriteOff["ItemName"].AsString;
+                worksheet.Cell(row, 2).Value = bsonWriteOff["WarehouseName"].AsString;
+                worksheet.Cell(row, 3).Value = bsonWriteOff["Quantity"].ToInt32();
+                worksheet.Cell(row, 4).Value = bsonWriteOff["Reason"].AsString;
+                worksheet.Cell(row, 5).Value = bsonWriteOff["RequestDate"].ToUniversalTime();
+                worksheet.Cell(row, 6).Value = bsonWriteOff["ApprovedByUser"].AsString;
                 row++;
             }
 
             worksheet.Columns().AdjustToContents();
         }
 
-
         private void GenerateItemsHistorySheet(IXLWorksheet worksheet, BsonDocument data)
         {
-            var items = data["History"].AsBsonArray;
+            var history = data["Items"].AsBsonArray;
 
             worksheet.Cell(1, 1).Value = "Тип операции";
             worksheet.Cell(1, 2).Value = "Наименование";
@@ -142,19 +133,18 @@ namespace ReportService.Application.Services
             worksheet.Cell(1, 5).Value = "Дата";
 
             int row = 2;
-            foreach (var item in items)
+            foreach (var item in history)
             {
                 var bsonItem = item.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonItem["OperationType"].AsString; // Тип операции
-                worksheet.Cell(row, 2).Value = bsonItem["Name"].AsString; // Наименование
-                worksheet.Cell(row, 3).Value = bsonItem["Warehouse"]["Name"].AsString; // Склад
-                worksheet.Cell(row, 4).Value = bsonItem["Quantity"].AsInt64; // Количество
-                worksheet.Cell(row, 5).Value = bsonItem["Date"].ToUniversalTime(); // Дата
+                worksheet.Cell(row, 1).Value = bsonItem["OperationType"].AsString;
+                worksheet.Cell(row, 2).Value = bsonItem["Name"].AsString;
+                worksheet.Cell(row, 3).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString;
+                worksheet.Cell(row, 4).Value = bsonItem["Quantity"].ToInt32();
+                worksheet.Cell(row, 5).Value = bsonItem["Date"].ToUniversalTime();
                 row++;
             }
 
             worksheet.Columns().AdjustToContents();
         }
-
     }
 }

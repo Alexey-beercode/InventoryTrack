@@ -9,4 +9,5 @@ public interface IUnitOfWork:IDisposable
     IInventoryItemRepository InventoryItems { get; }
     ISupplierRepository Suppliers { get; }
     IWarehouseRepository Warehouses { get; }
+    IInventoriesItemsWarehousesRepository InventoriesItemsWarehouses { get; }
 }

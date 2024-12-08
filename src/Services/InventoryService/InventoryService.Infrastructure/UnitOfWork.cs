@@ -12,14 +12,16 @@ public class UnitOfWork : IUnitOfWork
     private readonly IInventoryItemRepository _inventoryItemRepository;
     private readonly ISupplierRepository _supplierRepository;
     private readonly IWarehouseRepository _warehouseRepository;
+    private readonly IInventoriesItemsWarehousesRepository _inventoriesItemsWarehouses;
 
-    public UnitOfWork(InventoryDbContext dbContext, IDocumentRepository documentRepository, IInventoryItemRepository inventoryItemRepository, ISupplierRepository supplierRepository, IWarehouseRepository warehouseRepository)
+    public UnitOfWork(InventoryDbContext dbContext, IDocumentRepository documentRepository, IInventoryItemRepository inventoryItemRepository, ISupplierRepository supplierRepository, IWarehouseRepository warehouseRepository, IInventoriesItemsWarehousesRepository inventoriesItemsWarehouses)
     {
         _dbContext = dbContext;
         _documentRepository = documentRepository;
         _inventoryItemRepository = inventoryItemRepository;
         _supplierRepository = supplierRepository;
         _warehouseRepository = warehouseRepository;
+        _inventoriesItemsWarehouses = inventoriesItemsWarehouses;
     }
 
     public void Dispose()
@@ -50,4 +52,5 @@ public class UnitOfWork : IUnitOfWork
     public IInventoryItemRepository InventoryItems => _inventoryItemRepository;
     public ISupplierRepository Suppliers => _supplierRepository;
     public IWarehouseRepository Warehouses => _warehouseRepository;
+    public IInventoriesItemsWarehousesRepository InventoriesItemsWarehouses => _inventoriesItemsWarehouses;
 }

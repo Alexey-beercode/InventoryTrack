@@ -50,5 +50,13 @@ namespace MovementService.Infrastructure.Repositories
                 .Where(m => !m.IsDeleted && m.Status == status)
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<MovementRequest>> GetByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet
+                .Where(m => !m.IsDeleted && m.RequestDate >= startDate && m.RequestDate <= endDate)
+                .ToListAsync(cancellationToken);
+        }
+
     }
 }

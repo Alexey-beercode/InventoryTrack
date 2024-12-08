@@ -13,4 +13,8 @@ public class FilterWriteOffrequestModel
     public Guid? ApprovedByUserId { get; set; }
     public int PageSize { get; set; }
     public int PageNumber { get; set; }
+    public Guid CompanyId { get; set; }
+    public bool IsPaginated { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

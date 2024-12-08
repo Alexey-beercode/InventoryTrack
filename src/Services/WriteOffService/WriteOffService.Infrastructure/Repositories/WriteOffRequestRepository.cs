@@ -55,6 +55,14 @@ public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWrit
             .FirstOrDefaultAsync(request => !request.IsDeleted && request.ItemId == itemId && request.RequestDate==date, cancellationToken);
     }
 
+    public async Task<IEnumerable<WriteOffRequest>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(x => x.Reason)
+            .Where(request => !request.IsDeleted && request.CompanyId==companyId)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<WriteOffRequest>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -78,7 +86,7 @@ public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWrit
         var query = _dbSet
             .Include(x => x.Reason)
             .Where(request => !request.IsDeleted);
-        
+
         if (filter.ItemId != Guid.Empty)
             query = query.Where(r => r.ItemId == filter.ItemId);
 
@@ -91,21 +99,35 @@ public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWrit
         if (filter.ReasonId != Guid.Empty)
             query = query.Where(r => r.ReasonId == filter.ReasonId);
 
+        if (filter.CompanyId != Guid.Empty)
+            query = query.Where(r => r.CompanyId == filter.CompanyId);
+
         if (filter.Status != RequestStatus.None)
             query = query.Where(r => r.Status == filter.Status);
 
         if (filter.RequestDate != default)
             query = query.Where(r => r.RequestDate.Date == filter.RequestDate.Date);
 
-        if (filter.ApprovedByUserId.HasValue)
+        if (filter.ApprovedByUserId != Guid.Empty)
             query = query.Where(r => r.ApprovedByUserId == filter.ApprovedByUserId);
-        
-        query = query
-            .Skip((filter.PageNumber - 1) * filter.PageSize)
-            .Take(filter.PageSize);
-        
+
+        if (filter.StartDate != default)
+            query = query.Where(r => r.RequestDate >= filter.StartDate);
+
+        if (filter.EndDate != default)
+            query = query.Where(r => r.RequestDate <= filter.EndDate);
+
+        if (filter.IsPaginated)
+        {
+            query = query
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize);
+        }
+
         return await query
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
+
+
 }

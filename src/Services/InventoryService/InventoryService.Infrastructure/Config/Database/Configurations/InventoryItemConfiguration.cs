@@ -20,9 +20,6 @@ public class InventoryItemConfiguration : IEntityTypeConfiguration<InventoryItem
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(i => i.Quantity)
-            .IsRequired();
-
         builder.Property(i => i.EstimatedValue)
             .HasColumnType("decimal(8, 2)")
             .IsRequired();
@@ -36,11 +33,7 @@ public class InventoryItemConfiguration : IEntityTypeConfiguration<InventoryItem
         builder.HasOne(i => i.Supplier)
             .WithMany()
             .HasForeignKey(i => i.SupplierId);
-
-        builder.HasOne(i => i.Warehouse)
-            .WithMany()
-            .HasForeignKey(i => i.WarehouseId);
-
+        
         builder.HasOne(i => i.Document)
             .WithMany()
             .HasForeignKey(i => i.DocumentId);

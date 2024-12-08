@@ -1,6 +1,7 @@
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ using MovementService.Domain.Interfaces.Repositories;
 using MovementService.Domain.Interfaces.UnitOfWork;
 using MovementService.Infrastructure;
 using MovementService.Infrastructure.Config.Database;
+using MovementService.Infrastructure.Messaging.Consumers;
+using MovementService.Infrastructure.Messaging.Producers;
 using MovementService.Infrastructure.Repositories;
 using MovementService.Presentation.Validators;
 
@@ -126,4 +129,38 @@ public static class WebApplicationBuilderExtension
             
         });
     }
+    
+    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    {
+        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+
+        builder.Services.AddMassTransit(x =>
+        {
+            // Регистрация Consumer
+            x.AddConsumer<ReportMovementsRequestConsumer>();
+
+            // Регистрация Producer через IPublishEndpoint
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
+                {
+                    h.Username(rabbitMqSettings["Username"]);
+                    h.Password(rabbitMqSettings["Password"]);
+                });
+
+                // Конфигурация очереди для Consumer
+                cfg.ReceiveEndpoint("report-movements-queue", e =>
+                {
+                    e.ConfigureConsumer<ReportMovementsRequestConsumer>(context);
+                });
+            });
+        });
+
+        // Регистрация IPublishEndpoint для Producer
+        builder.Services.AddScoped<MovementRequestProducer>();
+
+        // Включение MassTransit как HostedService
+        builder.Services.AddMassTransitHostedService();
+    }
+
 }

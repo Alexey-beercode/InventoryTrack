@@ -16,22 +16,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/UseCases/Report/Create/CreateCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/TokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Extensions/ModelBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Extensions/ModelBuilderExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241127103447_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241127103447_Initial.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../shared/Contracts/CreateReportMessage.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../shared/Contracts/CreateReportResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/AuthService.BLL.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/AuthService.BLL.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/AuthService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241203005643_Initial.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/20241203005643_Initial.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.DAL/Migrations/AuthDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.sln" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/InventoryItem/FilterInventoryItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/InventoryItem/FilterInventoryItemDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/InventoryItem/UpdateInventoryItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/InventoryItem/UpdateInventoryItemDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/InventoryItem/InventoryItemResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/InventoryItem/InventoryItemResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Warehouse/WarehouseStateResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Warehouse/WarehouseStateResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IInventoryItemService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IWarehouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IWarehouseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/InventoryService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/InventoryItemProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/InventoryItemProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/WarehouseProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/WarehouseProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/DTOs/Request/Report/CreateReportDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/ReportService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/ReportService.Application.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/ReportType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/ReportType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Entities/InventoryItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/IInventoryItemRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/UnitOfWork/IUnitOfWork.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/UnitOfWork/IUnitOfWork.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/Configurations/InventoryItemConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/Configurations/InventoryItemConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/InventoryDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/InventoryDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/InventoryItemRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/UnitOfWork.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/UnitOfWork.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/WarehouseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/WarehouseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Validators/CreateInventoryItemDtoValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Validators/CreateInventoryItemDtoValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Application/MovementService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/Services/MovementRequestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Application/Services/MovementRequestService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Domain/Interfaces/Repositories/IMovementRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Domain/Interfaces/Repositories/IMovementRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/MovementService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/MovementService.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/Repositories/MovementRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/Repositories/MovementRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/Services/ExcelExportService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/Services/ExcelExportService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/UseCases/Report/Create/CreateCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/UseCases/Report/Create/CreateCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/UseCases/Report/Create/CreateCommandHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/UseCases/Report/Create/CreateCommandHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Database/ReportDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Database/ReportDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Messaging/Producers/ReportProducer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Messaging/Producers/ReportProducer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/ReportService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/ReportService.Infrastructure.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/ReportService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/ReportService.Presentation.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Response/WriteOffRequest/WriteOffRequestResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Response/WriteOffRequest/WriteOffRequestResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Controllers/ReportController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Controllers/ReportController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Request/WriteOffRequest/WriteOffRequestFilterDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Request/WriteOffRequest/WriteOffRequestFilterDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Services/WriteOffRequestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Services/WriteOffRequestService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/WriteOffService.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/WriteOffService.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Entities/WriteOffRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Entities/WriteOffRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Interfaces/Repositories/IWriteOffRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Interfaces/Repositories/IWriteOffRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Models/FilterWriteOffrequestModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Domain/Models/FilterWriteOffrequestModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Repositories/WriteOffRequestRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Repositories/WriteOffRequestRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/WriteOffService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/WriteOffService.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +92,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Symbols/src/dotnet/aspnetcore/b8139c5ee58f1708b0e3368a1b241400edd6cbc4/src/Mvc/Mvc.Core/src/Infrastructure/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/34e54cf52b4a4c2b82645ccc3a46837e5e000/57/9c681939/AbstractInvocation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/34e54cf52b4a4c2b82645ccc3a46837e5e000/fe/b6ca7389/InterfaceMethodWithoutTargetInvocation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4e8315746988a4c77acdb2357d1b9f99c910c1fb9ee86eed9510dbfbfda7/CastleProxyFactory.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -53,28 +111,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.InventoryService: IIS Express.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.InventoryService: IIS Express.executor": "Debug",
+    "327e57d1-73b1-4057-b5da-103c82191d76.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\Алексей\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ],
+    "rider.external.source.directories": [
+      "C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\Алексей\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.InventoryService: IIS Express">
     <configuration name="InventoryService: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/InventoryService.Presentation/InventoryService.Presentation.csproj" />
@@ -215,6 +277,12 @@
       <workItem from="1733182164823" duration="239000" />
       <workItem from="1733185148982" duration="89000" />
       <workItem from="1733187478654" duration="2690000" />
+      <workItem from="1733321941559" duration="1254000" />
+      <workItem from="1733424841106" duration="45000" />
+      <workItem from="1733425087775" duration="519000" />
+      <workItem from="1733426928682" duration="6000" />
+      <workItem from="1733587526865" duration="11125000" />
+      <workItem from="1733616169643" duration="14035000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />
@@ -244,5 +312,63 @@
     <MESSAGE value="Added domain, infrastructure layers in InventoryService" />
     <MESSAGE value="Added dtos, interfaces, mappers, validators, services, config for InventoryService" />
     <option name="LAST_COMMIT_MESSAGE" value="Added dtos, interfaces, mappers, validators, services, config for InventoryService" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/InventoryService.Tests/Services/InventoryItemServiceTests.cs</url>
+          <line>87</line>
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Tests\Services\InventoryItemServiceTests.cs" initialLine="83" containingFunctionPresentation="Method 'CreateInventoryItemAsync_ShouldCreateItem'">
+            <startOffsets>
+              <option value="3689" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3740" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs</url>
+          <line>30</line>
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" initialLine="30" containingFunctionPresentation="Method 'CreateInventoryItem'">
+            <startOffsets>
+              <option value="1209" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1210" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs</url>
+          <line>40</line>
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" initialLine="40" containingFunctionPresentation="Method 'GetAllInventoryItems'">
+            <startOffsets>
+              <option value="1690" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1691" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs</url>
+          <line>141</line>
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Application\Services\WarehouseService.cs" initialLine="141" containingFunctionPresentation="Method 'GetInventoryItemsByWarehouseAsync'">
+            <startOffsets>
+              <option value="6151" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6152" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
