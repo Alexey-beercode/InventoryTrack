@@ -100,29 +100,6 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddControllers();
     }
 
-    public static void AddMassTransit(this WebApplicationBuilder builder)
-    {
-        builder.Services.AddMassTransit(config =>
-        {
-            config.UsingRabbitMq((context, cfg) =>
-            {
-                var rabbitSettings = builder.Configuration.GetSection("RabbitMQ");
-                var host = rabbitSettings["Host"];
-                var username = rabbitSettings["Username"];
-                var password = rabbitSettings["Password"];
-
-                cfg.Host(host, h =>
-                {
-                    h.Username(username);
-                    h.Password(password);
-                });
-
-                // Добавляем запрос клиента
-                cfg.ConfigureEndpoints(context);
-            });
-        });
-    }
-
     public static void AddValidation(this WebApplicationBuilder builder)
     {
         builder

@@ -17,6 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\..\..\shared\Contracts\WriteOffInventoryMessage.cs" />
+        <Compile Include="..\..\Contracts\WriteOffInventoryMessage.cs" />
     </ItemGroup>
 </Project>

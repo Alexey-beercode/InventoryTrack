@@ -7,14 +7,15 @@ import { environment } from '../environments/environment';
 import { LoginDTO } from '../models/dto/auth/login-dto';
 import { RegisterDTO } from '../models/dto/auth/register-dto';
 import { AuthResponseDTO } from '../models/dto/auth/auth-response-dto';
+import { AddUserToWarehouseDto } from '../models/dto/auth/add-user-to-warehouse-dto';
 import { TokenService } from './token.service';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = `${environment.apiUrls.auth}`;
+  private readonly apiUrl = environment.baseAuthUrl;
 
   constructor(
     private http: HttpClient,
@@ -23,18 +24,29 @@ export class AuthService {
   ) {}
 
   login(loginDto: LoginDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${this.apiUrl}login`, loginDto).pipe(
-      tap(response => {
-        this.tokenService.setTokens(response.accessToken, response.userId.toString());
-      })
-    );
+    return this.http
+      .post<AuthResponseDTO>(`${this.apiUrl}${environment.apiUrls.auth.login}`, loginDto)
+      .pipe(
+        tap(response => {
+          this.tokenService.setTokens(response.accessToken, response.userId.toString());
+        })
+      );
   }
 
   register(registerDto: RegisterDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${this.apiUrl}register`, registerDto).pipe(
-      tap(response => {
-        this.tokenService.setTokens(response.accessToken, response.userId.toString());
-      })
+    return this.http
+      .post<AuthResponseDTO>(`${this.apiUrl}${environment.apiUrls.auth.register}`, registerDto)
+      .pipe(
+        tap(response => {
+          this.tokenService.setTokens(response.accessToken, response.userId.toString());
+        })
+      );
+  }
+
+  addUserToWarehouse(dto: AddUserToWarehouseDto): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}${environment.apiUrls.auth.addUserToWarehouse}`,
+      dto
     );
   }
 

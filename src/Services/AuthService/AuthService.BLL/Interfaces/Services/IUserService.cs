@@ -20,4 +20,7 @@ public interface IUserService
     public Task UpdateAsync(UpdateUserDTO userDto, CancellationToken cancellationToken = default);
     Task RegisterUserToCompany(RegisterUserToCompanyDTO registerUserToCompanyDto,
         CancellationToken cancellationToken = default);
+
+    Task AddUserToWarehouseAsync(AddUserToWarehouseDto addUserToWarehouseDto,
+        CancellationToken cancellationToken = default);
 }

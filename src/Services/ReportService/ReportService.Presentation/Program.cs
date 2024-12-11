@@ -5,7 +5,6 @@ builder.AddIdentity();
 builder.AddMapping();
 builder.AddMediatr();
 builder.AddServices();
-builder.AddMassTransit();
 builder.AddValidation();
 builder.AddMassTransitWithRabbitMq();
 builder.AddMongoDatabase();

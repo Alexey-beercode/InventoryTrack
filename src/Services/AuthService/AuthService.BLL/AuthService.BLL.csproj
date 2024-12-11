@@ -26,8 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\..\..\shared\Contracts\GetUserMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\UserResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\GetUserMessage.cs" />
+        <Compile Include="..\..\Contracts\UserResponseMessage.cs" />
     </ItemGroup>
 
 </Project>

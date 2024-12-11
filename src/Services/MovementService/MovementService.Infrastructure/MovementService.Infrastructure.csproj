@@ -26,9 +26,9 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Compile Include="..\..\..\..\shared\Contracts\GetReportDataMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\ReportDataResponseMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\MoveInventoryMessage.cs" />
+        <Compile Include="..\..\Contracts\GetReportDataMessage.cs" />
+        <Compile Include="..\..\Contracts\ReportDataResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\MoveInventoryMessage.cs" />
     </ItemGroup>
 
 </Project>

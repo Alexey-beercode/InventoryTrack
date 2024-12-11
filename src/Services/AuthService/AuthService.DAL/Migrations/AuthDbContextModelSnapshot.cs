@@ -80,25 +80,25 @@ namespace AuthService.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6cb3c815-ecff-45fb-b425-5d711afc8de3"),
+                            Id = new Guid("ac5e0c16-3823-4e6f-9efb-aadaaf6239b6"),
                             IsDeleted = false,
                             Name = "Пользователь"
                         },
                         new
                         {
-                            Id = new Guid("e6cb6e64-33f6-4ba1-9542-4eca61a3f025"),
+                            Id = new Guid("dd25a17b-19e1-4fac-b346-44fc1911809c"),
                             IsDeleted = false,
                             Name = "Начальник подразделения"
                         },
                         new
                         {
-                            Id = new Guid("101687c4-4c76-4b52-bce4-fcd062622677"),
+                            Id = new Guid("1277bae3-0814-47a7-8fd5-2506c1fae2de"),
                             IsDeleted = false,
                             Name = "Начальник склада"
                         },
                         new
                         {
-                            Id = new Guid("65704147-c1d0-4743-a6f5-714d843337e4"),
+                            Id = new Guid("5cfe2a2d-d7bb-4d7c-8a3a-4f6dc585c0ec"),
                             IsDeleted = false,
                             Name = "Бухгалтер"
                         });
@@ -134,6 +134,9 @@ namespace AuthService.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("WarehouseId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

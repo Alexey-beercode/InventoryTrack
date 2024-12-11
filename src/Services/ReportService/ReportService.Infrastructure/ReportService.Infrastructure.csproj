@@ -17,14 +17,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\..\..\shared\Contracts\GetReportDataMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\ReportDataResponseMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\GetUserMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\GetItemMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\GetWarehouseMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\UserResponseMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\ItemResponseMessage.cs" />
-        <Compile Include="..\..\..\..\shared\Contracts\WarehouseResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\GetReportDataMessage.cs" />
+        <Compile Include="..\..\Contracts\ReportDataResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\GetUserMessage.cs" />
+        <Compile Include="..\..\Contracts\GetItemMessage.cs" />
+        <Compile Include="..\..\Contracts\GetWarehouseMessage.cs" />
+        <Compile Include="..\..\Contracts\UserResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\ItemResponseMessage.cs" />
+        <Compile Include="..\..\Contracts\WarehouseResponseMessage.cs" />
     </ItemGroup>
 
 </Project>

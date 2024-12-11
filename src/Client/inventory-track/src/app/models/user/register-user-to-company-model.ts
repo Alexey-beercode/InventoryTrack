@@ -6,5 +6,5 @@ export interface UserResponseModel {
   firstName: string;
   lastName: string;
   role: RoleDTO | null;
-  selectedRoleId?: string|null; // Добавьте это свойство
+  selectedRoleId?: string|null;
 }

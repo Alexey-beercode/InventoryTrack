@@ -93,5 +93,14 @@ namespace AuthService.Controllers
             await _userService.RegisterUserToCompany(registerUserToCompanyDto, cancellationToken);
             return Ok();
         }
+
+        [HttpPut("user-to-warehouse")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddUserToWarehouseAsync([FromBody] AddUserToWarehouseDto addUserToWarehouseDto,
+            CancellationToken cancellationToken = default)
+        {
+            await _userService.AddUserToWarehouseAsync(addUserToWarehouseDto, cancellationToken);
+            return Ok();
+        }
     }
 }

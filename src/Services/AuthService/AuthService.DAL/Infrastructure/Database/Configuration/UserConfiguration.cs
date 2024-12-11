@@ -16,6 +16,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne<Company>()
             .WithMany()
             .HasForeignKey(e => e.CompanyId)
-            .IsRequired(false); // Убедитесь, что это поле не обязательно
+            .IsRequired(false); 
+        builder.Property(e=>e.WarehouseId)
+            .IsRequired(false); 
     }
 }

@@ -1,57 +1,72 @@
+// src/app/services/user.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { environment } from '../environments/environment';
-import {UserResponseDTO} from "../models/dto/user/user-response-dto";
-import {GetUserByNameDTO} from "../models/dto/user/get-user-by-name-dto";
-import {UpdateUserDTO} from "../models/dto/user/update-user-dto";
-import {RegisterUserToCompanyDTO} from "../models/dto/user/register-user-to-company-dto";
+import { UserResponseDTO } from '../models/dto/user/user-response-dto';
+import { GetUserByNameDTO } from '../models/dto/user/get-user-by-name-dto';
+import { UpdateUserDTO } from '../models/dto/user/update-user-dto';
+import { RegisterUserToCompanyDTO } from '../models/dto/user/register-user-to-company-dto';
+import { AddUserToWarehouseDto } from '../models/dto/auth/add-user-to-warehouse-dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-  private readonly apiUrl = `${environment.apiUrls.user}`;
+  private readonly baseUrl = environment.baseAuthUrl;
+  private readonly apiUrls = environment.apiUrls.user;
 
   constructor(private http: HttpClient) {}
 
-  // Получить всех пользователей
   getAll(): Observable<UserResponseDTO[]> {
-    return this.http.get<UserResponseDTO[]>(this.apiUrl);
+    const url = `${this.baseUrl}${this.apiUrls.getAll}`;
+    return this.http.get<UserResponseDTO[]>(url);
   }
 
-  // Получить пользователя по ID
-  getById(id: string | null): Observable<UserResponseDTO> {
-    return this.http.get<UserResponseDTO>(`${this.apiUrl}${id}`);
+  getById(id: string): Observable<UserResponseDTO> {
+    const url = `${this.baseUrl}${this.apiUrls.getById.replace('{id}', id)}`;
+    return this.http.get<UserResponseDTO>(url);
   }
 
-  // Получить пользователя по логину
   getByLogin(login: string): Observable<UserResponseDTO> {
-    return this.http.get<UserResponseDTO>(`${this.apiUrl}by-login/${login}`);
+    const url = `${this.baseUrl}${this.apiUrls.getByLogin.replace('{login}', login)}`;
+    return this.http.get<UserResponseDTO>(url);
   }
 
-  // Получить пользователя по имени
-  getByName(getUserByNameDto: GetUserByNameDTO): Observable<UserResponseDTO> {
-    return this.http.post<UserResponseDTO>(`${this.apiUrl}by-name`, getUserByNameDto);
+  getByName(dto: GetUserByNameDTO): Observable<UserResponseDTO> {
+    const url = `${this.baseUrl}${this.apiUrls.getByName}`;
+    return this.http.post<UserResponseDTO>(url, dto);
   }
 
-  // Получить пользователей по ID компании
   getByCompanyId(companyId: string): Observable<UserResponseDTO[]> {
-    return this.http.get<UserResponseDTO[]>(`${this.apiUrl}by-company/${companyId}`);
+    const url = `${this.baseUrl}${this.apiUrls.getByCompanyId.replace('{companyId}', companyId)}`;
+    return this.http.get<UserResponseDTO[]>(url);
   }
 
-  // Регистрация пользователя в компании
-  registerUserToCompany(registerUserToCompanyDto: RegisterUserToCompanyDTO): Observable<void> {
-    return this.http.post<void>(this.apiUrl, registerUserToCompanyDto);
+  registerUserToCompany(dto: RegisterUserToCompanyDTO): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.registerUserToCompany}`;
+    return this.http.post<void>(url, dto);
   }
 
-  // Обновление пользователя
-  update(updateUserDto: UpdateUserDTO): Observable<void> {
-    return this.http.put<void>(this.apiUrl, updateUserDto);
+  update(dto: UpdateUserDTO): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.update}`;
+    return this.http.put<void>(url, dto);
   }
 
-  // Удаление пользователя
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}${id}`);
+    const url = `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`;
+    return this.http.delete<void>(url);
+  }
+
+  addUserToCompany(dto: RegisterUserToCompanyDTO): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.addUserToCompany}`;
+    return this.http.post<void>(url, dto);
+  }
+
+  addUserToWarehouse(dto: AddUserToWarehouseDto): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.addUserToWarehouse}`;
+    return this.http.put<void>(url, dto);
   }
 }

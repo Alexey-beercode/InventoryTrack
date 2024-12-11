@@ -1,44 +1,50 @@
 // src/app/services/company.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { environment } from '../environments/environment';
+import { CompanyResponseDTO } from '../models/dto/company/company-response-dto';
 import { CreateCompanyDTO } from '../models/dto/company/create-company-dto';
 import { UpdateCompanyDTO } from '../models/dto/company/update-company-dto';
-import { CompanyResponseDTO } from '../models/dto/company/company-response-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
-  private apiUrl = `${environment.apiUrls.company}`;
+  private readonly baseUrl = environment.baseAuthUrl;
+  private readonly apiUrls = environment.apiUrls.company;
 
   constructor(private http: HttpClient) {}
 
   getById(id: string): Observable<CompanyResponseDTO> {
-    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}${id}`);
+    const url = `${this.baseUrl}${this.apiUrls.getById.replace('{id}', id)}`;
+    return this.http.get<CompanyResponseDTO>(url);
   }
 
-  create(companyDto: CreateCompanyDTO): Observable<void> {
-    return this.http.post<void>(this.apiUrl, companyDto, {
-    });
+  create(dto: CreateCompanyDTO): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.create}`;
+    return this.http.post<void>(url, dto);
   }
 
-  update(companyDto: UpdateCompanyDTO): Observable<void> {
-    return this.http.put<void>(this.apiUrl, companyDto, {
-    });
+  update(dto: UpdateCompanyDTO): Observable<void> {
+    const url = `${this.baseUrl}${this.apiUrls.update}`;
+    return this.http.put<void>(url, dto);
   }
 
   getAll(): Observable<CompanyResponseDTO[]> {
-    return this.http.get<CompanyResponseDTO[]>(this.apiUrl);
+    const url = `${this.baseUrl}${this.apiUrls.getAll}`;
+    return this.http.get<CompanyResponseDTO[]>(url);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}${id}`);
+    const url = `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`;
+    return this.http.delete<void>(url);
   }
 
-  getByUserId(userId: string | null): Observable<CompanyResponseDTO> {
-    return this.http.get<CompanyResponseDTO>(`${this.apiUrl}by-user-id/${userId}`);
+  getByUserId(userId: string): Observable<CompanyResponseDTO> {
+    const url = `${this.baseUrl}${this.apiUrls.getByUserId.replace('{userId}', userId)}`;
+    return this.http.get<CompanyResponseDTO>(url);
   }
 }

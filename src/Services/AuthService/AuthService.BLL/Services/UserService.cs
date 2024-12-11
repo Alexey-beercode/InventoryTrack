@@ -138,4 +138,18 @@ public class UserService:IUserService
         await _unitOfWork.Roles.SetRoleToUserAsync(user.Id, role.Id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task AddUserToWarehouseAsync(AddUserToWarehouseDto addUserToWarehouseDto,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(addUserToWarehouseDto.UserId, cancellationToken);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", addUserToWarehouseDto.UserId);
+        }
+
+        user.WarehouseId = addUserToWarehouseDto.WarehouseId;
+        _unitOfWork.Users.Update(user);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
 }
