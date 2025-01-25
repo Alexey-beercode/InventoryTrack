@@ -5,11 +5,13 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import { RegisterDTO } from '../../models/dto/auth/register-dto';
+import {HeaderComponent} from "../shared/header/header.component";
+import {FooterComponent} from "../shared/footer/footer.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgOptimizedImage],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgOptimizedImage, HeaderComponent, FooterComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -24,6 +26,7 @@ export class RegisterComponent implements OnInit {
     private router: Router
   ) {
     this.initForm();
+    console.log("регистрация")
   }
 
   ngOnInit() {

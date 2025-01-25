@@ -1,0 +1,119 @@
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --success-color: #4CAF50; /* Зеленый для одобрения */
+  --error-color: #F44336; /* Красный для отклонения */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px; /* Скругленные углы */
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень карточек */
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f4f8; /* Цвет фона страницы */
+  color: #333;
+  line-height: 1.6;
+}
+
+.writeoff-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.filter-container button {
+  background-color: white;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-container button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.filter-container button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.no-requests {
+  text-align: center;
+  color: var(--primary-dark);
+}
+
+.writeoff-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.writeoff-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.approve-btn {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.approve-btn:hover {
+  background-color: #45a049; /* Темный зеленый при наведении */
+}
+
+.reject-btn {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reject-btn:hover {
+  background-color: #d32f2f; /* Темный красный при наведении */
+}
+
+.writeoff-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.writeoff-card h3 {
+  margin-bottom: 15px;
+  color: var(--primary-dark);
+}

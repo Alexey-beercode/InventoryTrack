@@ -11,13 +11,18 @@ public class SupplierRepository : BaseRepository<Supplier>,ISupplierRepository
     {
     }
 
-    public Task<Supplier> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<Supplier> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return _dbSet.FirstOrDefaultAsync(s => !s.IsDeleted && s.Name == name,cancellationToken);
+        return await _dbSet.FirstOrDefaultAsync(s => !s.IsDeleted && s.Name == name,cancellationToken);
     }
 
-    public Task<Supplier> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken = default)
+    public async Task<Supplier> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken = default)
     {
-        return _dbSet.FirstOrDefaultAsync(s => !s.IsDeleted && s.AccountNumber == accountNumber,cancellationToken);
+        return await _dbSet.FirstOrDefaultAsync(s => !s.IsDeleted && s.AccountNumber == accountNumber,cancellationToken);
+    }
+
+    public async Task<IEnumerable<Supplier>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.Where(s => !s.IsDeleted && s.CompanyId == companyId).ToListAsync(cancellationToken);
     }
 }

@@ -1,6 +1,6 @@
 export enum DateSelect {
-  Month = 'Month',
-  Week = 'Week',
-  Day = 'Day',
-  Year = 'Year',
+  Day = 0,
+  Week = 1,
+  Month = 2,
+  Year = 3,
 }

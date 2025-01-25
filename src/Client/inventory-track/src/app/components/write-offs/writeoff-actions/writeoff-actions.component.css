@@ -1,0 +1,31 @@
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
+  line-height: 1.6;
+}
+.writeoff-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.approve-btn {
+  background-color: green;
+  color: white;
+}
+.reject-btn {
+  background-color: red;
+  color: white;
+}

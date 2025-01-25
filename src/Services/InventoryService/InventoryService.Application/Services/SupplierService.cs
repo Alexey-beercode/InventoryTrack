@@ -79,7 +79,7 @@ public class SupplierService : ISupplierService
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id, cancellationToken);
-
+        
         if (supplier is null)
         {
             throw new EntityNotFoundException("Supplier", id);
@@ -87,5 +87,11 @@ public class SupplierService : ISupplierService
 
         _unitOfWork.Suppliers.Delete(supplier);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<SupplierResponseDto>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        var suppliers = await _unitOfWork.Suppliers.GetByCompanyIdAsync(companyId, cancellationToken);
+        return _mapper.Map<IEnumerable<SupplierResponseDto>>(suppliers);
     }
 }

@@ -1,0 +1,51 @@
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog {
+  background-color: var(--card-background);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--box-shadow);
+}
+
+.dialog-buttons {
+  margin-top: 15px;
+}
+
+.btn-confirm {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-cancel {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #f5c6cb;
+}

@@ -13,6 +13,5 @@ public class FilterInventoryItemDtoValidator : AbstractValidator<FilterInventory
             RuleFor(x => x.ExpirationDateTo).GreaterThanOrEqualTo(x => x.ExpirationDateFrom);
         });
         RuleFor(x => x.EstimatedValue).GreaterThanOrEqualTo(0);
-
     }
 }

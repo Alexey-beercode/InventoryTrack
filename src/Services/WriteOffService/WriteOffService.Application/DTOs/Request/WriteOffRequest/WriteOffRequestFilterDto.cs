@@ -11,8 +11,8 @@ public class WriteOffRequestFilterDto
     public RequestStatus Status { get; set; }
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }
-    public int PageSize { get; set; }
-    public int PageNumber { get; set; }
+    public int PageSize { get; set; } = 10;
+    public int PageNumber { get; set; } = 1;
     public Guid CompanyId { get; set; }
     public bool IsPaginated { get; set; }
     public DateTime StartDate { get; set; }

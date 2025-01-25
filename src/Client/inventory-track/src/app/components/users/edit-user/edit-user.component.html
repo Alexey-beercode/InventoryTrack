@@ -1,0 +1,19 @@
+<div class="modal" (click)="onBackdropClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">Редактировать пользователя</h2>
+    <form (ngSubmit)="updateUser()">
+      <div class="form-group">
+        <label for="firstName">Имя</label>
+        <input id="firstName" [(ngModel)]="user.firstName" name="firstName" required />
+      </div>
+      <div class="form-group">
+        <label for="lastName">Фамилия</label>
+        <input id="lastName" [(ngModel)]="user.lastName" name="lastName" required />
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">Сохранить</button>
+        <button type="button" class="btn-secondary" (click)="handleClose()">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,5 +1,18 @@
-:root {
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --accent-color: #A9CFF3; /* Светлый синий для акцентов */
+  --text-color: #333; /* Цвет текста */
+  --background-color: #f0f4f8; /* Мягкий фон */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
 

@@ -120,5 +120,34 @@ namespace WriteOffService.Presentation.Controllers
             await _writeOffRequestService.DeleteWriteOffRequestAsync(id, cancellationToken);
             return Ok();
         }
+        
+        [HttpPut("approve")]
+        [Authorize(Policy = "Accountant")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> Approve(
+            [FromForm] ApproveWriteOffRequestDto approveDto,
+            CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Approving write-off request: {Id}", approveDto.Id);
+            await _writeOffRequestService.ApproveAsync(approveDto, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPut("reject/{id:guid}")]
+        [Authorize(Policy = "Accountant")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> Reject(
+            Guid id,
+            [FromQuery] Guid approvedByUserId,
+            CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Rejecting write-off request: {Id}", id);
+            await _writeOffRequestService.RejectAsync(id, approvedByUserId, cancellationToken);
+            return Ok();
+        }
     }
 }

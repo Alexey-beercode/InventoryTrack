@@ -1,0 +1,86 @@
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Прозрачный черный фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--card-background); /* Используем фоновый цвет карточек */
+  padding: 30px; /* Пространство внутри */
+  border-radius: var(--border-radius); /* Закругление углов */
+  box-shadow: var(--box-shadow); /* Тень */
+  max-width: 600px; /* Максимальная ширина */
+  width: 90%; /* Адаптивная ширина */
+}
+
+.modal-title {
+  margin-bottom: 20px; /* Отступ снизу */
+  font-size: 24px; /* Размер заголовка */
+  color: var(--primary-dark); /* Темный цвет */
+  text-align: center; /* Выравнивание по центру */
+  font-weight: bold; /* Полужирный шрифт */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Отступ между полями */
+  display: flex;
+  flex-direction: column; /* Размещение элементов в столбик */
+}
+
+.form-group label {
+  font-size: 14px; /* Размер текста */
+  color: var(--text-color); /* Цвет текста */
+  margin-bottom: 5px; /* Отступ снизу */
+  font-weight: bold; /* Полужирный шрифт */
+}
+
+.form-group input,
+.form-group select {
+  width: 100%; /* Ширина на всю строку */
+  padding: 10px; /* Внутренний отступ */
+  border: 1px solid #ccc; /* Граница */
+  border-radius: var(--border-radius); /* Закругление углов */
+  font-size: 16px; /* Размер текста */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between; /* Равномерное распределение кнопок */
+  gap: 15px; /* Пробел между кнопками */
+}
+
+.btn-primary {
+  background-color: var(--primary-color); /* Основной цвет кнопки */
+  color: white; /* Цвет текста */
+  padding: 10px 20px; /* Внутренний отступ */
+  border: none; /* Без границ */
+  border-radius: var(--border-radius); /* Закругленные углы */
+  cursor: pointer; /* Курсор указателя */
+  font-size: 16px; /* Размер текста */
+  transition: background-color 0.3s ease; /* Плавный переход цвета */
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark); /* Цвет кнопки при наведении */
+}
+
+.btn-secondary {
+  background-color: #ccc; /* Серый цвет */
+  color: #333; /* Темный текст */
+  padding: 10px 20px; /* Внутренний отступ */
+  border: none; /* Без границ */
+  border-radius: var(--border-radius); /* Закругленные углы */
+  cursor: pointer; /* Курсор указателя */
+  font-size: 16px; /* Размер текста */
+}
+
+.btn-secondary:hover {
+  background-color: #bbb; /* Более темный серый при наведении */
+}

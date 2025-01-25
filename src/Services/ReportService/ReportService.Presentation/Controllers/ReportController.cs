@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReportService.Application.UseCases.Report.Create;
 using ReportService.Application.UseCases.Report.Delete;
 using ReportService.Application.UseCases.Report.GetAll;
 using ReportService.Application.UseCases.Report.GetByDateRange;
@@ -57,7 +58,8 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("paginated")]
-    public async Task<IActionResult> GetPaginatedAsync([FromBody] GetPaginatedReportsQuery query,
+    public async Task<IActionResult> GetPaginatedAsync(
+        [FromQuery] GetPaginatedReportsQuery query,
         CancellationToken cancellationToken = default)
     {
         var reports = await _mediator.Send(query, cancellationToken);
@@ -76,5 +78,13 @@ public class ReportController : ControllerBase
     {
         await _mediator.Send(new DeleteCommand() { Id = id }, cancellationToken);
         return Ok();
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateCommand createCommand,
+        CancellationToken cancellationToken = default)
+    {
+        await _mediator.Send(createCommand, cancellationToken);
+        return Created();
     }
 }

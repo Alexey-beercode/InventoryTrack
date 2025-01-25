@@ -1,0 +1,29 @@
+<app-header
+  title="Информация о пользователе"
+  (userEmitter)="onUserReceived($event!)"
+></app-header>
+<app-back-button></app-back-button>
+<div class="user-details" *ngIf="user">
+  <h2>Информация о пользователе</h2>
+  <p><strong>Имя:</strong> {{ user.firstName }}</p>
+  <p><strong>Фамилия:</strong> {{ user.lastName }}</p>
+  <p><strong>Логин:</strong> {{ user.login }}</p>
+  <p><strong>Роль:</strong>
+    <ng-container *ngIf="user.roles && user.roles.length > 0; else noRoles">
+      <span *ngFor="let role of user.roles; let i = index">
+        {{ role.name }}<span *ngIf="i < user.roles.length - 1">, </span>
+      </span>
+    </ng-container>
+    <ng-template #noRoles>Роли отсутствуют</ng-template>
+  </p>
+  <button (click)="openEditModal()" class="edit-button">Редактировать</button>
+</div>
+
+<!-- Модальное окно редактирования -->
+<app-edit-user
+  *ngIf="showEditModal"
+  [user]="user!"
+  (closeModal)="closeEditModal()"
+  (refresh)="onRefresh()"
+></app-edit-user>
+<app-footer></app-footer>

@@ -51,7 +51,7 @@ public class WarehouseProfile : Profile
     {
         return Enum.GetName(typeof(TEnum), enumValue) switch
         {
-            "Production" => "Производство", //For WarehouseType
+            "Production" => "Производственный", //For WarehouseType
             "Internal" => "Внутренний",     //For WarehouseType
             _ => enumValue.ToString(),      //Default fallback
         };

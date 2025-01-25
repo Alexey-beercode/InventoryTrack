@@ -152,11 +152,7 @@ public static class WebApplicationBuilderExtension
 
         builder.Services.AddMassTransit(x =>
         {
-            // Регистрация всех Consumer
-            x.AddConsumer<GetItemConsumer>();
-            x.AddConsumer<GetWarehouseConsumer>();
             x.AddConsumer<MovementsRequestConsumer>();
-            x.AddConsumer<ReportInventoryRequestConsumer>();
             x.AddConsumer<WriteOffsRequestConsumer>();
 
             // Регистрация IRequestClient для запросов
@@ -173,25 +169,9 @@ public static class WebApplicationBuilderExtension
                     h.Password(rabbitMqSettings["Password"]);
                 });
 
-                // Конфигурация очередей для Consumer
-                cfg.ReceiveEndpoint("get-item-queue", e =>
-                {
-                    e.ConfigureConsumer<GetItemConsumer>(context);
-                });
-
-                cfg.ReceiveEndpoint("get-warehouse-queue", e =>
-                {
-                    e.ConfigureConsumer<GetWarehouseConsumer>(context);
-                });
-
                 cfg.ReceiveEndpoint("move-inventory-queue", e =>
                 {
                     e.ConfigureConsumer<MovementsRequestConsumer>(context);
-                });
-
-                cfg.ReceiveEndpoint("report-inventory-queue", e =>
-                {
-                    e.ConfigureConsumer<ReportInventoryRequestConsumer>(context);
                 });
 
                 cfg.ReceiveEndpoint("write-off-queue", e =>

@@ -1,0 +1,40 @@
+<app-header title="Склад: {{ warehouseState.name }}"></app-header>
+
+<div class="container">
+  <div class="warehouse-info">
+    <h2>{{ warehouseState.name }}</h2>
+    <p><strong>Тип:</strong> {{ warehouseState.type.name }}</p>
+    <p><strong>Местоположение:</strong> {{ warehouseState.location }}</p>
+    <p><strong>Количество ценностей:</strong> {{ warehouseState.itemsCount }}</p>
+    <p><strong>Общее количество:</strong> {{ warehouseState.quantity }}</p>
+  </div>
+
+  <div class="items-table">
+    <h3>Материальные ценности</h3>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Название</th>
+        <th>Уникальный код</th>
+        <th>Количество</th>
+        <th>Поставщик</th>
+        <th>Оценочная стоимость</th>
+        <th>Срок годности</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of inventoryItems">
+        <td>{{ item.name }}</td>
+        <td>{{ item.uniqueCode }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.supplier }}</td>
+        <td>{{ item.estimatedValue  }} бел. руб.</td>
+        <td>{{ item.expirationDate | date: 'dd.MM.yyyy' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-footer></app-footer>

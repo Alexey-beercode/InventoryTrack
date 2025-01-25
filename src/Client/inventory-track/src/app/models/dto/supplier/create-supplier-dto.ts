@@ -3,4 +3,5 @@ export class CreateSupplierDto {
   phoneNumber!: string;
   postalAddress!: string;
   accountNumber!: string;
+  companyId!:string;
 }

@@ -1,0 +1,9 @@
+<div class="dialog-backdrop" *ngIf="isVisible">
+  <div class="dialog">
+    <p>{{ message }}</p>
+    <div class="dialog-buttons">
+      <button class="btn-confirm" (click)="onConfirm()">Да</button>
+      <button class="btn-cancel" (click)="onCancel()">Нет</button>
+    </div>
+  </div>
+</div>

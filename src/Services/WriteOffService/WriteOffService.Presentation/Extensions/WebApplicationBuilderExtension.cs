@@ -15,7 +15,6 @@ using WriteOffService.Domain.Interfaces.Repositories;
 using WriteOffService.Domain.Interfaces.UnitOfWork;
 using WriteOffService.Infrastructure;
 using WriteOffService.Infrastructure.Config.Database;
-using WriteOffService.Infrastructure.Messaging.Consumers;
 using WriteOffService.Infrastructure.Repositories;
 using WriteOffService.Presentation.Validators;
 
@@ -146,8 +145,6 @@ public static class WebApplicationBuilderExtension
 
         builder.Services.AddMassTransit(x =>
         {
-            // Регистрация Consumer
-            x.AddConsumer<ReportWriteOffsRequestConsumer>();
 
             // Регистрация Producer через IPublishEndpoint
             x.UsingRabbitMq((context, cfg) =>
@@ -156,12 +153,6 @@ public static class WebApplicationBuilderExtension
                 {
                     h.Username(rabbitMqSettings["Username"]);
                     h.Password(rabbitMqSettings["Password"]);
-                });
-
-                // Конфигурация очереди для Consumer
-                cfg.ReceiveEndpoint("report-write-offs-queue", e =>
-                {
-                    e.ConfigureConsumer<ReportWriteOffsRequestConsumer>(context);
                 });
             });
         });

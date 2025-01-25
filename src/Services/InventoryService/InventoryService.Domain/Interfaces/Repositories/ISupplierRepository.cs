@@ -6,4 +6,5 @@ public interface ISupplierRepository:IBaseRepository<Supplier>
 {
     Task<Supplier> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     Task<Supplier> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Supplier>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default);
 }

@@ -6,11 +6,13 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TokenService } from '../../services/token.service';
 import {LoginDTO} from "../../models/dto/auth/login-dto";
+import {FooterComponent} from "../shared/footer/footer.component";
+import {HeaderComponent} from "../shared/header/header.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, RouterLink, NgOptimizedImage, FooterComponent, HeaderComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -72,9 +74,9 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         console.error('Login error:', error);
         if (error.status === 401) {
-          this.errorMessage = 'Invalid username or password';
-        } else {
-          this.errorMessage = 'An error occurred during login. Please try again.';
+          this.errorMessage = 'Неправильный логин или пароль';
+        } else if(error.status===404) {
+          this.errorMessage = 'Пользователь с таким логином не найден';
         }
         this.tokenService.clearTokens(); // Очищаем старые токены при ошибке
       }

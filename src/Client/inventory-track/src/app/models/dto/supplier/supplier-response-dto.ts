@@ -4,4 +4,5 @@ export class SupplierResponseDto {
   phoneNumber!: string;
   postalAddress!: string;
   accountNumber!: string;
+  companyId!:string;
 }

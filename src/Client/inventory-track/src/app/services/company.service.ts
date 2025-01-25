@@ -1,5 +1,3 @@
-// src/app/services/company.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -18,7 +16,10 @@ export class CompanyService {
 
   constructor(private http: HttpClient) {}
 
-  getById(id: string): Observable<CompanyResponseDTO> {
+  getById(id: string | null): Observable<CompanyResponseDTO> {
+    if (!id) {
+      throw new Error('ID компании не может быть null');
+    }
     const url = `${this.baseUrl}${this.apiUrls.getById.replace('{id}', id)}`;
     return this.http.get<CompanyResponseDTO>(url);
   }
@@ -38,12 +39,18 @@ export class CompanyService {
     return this.http.get<CompanyResponseDTO[]>(url);
   }
 
-  delete(id: string): Observable<void> {
+  delete(id: string | null): Observable<void> {
+    if (!id) {
+      throw new Error('ID компании не может быть null');
+    }
     const url = `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`;
     return this.http.delete<void>(url);
   }
 
-  getByUserId(userId: string): Observable<CompanyResponseDTO> {
+  getByUserId(userId: string | null): Observable<CompanyResponseDTO> {
+    if (!userId) {
+      throw new Error('ID пользователя не может быть null');
+    }
     const url = `${this.baseUrl}${this.apiUrls.getByUserId.replace('{userId}', userId)}`;
     return this.http.get<CompanyResponseDTO>(url);
   }

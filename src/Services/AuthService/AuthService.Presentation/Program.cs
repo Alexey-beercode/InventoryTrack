@@ -7,7 +7,6 @@ builder.AddMapping();
 builder.AddServices();
 builder.AddValidation();
 builder.AddSwaggerDocumentation();
-builder.AddMassTransitWithRabbitMq();
 var app = builder.Build();
 app.AddSwagger();
 app.AddApplicationMiddleware();

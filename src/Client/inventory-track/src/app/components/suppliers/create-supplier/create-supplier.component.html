@@ -1,0 +1,70 @@
+<div class="modal">
+  <div class="modal-content">
+    <h2>Добавить контрагента</h2>
+    <form #supplierForm="ngForm" (ngSubmit)="createSupplier(supplierForm)">
+      <div class="form-group">
+        <label for="name">Название</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="newSupplier.name"
+          required
+        />
+        <app-error-message
+          *ngIf="supplierForm.controls['name']?.invalid && submitted"
+          [message]="'Название обязательно.'"
+        ></app-error-message>
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Телефон</label>
+        <input
+          type="text"
+          id="phoneNumber"
+          name="phoneNumber"
+          [(ngModel)]="newSupplier.phoneNumber"
+          required
+        />
+        <app-error-message
+          *ngIf="supplierForm.controls['phoneNumber']?.invalid && submitted"
+          [message]="'Телефон обязателен.'"
+        ></app-error-message>
+      </div>
+      <div class="form-group">
+        <label for="postalAddress">Адрес</label>
+        <input
+          type="text"
+          id="postalAddress"
+          name="postalAddress"
+          [(ngModel)]="newSupplier.postalAddress"
+          required
+        />
+        <app-error-message
+          *ngIf="supplierForm.controls['postalAddress']?.invalid && submitted"
+          [message]="'Адрес обязателен.'"
+        ></app-error-message>
+      </div>
+      <div class="form-group">
+        <label for="accountNumber">Номер счета</label>
+        <input
+          type="text"
+          id="accountNumber"
+          name="accountNumber"
+          [(ngModel)]="newSupplier.accountNumber"
+          required
+        />
+        <app-error-message
+          *ngIf="supplierForm.controls['accountNumber']?.invalid && submitted"
+          [message]="'Номер счета обязателен.'"
+        ></app-error-message>
+      </div>
+      <div class="modal-buttons">
+        <button type="submit" class="btn-primary">Сохранить</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">
+          Отмена
+        </button>
+      </div>
+      <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+    </form>
+  </div>
+</div>

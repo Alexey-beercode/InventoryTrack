@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 import { WarehouseResponseDto } from '../models/dto/warehouse/warehouse-response-dto';
 import { CreateWarehouseDto } from '../models/dto/warehouse/create-warehouse-dto';
 import { WarehouseStateResponseDto } from '../models/dto/warehouse/warehouse-state-response-dto';
+import {UpdateWarehouseDto} from "../models/dto/warehouse/update-warehouse-dto";
 
 @Injectable({
   providedIn: 'root',
@@ -80,4 +81,9 @@ export class WarehouseService {
       `${this.baseUrl}${this.apiUrls.getStatesByCompany.replace('{companyId}', companyId)}`
     );
   }
+  updateWarehouse(dto: UpdateWarehouseDto): Observable<void> {
+    const url = `${environment.baseInventoryUrl}${environment.apiUrls.warehouse.update}`;
+    return this.http.put<void>(url, dto);
+  }
+
 }

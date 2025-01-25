@@ -140,5 +140,15 @@ namespace InventoryService.Controllers
             return Ok(warehouseStates);
         }
 
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateWarehouseDto dto,
+            CancellationToken cancellationToken = default)
+        {
+            await _warehouseService.UpdateAsync(dto, cancellationToken);
+            return Ok();
+        }
+
     }
 }

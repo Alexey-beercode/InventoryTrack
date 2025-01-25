@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {catchError, map, Observable, of} from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {environment} from "../environments/environment";
+import { environment } from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,10 @@ import {environment} from "../environments/environment";
 export class TokenService {
   private readonly ACCESS_TOKEN_KEY = 'accessToken';
   private readonly USER_ID_KEY = 'userId';
-  private readonly apiUrl = `${environment.apiUrls.auth}`;
-  constructor(private http: HttpClient,) {
-  }
+  private readonly baseUrl = environment.baseAuthUrl;
+  private readonly apiUrls = environment.apiUrls.auth;
+
+  constructor(private http: HttpClient) {}
 
   setTokens(accessToken: string, userId: string): void {
     localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
@@ -32,7 +33,7 @@ export class TokenService {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return of(!!this.getAccessToken()); // Возвращаем Observable
+    return this.checkTokenStatus();
   }
 
   checkTokenStatus(): Observable<boolean> {
@@ -45,14 +46,13 @@ export class TokenService {
       return of(false);
     }
 
-    // Добавим проверку формата токена
     if (!this.isValidTokenFormat(accessToken)) {
       console.log('Invalid token format');
       this.clearTokens();
       return of(false);
     }
 
-    return this.http.get(`${this.apiUrl}token-status`, {
+    return this.http.get(`${this.baseUrl}${this.apiUrls.token_status}`, {
       headers: { 'Authorization': `Bearer ${accessToken}` },
       observe: 'response',
       responseType: 'text'
@@ -60,11 +60,50 @@ export class TokenService {
       map(response => {
         console.log('Token status response:', response);
         return response.status === 200;
-      }))
+      })
+    );
   }
+
+  getUserRoles(): string[] {
+    const token = this.getAccessToken();
+    if (!token || !this.isValidTokenFormat(token)) {
+      return [];
+    }
+
+    const decodedToken = this.decodeToken(token);
+    if (decodedToken) {
+      // Проверяем, есть ли в токене ClaimTypes.Role
+      const rolesClaim = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']; // Обычный namespace для Role
+      if (rolesClaim) {
+        // Если роли представлены как массив
+        return Array.isArray(rolesClaim) ? rolesClaim : [rolesClaim];
+      }
+
+      // Если поле ролей называется просто "role"
+      const alternativeRoleClaim = decodedToken['role'];
+      if (alternativeRoleClaim) {
+        return Array.isArray(alternativeRoleClaim) ? alternativeRoleClaim : [alternativeRoleClaim];
+      }
+    }
+
+    console.error('Roles not found in the token');
+    return [];
+  }
+
+
   private isValidTokenFormat(token: string): boolean {
-    // Простая проверка формата JWT
     const parts = token.split('.');
     return parts.length === 3;
   }
+
+  private decodeToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return null;
+    }
+  }
+
 }

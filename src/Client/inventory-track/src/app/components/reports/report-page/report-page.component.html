@@ -1,0 +1,63 @@
+<app-header
+  title="Отчёты"
+  (companyIdEmitter)="companyId = $event"
+></app-header>
+
+<div class="report-page-container">
+  <button class="create-report-button" (click)="openModal()">Сформировать отчет</button>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && reports.length === 0" class="no-reports">
+    <p>Отчётов пока нет</p>
+  </div>
+  <app-error-message [message]="errorMessage"></app-error-message>
+
+  <div *ngIf="!isLoading && reports.length > 0" class="report-list">
+    <div
+      *ngFor="let report of reports"
+      class="report-card clickable"
+      (click)="downloadReport(report.id,report.name)"
+      title="Скачать отчет"
+    >
+      <h3>{{ report.name }}</h3>
+      <p><strong>Тип:</strong> {{ report.reportType | enumLabel: 'ReportType' }}</p>
+      <p><strong>Создан:</strong> {{ report.createdAt | customDate }}</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <h2>Сформировать новый отчет</h2>
+    <form>
+      <div class="form-group">
+        <label for="reportType">Тип отчета</label>
+        <select id="reportType" [(ngModel)]="selectedReportType" name="reportType">
+          <option *ngFor="let type of reportTypes" [value]="type">
+            {{ type | enumLabel: 'ReportType' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="dateSelect">Временной диапазон</label>
+        <select id="dateSelect" [(ngModel)]="selectedDateSelect" name="dateSelect">
+          <option *ngFor="let option of dateSelectOptions" [value]="option">
+            {{ option | enumLabel: 'DateSelect' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-primary" (click)="createReport()">Сформировать</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-footer></app-footer>

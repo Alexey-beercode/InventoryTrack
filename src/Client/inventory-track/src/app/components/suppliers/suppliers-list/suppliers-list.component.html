@@ -1,0 +1,41 @@
+<app-header
+  title="Список контрагентов"
+  (companyIdEmitter)="onCompanyIdReceived($event)"
+></app-header>
+
+<div class="supplier-list-container">
+  <div class="supplier-list-header">
+    <app-back-button></app-back-button>
+    <button class="add-supplier-button" (click)="openCreateModal()">Добавить контрагента</button>
+  </div>
+
+  <div class="supplier-content">
+    <div *ngIf="isLoading" class="loading-container">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && suppliers.length === 0" class="no-suppliers">
+      <p>У вас пока нет контрагентов.</p>
+    </div>
+
+    <div *ngIf="!isLoading && suppliers.length > 0" class="supplier-list">
+      <div *ngFor="let supplier of suppliers" class="supplier-card">
+        <h3>{{ supplier.name }}</h3>
+        <p><strong>Телефон:</strong> {{ supplier.phoneNumber }}</p>
+        <p><strong>Адрес:</strong> {{ supplier.postalAddress }}</p>
+        <p><strong>Номер счета:</strong> {{ supplier.accountNumber }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-create-supplier
+  *ngIf="showCreateModal && companyId"
+  [companyId]="companyId!"
+  (close)="closeCreateModal()"
+  (refreshList)="loadSuppliers()"
+></app-create-supplier>
+
+
+
+<app-footer></app-footer>

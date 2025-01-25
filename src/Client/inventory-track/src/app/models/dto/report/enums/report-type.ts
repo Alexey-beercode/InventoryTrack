@@ -1,6 +1,6 @@
 export enum ReportType {
-  StockState = 'StockState',
-  Movements = 'Movements',
-  WriteOffs = 'WriteOffs',
-  Items = 'Items',
+  StockState = 0, // Отчет о состоянии склада
+  Movements = 1,  // Отчет о внутренних перемещениях
+  WriteOffs = 2,  // Отчет о списаниях
+  Items = 3,      // История операций
 }

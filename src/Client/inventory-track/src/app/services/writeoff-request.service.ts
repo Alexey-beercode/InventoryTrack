@@ -90,4 +90,17 @@ export class WriteOffRequestService {
       `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`
     );
   }
+  approve(formData: FormData): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}${this.apiUrls.approve}`, formData);
+  }
+
+  reject(id: string, userId: string): Observable<void> {
+    const params = { approvedByUserId: userId };
+    return this.http.put<void>(
+      `${this.baseUrl}${this.apiUrls.reject.replace('{id}', id)}`,
+      null,
+      { params }
+    );
+  }
+
 }

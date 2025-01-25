@@ -45,4 +45,10 @@ export class SupplierService {
       `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`
     );
   }
+
+  getByCompanyId(companyId:string):Observable<SupplierResponseDto[]> {
+    return this.http.get<SupplierResponseDto[]>(
+      `${this.baseUrl}${this.apiUrls.getByCompanyId.replace('{companyId}', companyId)}`
+    );
+  }
 }

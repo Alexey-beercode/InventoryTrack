@@ -11,6 +11,9 @@ services:
       - ASPNETCORE_URLS=http://+:5110
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__ConnectionString=Host=auth-db;Port=5432;Database=inventory_track_auth_service;Username=postgres;Password=CHEATS145
+      - RabbitMQ__Hostname=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
     depends_on:
       - auth-db
     networks:
@@ -84,6 +87,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - MongoDB__ConnectionString=mongodb://report-db:27017
       - MongoDB__DatabaseName=inventory_track_report_service
+      - Services__AuthService=http://auth-service:5110/api/auth/messaging/
+      - Services__InventoryService=http://inventory-service:5111/api/inventory/messaging/
+      - Services__MovementService=http://movement-service:5112/api/movement/messaging/
+      - Services__WriteOffService=http://write-off-service:5113/api/writeoff/messaging/
     depends_on:
       - report-db
     networks:
@@ -160,7 +167,7 @@ services:
       - inventory-truck-network
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:management
     container_name: rabbitmq
     ports:
       - "5672:5672"

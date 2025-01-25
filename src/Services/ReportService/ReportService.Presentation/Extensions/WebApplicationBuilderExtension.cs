@@ -97,6 +97,7 @@ public static class WebApplicationBuilderExtension
     {
         builder.Services.AddScoped<IReportRepository, ReportRepository>();
         builder.Services.AddScoped<IExcelExportService, ExcelExportService>();
+        builder.Services.AddScoped<ReportProducer>();
         builder.Services.AddControllers();
     }
 
@@ -157,37 +158,41 @@ public static class WebApplicationBuilderExtension
         ));
     }
     
-    public static void AddMassTransitWithRabbitMq(this WebApplicationBuilder builder)
+    public static void AddHttpClients(this WebApplicationBuilder builder)
     {
-        var rabbitMqSettings = builder.Configuration.GetSection("RabbitMQ");
+        var configuration = builder.Configuration;
 
-        builder.Services.AddMassTransit(x =>
+        builder.Services.AddHttpClient("AuthService", client =>
         {
-            // Регистрация всех IRequestClient
-            x.AddRequestClient<GetReportDataMessage>();
-            x.AddRequestClient<GetUserMessage>();
-            x.AddRequestClient<GetItemMessage>();
-            x.AddRequestClient<GetWarehouseMessage>();
-
-            // Конфигурация RabbitMQ
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host(rabbitMqSettings["Hostname"], "/", h =>
-                {
-                    h.Username(rabbitMqSettings["Username"]);
-                    h.Password(rabbitMqSettings["Password"]);
-                });
-
-                // Конфигурация очередей и endpoint'ов
-                cfg.ConfigureEndpoints(context);
-            });
+            client.BaseAddress = new Uri(configuration["Services:AuthService"]);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
         });
 
-        // Регистрация ReportProducer
-        builder.Services.AddScoped<ReportProducer>();
+        builder.Services.AddHttpClient("InventoryService", client =>
+        {
+            client.BaseAddress = new Uri(configuration["Services:InventoryService"]);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
 
-        // Включение HostedService для MassTransit
-        builder.Services.AddMassTransitHostedService();
+        builder.Services.AddHttpClient("MovementService", client =>
+        {
+            client.BaseAddress = new Uri(configuration["Services:MovementService"]);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+
+        builder.Services.AddHttpClient("WriteOffService", client =>
+        {
+            client.BaseAddress = new Uri(configuration["Services:WriteOffService"]);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+        builder.Services.AddHttpClient("ReportHttpClient", client =>
+        {
+            // Установите базовый адрес для запросов
+            client.BaseAddress = new Uri("http://localhost:5114/");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+
     }
+
 
 }

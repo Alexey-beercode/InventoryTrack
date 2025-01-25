@@ -134,6 +134,9 @@ namespace InventoryService.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")

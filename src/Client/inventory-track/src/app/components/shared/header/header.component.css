@@ -1,0 +1,184 @@
+.header {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.company-name {
+  font-size: 14px;
+  color: var(--accent-color);
+}
+
+.add-company-button {
+  background-color: var(--accent-color);
+  border: none;
+  padding: 8px 12px;
+  color: #fff;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-button {
+  background-color: var(--primary-dark);
+  border: none;
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  max-width: 600px;
+  width: 90%;
+}
+
+.modal-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: var(--primary-dark);
+  text-align: center;
+  font-weight: bold;
+}
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 20px; /* Увеличили отступ между элементами формы */
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: var(--text-color);
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  font-size: 16px; /* Более удобный размер текста */
+}
+
+.form-group textarea {
+  height: 100px; /* Увеличена высота текстовых областей */
+  resize: none;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between; /* Кнопки будут равномерно распределены */
+  gap: 15px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-secondary:hover {
+  background-color: #bbb;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: bold;
+  display: block; /* Убедитесь, что ошибка занимает свою строку */
+  line-height: 1.5;
+}
+
+
+

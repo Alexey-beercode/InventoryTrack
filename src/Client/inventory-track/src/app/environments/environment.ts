@@ -9,9 +9,8 @@ export const environment = {
     auth: {
       login: '/api/auth/login',
       register: '/api/auth/register',
-      refreshToken: '/api/auth/refresh',
-      revoke: '/api/auth/revoke',
       addUserToWarehouse: '/api/auth/user-to-warehouse',
+      token_status:'/api/auth/token-status'
     },
     company: {
       getById: '/api/companies/{id}',
@@ -58,6 +57,7 @@ export const environment = {
       getByAccountNumber: '/api/suppliers/by-account/{accountNumber}',
       create: '/api/suppliers',
       delete: '/api/suppliers/{id}',
+      getByCompanyId: '/api/suppliers/by-company/{companyId}',
     },
     warehouse: {
       getAll: '/api/warehouses',
@@ -72,6 +72,7 @@ export const environment = {
       getAllStates: '/api/warehouses/states',
       getStateById: '/api/warehouses/states/{id}',
       getStatesByCompany: '/api/warehouses/states/by-company/{companyId}',
+      update: '/api/warehouses/update',
     },
     movementRequest: {
       create: '/api/movement-requests',
@@ -96,6 +97,8 @@ export const environment = {
       create: '/api/write-off-requests',
       update: '/api/write-off-requests',
       delete: '/api/write-off-requests/{id}',
+      reject: 'api/write-off-requests/reject/{id}',
+      approve: 'api/write-off-requests/approve'
     },
     report: {
       getById: '/api/report/id/{id}',
@@ -105,6 +108,14 @@ export const environment = {
       getPaginated: '/api/report/paginated',
       getAll: '/api/report',
       delete: '/api/report/{id}',
+      create: '/api/report/create'
+    },
+    role: {
+      getAll: '/api/roles', // Получить все роли
+      getById: '/api/roles/{id}', // Получить роль по ID
+      getRolesByUserId: '/api/roles/by-user/{userId}', // Получить роли пользователя
+      setRoleToUser: '/api/roles/assign', // Назначить роль пользователю
+      removeRoleFromUser: '/api/roles/remove', // Удалить роль у пользователя
     },
   },
 };

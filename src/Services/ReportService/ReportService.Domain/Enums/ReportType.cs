@@ -1,6 +1,6 @@
 ﻿namespace ReportService.Domain.Enums;
 
-public enum ReportType
+public enum ReportType: int
 {
     /// <summary>
     /// Отчет о состоянии склада (остатки, категории, стоимость, истекающие активы).

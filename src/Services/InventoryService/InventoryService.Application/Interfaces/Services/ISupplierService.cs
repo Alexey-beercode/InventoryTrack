@@ -11,4 +11,7 @@ public interface ISupplierService
     Task<SupplierResponseDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task CreateAsync(CreateSupplierDto createSupplierDto, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<SupplierResponseDto>> GetByCompanyIdAsync(Guid companyId,
+        CancellationToken cancellationToken = default);
 }

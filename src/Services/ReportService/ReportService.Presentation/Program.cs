@@ -6,7 +6,7 @@ builder.AddMapping();
 builder.AddMediatr();
 builder.AddServices();
 builder.AddValidation();
-builder.AddMassTransitWithRabbitMq();
+builder.AddHttpClients();
 builder.AddMongoDatabase();
 builder.AddSwaggerDocumentation();
 var app = builder.Build();

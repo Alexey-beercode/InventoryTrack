@@ -1,0 +1,82 @@
+:host {
+  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-dark: #357ABD; /* Темный синий для наведения */
+  --accent-color: #A9CFF3; /* Светлый синий для акцентов */
+  --text-color: #333; /* Цвет текста */
+  --background-color: #f0f4f8; /* Мягкий фон */
+  --card-background: #ffffff; /* Фон карточек */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.supplier-list-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.supplier-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.supplier-content {
+  padding: 20px 0;
+}
+
+.add-supplier-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-supplier-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.supplier-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.supplier-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  transition: transform 0.2s;
+}
+
+.supplier-card:hover {
+  transform: scale(1.03);
+}
+
+.no-suppliers {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

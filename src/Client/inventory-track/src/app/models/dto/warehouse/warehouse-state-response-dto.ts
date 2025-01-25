@@ -1,6 +1,12 @@
+import { WarehouseTypeResponseDto } from './warehouse-type-response-dto';
+import { InventoryItemResponseDto } from '../inventory-item/inventory-item-response-dto';
+
 export class WarehouseStateResponseDto {
   id!: string;
   name!: string;
-  state!: string; // Assuming state is a string representation
-  companyId!: string;
+  type!: WarehouseTypeResponseDto;
+  itemsCount!: number;
+  location!: string;
+  quantity!: number;
+  inventoryItems!: InventoryItemResponseDto[];
 }

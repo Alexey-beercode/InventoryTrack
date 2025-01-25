@@ -1,4 +1,4 @@
 export enum WarehouseType {
-  Production,
-  Internal,
+  Production = 0,
+  Internal = 1,
 }

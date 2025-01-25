@@ -5,5 +5,4 @@ export interface CreateWriteOffRequestDto {
   quantity: number;
   reasonId: string;
   anotherReason?: string;
-  documents: File[];
 }

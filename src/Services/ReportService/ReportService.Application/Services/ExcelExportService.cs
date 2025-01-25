@@ -38,35 +38,57 @@ namespace ReportService.Application.Services
         }
 
         public void GenerateStockStateSheet(IXLWorksheet worksheet, BsonDocument data)
-        {
-            var items = data["Items"].AsBsonArray;
+{
+    // Устанавливаем заголовки
+    worksheet.Cell(1, 1).Value = "Наименование";
+    worksheet.Cell(1, 2).Value = "Уникальный код";
+    worksheet.Cell(1, 3).Value = "Количество";
+    worksheet.Cell(1, 4).Value = "Оценочная стоимость";
+    worksheet.Cell(1, 5).Value = "Срок годности";
+    worksheet.Cell(1, 6).Value = "Поставщик";
+    worksheet.Cell(1, 7).Value = "Склад";
+    worksheet.Cell(1, 8).Value = "Дата поступления";
 
-            worksheet.Cell(1, 1).Value = "Наименование";
-            worksheet.Cell(1, 2).Value = "Уникальный код";
-            worksheet.Cell(1, 3).Value = "Количество";
-            worksheet.Cell(1, 4).Value = "Оценочная стоимость";
-            worksheet.Cell(1, 5).Value = "Срок годности";
-            worksheet.Cell(1, 6).Value = "Поставщик";
-            worksheet.Cell(1, 7).Value = "Склад";
-            worksheet.Cell(1, 8).Value = "Дата поступления";
+    // Проверяем, существует ли поле "Items"
+    if (!data.Contains("Items") || data["Items"].IsBsonNull)
+    {
+        worksheet.Cell(2, 1).Value = "Данные отсутствуют";
+        worksheet.Range(2, 1, 2, 8).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        worksheet.Columns().AdjustToContents();
+        return;
+    }
 
-            int row = 2;
-            foreach (var item in items)
-            {
-                var bsonItem = item.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonItem["Name"].AsString; // Наименование
-                worksheet.Cell(row, 2).Value = bsonItem["UniqueCode"].AsString; // Уникальный код
-                worksheet.Cell(row, 3).Value = bsonItem["Quantity"].ToInt32(); // Количество
-                worksheet.Cell(row, 4).Value = bsonItem["EstimatedValue"].ToDecimal(); // Оценочная стоимость
-                worksheet.Cell(row, 5).Value = bsonItem["ExpirationDate"].ToUniversalTime(); // Срок годности
-                worksheet.Cell(row, 6).Value = bsonItem["SupplierName"].AsString; // Поставщик
-                worksheet.Cell(row, 7).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString; // Склад
-                worksheet.Cell(row, 8).Value = bsonItem["DeliveryDate"].ToUniversalTime(); // Дата поступления
-                row++;
-            }
+    // Получаем массив "Items"
+    var items = data["Items"].AsBsonArray;
 
-            worksheet.Columns().AdjustToContents();
-        }
+    // Если массив пуст, добавляем сообщение
+    if (!items.Any())
+    {
+        worksheet.Cell(2, 1).Value = "Данные отсутствуют";
+        worksheet.Range(2, 1, 2, 8).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        worksheet.Columns().AdjustToContents();
+        return;
+    }
+
+    // Заполняем строки данными
+    int row = 2;
+    foreach (var item in items)
+    {
+        var bsonItem = item.AsBsonDocument;
+        worksheet.Cell(row, 1).Value = bsonItem.GetValue("Name", "").AsString; // Наименование
+        worksheet.Cell(row, 2).Value = bsonItem.GetValue("UniqueCode", "").AsString; // Уникальный код
+        worksheet.Cell(row, 3).Value = bsonItem.GetValue("Quantity", 0).ToInt32(); // Количество
+        worksheet.Cell(row, 4).Value = bsonItem.GetValue("EstimatedValue", 0.0M).ToDecimal(); // Оценочная стоимость
+        worksheet.Cell(row, 5).Value = bsonItem.GetValue("ExpirationDate", BsonNull.Value).ToNullableUniversalTime(); // Срок годности
+        worksheet.Cell(row, 6).Value = bsonItem.GetValue("SupplierName", "").AsString; // Поставщик
+        worksheet.Cell(row, 7).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString; 
+        worksheet.Cell(row, 8).Value = bsonItem.GetValue("DeliveryDate", BsonNull.Value).ToNullableUniversalTime(); // Дата поступления
+        row++;
+    }
+
+    worksheet.Columns().AdjustToContents();
+}
+
 
         private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
         {

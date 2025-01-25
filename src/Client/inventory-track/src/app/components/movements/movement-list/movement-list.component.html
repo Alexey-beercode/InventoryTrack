@@ -1,0 +1,43 @@
+<app-header
+  title="Перемещения">
+  <!--(companyIdEmitter)="onCompanyIdReceived($event)"-->
+></app-header>
+
+<div class="container">
+  <h2>Список перемещений</h2>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && movements.length > 0" class="table">
+    <div class="table-header">
+      <div>Товар</div>
+      <div>Со склада</div>
+      <div>На склад</div>
+      <div>Количество</div>
+      <div>Статус</div>
+    </div>
+    <div *ngFor="let movement of movements" class="table-row">
+      <div>{{ getItemName(movement.itemId) }}</div>
+      <div>{{ movement.sourceWarehouseId }}</div>
+      <div>{{ movement.destinationWarehouseId }}</div>
+      <div>{{ movement.quantity }}</div>
+      <div>{{ movement.status.name }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && movements.length === 0" class="no-data">
+    <p>Перемещения отсутствуют.</p>
+  </div>
+
+  <button (click)="openMovementModal()" class="btn">Создать перемещение</button>
+
+  <app-movement-modal
+    *ngIf="showMovementModal"
+    (close)="closeMovementModal()"
+    [companyId]="companyId"
+  ></app-movement-modal>
+</div>
+
+<app-footer></app-footer>

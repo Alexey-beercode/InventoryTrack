@@ -1,6 +1,6 @@
 ﻿namespace ReportService.Domain.Enums;
 
-public enum DateSelect
+public enum DateSelect: int
 {
     Month,
     Week,

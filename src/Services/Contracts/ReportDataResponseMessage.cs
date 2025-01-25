@@ -1,7 +1,10 @@
 ﻿using MongoDB.Bson;
 
-public class ReportDataResponseMessage
+namespace ReportService.Messaging.Messages
 {
-    public Guid ReportRequestId { get; set; }
-    public BsonDocument Data { get; set; }
+    public class ReportDataResponseMessage
+    {
+        public Guid ReportRequestId { get; set; }
+        public BsonDocument Data { get; set; }
+    }
 }

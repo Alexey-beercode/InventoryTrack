@@ -1,0 +1,12 @@
+<div class="writeoff-card">
+  <h3>Заявка №{{ writeOffRequest.id }}</h3>
+  <p><strong>Склад:</strong> {{ writeOffRequest.warehouseId }}</p>
+  <p><strong>Причина:</strong> {{ writeOffRequest.reason.reason }}</p>
+  <p><strong>Дата:</strong> {{ writeOffRequest.requestDate | customDate }}</p>
+
+  <div *ngIf="writeOffRequest.status.value === RequestStatus.Requested" class="actions">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button class="approve-btn" (click)="approve()">Одобрить</button>
+    <button class="reject-btn" (click)="reject()">Отклонить</button>
+  </div>
+</div>

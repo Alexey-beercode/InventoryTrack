@@ -1,7 +1,5 @@
-// src/app/services/role.service.ts
-
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { RoleDTO } from '../models/dto/role/role-dto';
@@ -11,31 +9,43 @@ import { UserRoleDTO } from '../models/dto/user/user-role-dto';
   providedIn: 'root',
 })
 export class RoleService {
-  private apiUrl = `${environment.apiUrls.role}`;
+  private readonly baseUrl = environment.baseAuthUrl;
+  private readonly apiUrls = environment.apiUrls.role;
 
   constructor(private http: HttpClient) {}
 
+  // Получить все роли
   getAll(): Observable<RoleDTO[]> {
-    return this.http.get<RoleDTO[]>(this.apiUrl);
+    return this.http.get<RoleDTO[]>(`${this.baseUrl}${this.apiUrls.getAll}`);
   }
 
+  // Получить роль по ID
   getById(id: string): Observable<RoleDTO> {
-    return this.http.get<RoleDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<RoleDTO>(
+      `${this.baseUrl}${this.apiUrls.getById.replace('{id}', id)}`
+    );
   }
 
-  getRolesByUserId(userId: string | null): Observable<RoleDTO[]> {
-    return this.http.get<RoleDTO[]>(`${this.apiUrl}/by-user/${userId}`);
+  // Получить роли пользователя по его ID
+  getRolesByUserId(userId: string): Observable<RoleDTO[]> {
+    return this.http.get<RoleDTO[]>(
+      `${this.baseUrl}${this.apiUrls.getRolesByUserId.replace('{userId}', userId)}`
+    );
   }
 
+  // Назначить роль пользователю
   setRoleToUser(userRoleDto: UserRoleDTO): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/assign`, userRoleDto, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    });
+    return this.http.post<void>(
+      `${this.baseUrl}${this.apiUrls.setRoleToUser}`,
+      userRoleDto
+    );
   }
 
+  // Удалить роль у пользователя
   removeRoleFromUser(userRoleDto: UserRoleDTO): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/remove`, userRoleDto, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    });
+    return this.http.post<void>(
+      `${this.baseUrl}${this.apiUrls.removeRoleFromUser}`,
+      userRoleDto
+    );
   }
 }

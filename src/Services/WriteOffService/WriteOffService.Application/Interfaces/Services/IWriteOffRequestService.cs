@@ -19,4 +19,6 @@ public interface IWriteOffRequestService
     Task DeleteWriteOffRequestAsync(Guid id, CancellationToken cancellationToken = default);
     Task CreateAsync(CreateWriteOffRequestDto createWriteOffRequestDto, CancellationToken cancellationToken = default);
     Task UpdateAsync(UpdateWriteOffRequestDto updateWriteOffRequestDto, CancellationToken cancellationToken = default);
+    Task ApproveAsync(ApproveWriteOffRequestDto approveDto, CancellationToken cancellationToken = default);
+    Task RejectAsync(Guid requestId, Guid approvedByUserId, CancellationToken cancellationToken = default);
 }

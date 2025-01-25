@@ -82,5 +82,16 @@ namespace InventoryService.Controllers
             await _supplierService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
+
+        [HttpGet("by-company/{companyId:guid}")]
+        [Authorize(Policy = "Accountant")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByCompanyIdAsync(Guid companyId,
+            CancellationToken cancellationToken = default)
+        {
+            var suppliers = await _supplierService.GetByCompanyIdAsync(companyId, cancellationToken);
+            return Ok(suppliers);
+        }
     }
 }

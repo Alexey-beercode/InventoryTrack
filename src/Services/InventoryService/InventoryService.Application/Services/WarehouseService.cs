@@ -137,6 +137,19 @@ public class WarehouseService : IWarehouseService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(UpdateWarehouseDto updateWarehouseDto, CancellationToken cancellationToken = default)
+    {
+        var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(updateWarehouseDto.Id, cancellationToken);
+        if (warehouse is null)
+        {
+            throw new EntityNotFoundException("Склад", updateWarehouseDto.Id);
+        }
+
+        _mapper.Map(updateWarehouseDto, warehouse);
+        _unitOfWork.Warehouses.Update(warehouse);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
     private async Task<List<InventoryItemResponseDto>> GetInventoryItemsByWarehouseAsync(Guid warehouseId, 
         CancellationToken cancellationToken = default)
     {

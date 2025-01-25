@@ -14,7 +14,6 @@ using MovementService.Domain.Interfaces.Repositories;
 using MovementService.Domain.Interfaces.UnitOfWork;
 using MovementService.Infrastructure;
 using MovementService.Infrastructure.Config.Database;
-using MovementService.Infrastructure.Messaging.Consumers;
 using MovementService.Infrastructure.Messaging.Producers;
 using MovementService.Infrastructure.Repositories;
 using MovementService.Presentation.Validators;
@@ -136,8 +135,6 @@ public static class WebApplicationBuilderExtension
 
         builder.Services.AddMassTransit(x =>
         {
-            // Регистрация Consumer
-            x.AddConsumer<ReportMovementsRequestConsumer>();
 
             // Регистрация Producer через IPublishEndpoint
             x.UsingRabbitMq((context, cfg) =>
@@ -146,12 +143,6 @@ public static class WebApplicationBuilderExtension
                 {
                     h.Username(rabbitMqSettings["Username"]);
                     h.Password(rabbitMqSettings["Password"]);
-                });
-
-                // Конфигурация очереди для Consumer
-                cfg.ReceiveEndpoint("report-movements-queue", e =>
-                {
-                    e.ConfigureConsumer<ReportMovementsRequestConsumer>(context);
                 });
             });
         });

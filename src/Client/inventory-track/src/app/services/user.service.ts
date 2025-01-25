@@ -25,10 +25,14 @@ export class UserService {
     return this.http.get<UserResponseDTO[]>(url);
   }
 
-  getById(id: string): Observable<UserResponseDTO> {
+  getById(id: string | null): Observable<UserResponseDTO> {
+    if (!id) {
+      throw new Error('ID пользователя не может быть null');
+    }
     const url = `${this.baseUrl}${this.apiUrls.getById.replace('{id}', id)}`;
     return this.http.get<UserResponseDTO>(url);
   }
+
 
   getByLogin(login: string): Observable<UserResponseDTO> {
     const url = `${this.baseUrl}${this.apiUrls.getByLogin.replace('{login}', login)}`;
@@ -66,7 +70,8 @@ export class UserService {
   }
 
   addUserToWarehouse(dto: AddUserToWarehouseDto): Observable<void> {
-    const url = `${this.baseUrl}${this.apiUrls.addUserToWarehouse}`;
+    const url = `${environment.baseAuthUrl}${environment.apiUrls.user.addUserToWarehouse}`;
     return this.http.put<void>(url, dto);
   }
+
 }

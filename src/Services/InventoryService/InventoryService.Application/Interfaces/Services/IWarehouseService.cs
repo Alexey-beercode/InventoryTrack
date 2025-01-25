@@ -33,4 +33,5 @@ public interface IWarehouseService
         CancellationToken cancellationToken = default);
 
     Task CreateAsync(CreateWarehouseDto createWarehouseDto, CancellationToken cancellationToken = default);
+    Task UpdateAsync(UpdateWarehouseDto updateWarehouseDto, CancellationToken cancellationToken = default);
 }

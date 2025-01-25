@@ -1,10 +1,11 @@
 // src/app/services/report.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { ReportResponseDto } from '../models/dto/report/report-response-dto';
 import { GetPaginatedReportsQuery } from '../models/dto/report/get-paginated-reports-query';
+import {CreateCommand} from "../models/dto/report/create-command";
 
 @Injectable({
   providedIn: 'root',
@@ -48,11 +49,16 @@ export class ReportService {
 
   // Получить отчеты с пагинацией
   getPaginated(query: GetPaginatedReportsQuery): Observable<ReportResponseDto[]> {
-    return this.http.post<ReportResponseDto[]>(
+    const params = new HttpParams()
+      .set('pageNumber', query.pageNumber.toString())
+      .set('pageSize', query.pageSize.toString());
+
+    return this.http.get<ReportResponseDto[]>(
       `${this.baseUrl}${this.apiUrls.getPaginated}`,
-      query
+      { params }
     );
   }
+
 
   // Получить все отчеты
   getAll(): Observable<ReportResponseDto[]> {
@@ -65,4 +71,9 @@ export class ReportService {
       `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`
     );
   }
+
+  createReport(command: CreateCommand): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}${this.apiUrls.create}`, command);
+  }
+
 }

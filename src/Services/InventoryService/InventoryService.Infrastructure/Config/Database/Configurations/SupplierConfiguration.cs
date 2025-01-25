@@ -31,5 +31,8 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .IsRequired();
+        
+        builder.Property(w => w.CompanyId)
+            .IsRequired();
     }
 }

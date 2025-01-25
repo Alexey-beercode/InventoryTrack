@@ -67,22 +67,52 @@ public class WriteOffRequestService : IWriteOffRequestService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task CreateAsync(CreateWriteOffRequestDto createWriteOffRequestDto, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(CreateWriteOffRequestDto createDto, CancellationToken cancellationToken = default)
     {
-        var newRequest = _mapper.Map<WriteOffRequest>(createWriteOffRequestDto);
-        
-        await SetWriteOffReasonAsync(createWriteOffRequestDto, newRequest, cancellationToken);
-        
+        var newRequest = _mapper.Map<WriteOffRequest>(createDto);
+
         newRequest.ApprovedByUserId = null;
         newRequest.Status = RequestStatus.Requested;
         newRequest.RequestDate = DateTime.UtcNow;
-        
+
         await _unitOfWork.WriteOffRequests.CreateAsync(newRequest, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        var savedRequest = await _unitOfWork.WriteOffRequests.GetByDateAndItemIdAsync(newRequest.ItemId, newRequest.RequestDate, cancellationToken);
-        
-        await AddDocumentsToRequestAsync(savedRequest, createWriteOffRequestDto.Documents, cancellationToken);
+    }
+
+    public async Task ApproveAsync(ApproveWriteOffRequestDto approveDto, CancellationToken cancellationToken = default)
+    {
+        var request = await _unitOfWork.WriteOffRequests.GetByIdAsync(approveDto.Id, cancellationToken)
+            ?? throw new EntityNotFoundException("WriteOffRequest", approveDto.Id);
+
+        if (request.Status != RequestStatus.Requested)
+        {
+            throw new InvalidOperationException("Only requests with status 'Requested' can be approved.");
+        }
+
+        request.Status = RequestStatus.Created;
+        request.ApprovedByUserId = approveDto.ApprovedByUserId;
+
+        await AddDocumentsToRequestAsync(request, approveDto.Documents, cancellationToken);
+
+        _unitOfWork.WriteOffRequests.Update(request);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task RejectAsync(Guid requestId, Guid approvedByUserId, CancellationToken cancellationToken = default)
+    {
+        var request = await _unitOfWork.WriteOffRequests.GetByIdAsync(requestId, cancellationToken)
+            ?? throw new EntityNotFoundException("WriteOffRequest", requestId);
+
+        if (request.Status != RequestStatus.Requested)
+        {
+            throw new InvalidOperationException("Only requests with status 'Requested' can be rejected.");
+        }
+
+        request.Status = RequestStatus.Rejected;
+        request.ApprovedByUserId = approvedByUserId;
+
+        _unitOfWork.WriteOffRequests.Update(request);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(UpdateWriteOffRequestDto updateWriteOffRequestDto, CancellationToken cancellationToken = default)
