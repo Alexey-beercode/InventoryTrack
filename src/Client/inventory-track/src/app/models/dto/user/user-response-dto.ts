@@ -6,4 +6,5 @@ export interface UserResponseDTO {
   firstName: string;
   lastName: string;
   roles: RoleDTO[];
+  warehouseId: string;
 }

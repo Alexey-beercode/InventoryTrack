@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Contracts;
 using Microsoft.AspNetCore.Http;
 using WriteOffService.Application.DTOs.Request.WriteOffRequest;
 using WriteOffService.Application.DTOs.Response.WriteOffRequest;

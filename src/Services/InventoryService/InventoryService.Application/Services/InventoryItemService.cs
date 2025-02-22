@@ -42,7 +42,7 @@ public class InventoryItemService : IInventoryItemService
         var inventoryItem = _mapper.Map<InventoryItem>(dto);
         inventoryItem.DocumentId = document.Id;
         inventoryItem.SupplierId = supplier.Id;
-        inventoryItem.Status = InventoryItemStatus.Requested;
+        inventoryItem.Status = InventoryItemStatus.Created;
 
         await _unitOfWork.InventoryItems.CreateAsync(inventoryItem, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

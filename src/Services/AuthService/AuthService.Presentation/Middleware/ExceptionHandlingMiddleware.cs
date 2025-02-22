@@ -38,21 +38,18 @@ public class ExceptionHandlingMiddleware
 
         switch (exception)
         {
+            case InvalidCredentialException:
+                response.StatusCode = (int)HttpStatusCode.NotAcceptable;
+                break;
             case EntityNotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
                 break;
             case FormatException:
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
-                break;
             case ValidationException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 break;
             case UnauthorizedAccessException:
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                break;
             case AuthenticationException:
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                break;
             case AuthorizationException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 break;
@@ -63,6 +60,7 @@ public class ExceptionHandlingMiddleware
                 response.StatusCode = (int)HttpStatusCode.Conflict;
                 break;
             default:
+                // Для всех остальных исключений устанавливаем статус 500 (Internal Server Error)
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 break;
         }

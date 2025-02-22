@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovementService.Presentation", "MovementService.Presentation\MovementService.Presentation.csproj", "{A7F2F8FC-319D-4924-98D7-499B22EA83D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovementService.Domain", "MovementService.Domain\MovementService.Domain.csproj", "{D859FEAD-F0BE-45E5-86A7-B2F9AB2FDBA8}"
@@ -9,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovementService.Application", "MovementService.Application\MovementService.Application.csproj", "{991B381E-F1DB-4858-A792-FB35F56D0D1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovementService.Tests", "MovementService.Tests\MovementService.Tests.csproj", "{77C67010-E82B-4C0F-9D53-1A185E0D5F3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "..\Contracts\Contracts.csproj", "{54DA8A33-E0EC-4DC3-8C12-64C546B94BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +39,9 @@ Global
 		{77C67010-E82B-4C0F-9D53-1A185E0D5F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77C67010-E82B-4C0F-9D53-1A185E0D5F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77C67010-E82B-4C0F-9D53-1A185E0D5F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54DA8A33-E0EC-4DC3-8C12-64C546B94BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54DA8A33-E0EC-4DC3-8C12-64C546B94BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54DA8A33-E0EC-4DC3-8C12-64C546B94BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54DA8A33-E0EC-4DC3-8C12-64C546B94BFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -38,7 +38,6 @@ export class TokenService {
 
   checkTokenStatus(): Observable<boolean> {
     const accessToken = this.getAccessToken();
-    console.log('Checking token status with token:', accessToken);
 
     if (!accessToken) {
       console.log('No token found');

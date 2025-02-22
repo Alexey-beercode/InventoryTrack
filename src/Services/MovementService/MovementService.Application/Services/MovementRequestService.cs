@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingService.Application.Exceptions;
+using Contracts;
 using MovementService.Application.DTOs.Request.MovementRequest;
 using MovementService.Application.DTOs.Response.MovementRequest;
 using MovementService.Application.Interfaces.Services;

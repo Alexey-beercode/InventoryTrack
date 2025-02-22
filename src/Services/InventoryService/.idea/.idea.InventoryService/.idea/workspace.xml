@@ -16,102 +16,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a5b9533-d243-4947-b00d-07d0751040b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/movements/movement-list/mock-inventory-items.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/movements/movement-list/mock-movements.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/warehouses/mock-warehouses-state.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/report/create-command.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/user/add-user-to-warehouse-dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/update-warehouse-dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/warehouse-type-response-dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/pipes/data-pipe.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/pipes/enum-label.pipe.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/public/shared/auth-styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/public/shared/auth-styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/home/home.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/login/login.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/login/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/register/register.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/register/register.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/user-managment/user-managment.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/user-managment/user-managment.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/user-managment/user-managment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/environments/environment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/guards/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/guards/auth.guard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/movement-request/enums/movement-request-status.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/movement-request/enums/movement-request-status.enum.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/movement-request/movement-request-status-response-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/movement-request/movement-request-status-response-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/report/enums/data-select.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/report/enums/data-select.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/report/enums/report-type.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/report/enums/report-type.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/supplier/create-supplier-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/supplier/create-supplier-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/supplier/supplier-response-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/supplier/supplier-response-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/enums/warehouse-type.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/enums/warehouse-type.enum.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/warehouse-state-response-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/warehouse-state-response-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/create-writeoff-request-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/create-writeoff-request-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/enums/request-status.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/enums/request-status.enum.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/request-status-response-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/writeoff-request/request-status-response-dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/company.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/report.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/report.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/role.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/supplier.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/supplier.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/app.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/reports/report-details/report-details.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/reports/report-details/report-details.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/reports/report-details/report-details.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/reports/report-page/report-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/reports/report-page/report-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/shared/header/header.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/shared/header/header.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/shared/header/header.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/shared/header/header.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/components/users/user-managment/user-managment.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/user/user-response-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/user/user-response-dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/update-warehouse-dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/models/dto/warehouse/update-warehouse-dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/auth.interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/token.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/warehouse.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/warehouse.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/writeoff-request.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/app/services/writeoff-request.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/inventory-track/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/inventory-track/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Messaging/Consumers/GetUserConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/.idea/.idea.AuthService/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/DTOs/Implementations/Responses/User/UserRepsonseDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/DTOs/Implementations/Responses/User/UserRepsonseDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.BLL/Services/AuthService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Domain/Enities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Domain/Enities/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Controllers/CompanyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Controllers/CompanyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/AuthService.Presentation/Middleware/ExceptionHandlingMiddleware.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/GetItemMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/GetItemMessage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Contracts/GetReportDataMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/GetReportDataMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/GetUserMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/GetUserMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/GetWarehouseMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/GetWarehouseMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/ItemResponseMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/ItemResponseMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/MoveInventoryMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/MoveInventoryMessage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Contracts/ReportDataResponseMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/ReportDataResponseMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/UserResponseMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/UserResponseMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/WarehouseResponseMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/WarehouseResponseMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Contracts/WriteOffInventoryMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Contracts/WriteOffInventoryMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/dataSources/b9d7d632-66f7-4e71-9e8b-a1c60deb6510.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/dataSources/b9d7d632-66f7-4e71-9e8b-a1c60deb6510.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/Supplier/CreateSupplierDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Request/Supplier/CreateSupplierDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Supplier/SupplierResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Supplier/SupplierResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/ISupplierService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/ISupplierService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IWarehouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Interfaces/Services/IWarehouseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/WarehouseProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/MapperProfiles/WarehouseProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/SupplierService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/SupplierService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Warehouse/WarehouseStateResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/DTOs/Response/Warehouse/WarehouseStateResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/InventoryItemService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Entities/Supplier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Entities/Supplier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/ISupplierRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Domain/Interfaces/Repositories/ISupplierRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/Configurations/SupplierConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Config/Database/Configurations/SupplierConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/GetItemConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/GetWarehouseConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/ReportInventoryRequestConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Migrations/InventoryDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Migrations/InventoryDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/SupplierRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Repositories/SupplierRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/SupplierController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/SupplierController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/WarehouseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/WarehouseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/MovementsRequestConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/MovementsRequestConsumer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/WriteOffsRequestConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Infrastructure/Messaging/Consumers/WriteOffsRequestConsumer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/MessagingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Controllers/MessagingController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/Validators/FilterInventoryItemDtoValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/Validators/FilterInventoryItemDtoValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.Presentation/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/Messaging/Consumers/ReportMovementsRequestConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InventoryService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/InventoryService.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Application/Services/MovementRequestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Application/Services/MovementRequestService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/Messaging/Producers/MovementRequestProducer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/Messaging/Producers/MovementRequestProducer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/MovementService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.Infrastructure/MovementService.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MovementService/MovementService.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../MovementService/MovementService.sln" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Application/Services/ExcelExportService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Application/Services/ExcelExportService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/DateSelect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/DateSelect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/ReportType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Domain/Enums/ReportType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Messaging/Producers/ReportProducer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/Messaging/Producers/ReportProducer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/ReportService.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Infrastructure/ReportService.Infrastructure.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Controllers/ReportController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Controllers/ReportController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ReportService/ReportService.Presentation/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Request/WriteOffRequest/WriteOffRequestFilterDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/DTOs/Request/WriteOffRequest/WriteOffRequestFilterDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Interfaces/Services/IWriteOffRequestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Interfaces/Services/IWriteOffRequestService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Messaging/Producers/WriteOffsRequestProducer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Messaging/Producers/WriteOffsRequestProducer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Services/WriteOffRequestService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Application/Services/WriteOffRequestService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Infrastructure/Messaging/Consumers/ReportWriteOffsRequestConsumer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Controllers/WriteOffRequestController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Controllers/WriteOffRequestController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationBuilderExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationBuilderExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/Extensions/WebApplicationExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/WriteOffService.Presentation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../WriteOffService/WriteOffService.Presentation/WriteOffService.Presentation.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,12 +76,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/ASProggs/InventoryTrack/src/Services/InventoryService/InventoryService.Tests/Services/InventoryItemServiceTests.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Local/Symbols/src/dotnet/aspnetcore/b8139c5ee58f1708b0e3368a1b241400edd6cbc4/src/Mvc/Mvc.Core/src/Infrastructure/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/34e54cf52b4a4c2b82645ccc3a46837e5e000/57/9c681939/AbstractInvocation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/34e54cf52b4a4c2b82645ccc3a46837e5e000/fe/b6ca7389/InterfaceMethodWithoutTargetInvocation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4e8315746988a4c77acdb2357d1b9f99c910c1fb9ee86eed9510dbfbfda7/CastleProxyFactory.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/InventoryService.Presentation/Controllers/WarehouseController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/AweZip/Temp1/AweZip1/HQ Test Data/Candle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/AweZip/Temp1/AweZip1/HQ Test Data/ITestConnector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/AweZip/Temp1/AweZip1/HQ Test Data/Trade.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d1e5dcf9ac947560a91bfe84f920886a2120248999e85b2cdfc5b6cc3d8493cc/BsonValue.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -146,7 +104,9 @@
     &quot;327e57d1-73b1-4057-b5da-103c82191d76.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/ASProggs/InventoryTrack/src/Services/InventoryService/InventoryService.sln&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -158,11 +118,6 @@
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
       &quot;postgresql&quot;
-    ],
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\Алексей\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\Алексей\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
 }</component>
@@ -317,6 +272,8 @@
       <workItem from="1734054398107" duration="1042000" />
       <workItem from="1734290903216" duration="1939000" />
       <workItem from="1736085410820" duration="1686000" />
+      <workItem from="1738940480581" duration="10833000" />
+      <workItem from="1740071002044" duration="10120000" />
     </task>
     <task id="LOCAL-00001" summary="Added domain, infrastructure layers in InventoryService">
       <option name="closed" value="true" />
@@ -349,6 +306,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Added domain, infrastructure layers in InventoryService" />
@@ -362,7 +320,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs</url>
           <line>30</line>
-          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" initialLine="30" containingFunctionPresentation="Method 'CreateInventoryItem'">
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" containingFunctionPresentation="Method 'CreateInventoryItem'">
             <startOffsets>
               <option value="1209" />
             </startOffsets>
@@ -375,7 +333,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/InventoryService.Presentation/Controllers/InventoryItemController.cs</url>
           <line>40</line>
-          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" initialLine="40" containingFunctionPresentation="Method 'GetAllInventoryItems'">
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Presentation\Controllers\InventoryItemController.cs" containingFunctionPresentation="Method 'GetAllInventoryItems'">
             <startOffsets>
               <option value="1690" />
             </startOffsets>
@@ -387,13 +345,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/InventoryService.Application/Services/WarehouseService.cs</url>
-          <line>154</line>
-          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Application\Services\WarehouseService.cs" initialLine="141" containingFunctionPresentation="Method 'GetInventoryItemsByWarehouseAsync'">
+          <line>155</line>
+          <properties documentPath="C:\ASProggs\InventoryTrack\src\Services\InventoryService\InventoryService.Application\Services\WarehouseService.cs" containingFunctionPresentation="Method 'GetInventoryItemsByWarehouseAsync'">
             <startOffsets>
-              <option value="6689" />
+              <option value="6754" />
             </startOffsets>
             <endOffsets>
-              <option value="6690" />
+              <option value="6755" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />

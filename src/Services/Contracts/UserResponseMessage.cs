@@ -1,4 +1,6 @@
-﻿public class UserResponseMessage
+﻿namespace Contracts;
+
+public class UserResponseMessage
 {
     public Guid Id { get; set; }
     public string Login { get; set; }

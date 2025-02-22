@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Contracts;
+using MassTransit;
 
 namespace WriteOffService.Application.Messaging.Producers
 {

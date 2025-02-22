@@ -32,14 +32,15 @@
           <ng-container *ngIf="user.role?.name !== 'Бухгалтер'; else readonlyRole">
             <select
               [(ngModel)]="user.selectedRoleId"
-              class="role-select"
-              (change)="onRoleChange(user)"
+              name="role"
+            class="role-select"
+            (change)="onRoleChange(user)"
             >
-              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
             </select>
           </ng-container>
           <ng-template #readonlyRole>
-            <span>{{ user.role?.name }}</span>
+            <div class="table-item">{{ user.role?.name }}</div>
           </ng-template>
         </div>
         <div class="table-item">
@@ -57,7 +58,7 @@
       <h2>Выберите склад</h2>
       <div class="form-group">
         <label>Склады:</label>
-        <select [(ngModel)]="selectedWarehouseId" class="form-select">
+        <select [(ngModel)]="selectedWarehouseId" class="form-select" name="warehouse">
           <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">
             {{ warehouse.name }}
           </option>
@@ -99,7 +100,7 @@
         </div>
         <div *ngIf="warehouses.length > 0" class="form-group">
           <label>Склад</label>
-          <select [(ngModel)]="selectedWarehouseId" class="form-select">
+          <select [(ngModel)]="selectedWarehouseId" name="warehouse" class="form-select">
             <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{ warehouse.name }}</option>
           </select>
         </div>

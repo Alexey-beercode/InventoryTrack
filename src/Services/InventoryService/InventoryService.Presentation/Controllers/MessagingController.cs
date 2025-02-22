@@ -126,10 +126,23 @@ public class MessagingController : ControllerBase
                 "Items", new BsonArray(inventoryItems.Select(item => new BsonDocument
                 {
                     { "Name", item.Name },
+                    { "UniqueCode", item.UniqueCode },
                     { "Quantity", item.Quantity },
-                    { "EstimatedValue", item.EstimatedValue }
+                    { "EstimatedValue", item.EstimatedValue },
+                    { "ExpirationDate", item.ExpirationDate },
+                    { "DeliveryDate", item.DeliveryDate },
+                    { "Status", item.Status?.Name ?? "Unknown" }, // Убедимся, что статус не null
+                    { "Supplier", item.Supplier != null ? item.Supplier.Name : string.Empty },
+                    { "WarehouseDetails", new BsonArray(item.WarehouseDetails.Select(wd => new BsonDocument
+                        {
+                            { "WarehouseId", wd.WarehouseName },
+                            { "Quantity", wd.Quantity }
+                        }))
+                    },
+                    { "DocumentInfo", item.DocumentInfo != null ? item.DocumentInfo.FileName : String.Empty }
                 }))
             }
         };
     }
+
 }

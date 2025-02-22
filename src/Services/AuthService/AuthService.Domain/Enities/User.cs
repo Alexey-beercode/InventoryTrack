@@ -10,5 +10,4 @@ public class User : BaseEntity
     public string PasswordHash { get; set; }
     public Guid? CompanyId { get; set; }
     public Guid? WarehouseId { get; set; }
-
 }

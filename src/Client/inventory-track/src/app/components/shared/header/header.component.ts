@@ -20,9 +20,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
     CommonModule,
     RouterLink,
     FormsModule,
-    BackButtonComponent,
     ErrorMessageComponent,
-    LoadingSpinnerComponent,
   ],
   standalone: true,
 })
@@ -42,6 +40,7 @@ export class HeaderComponent implements OnInit {
   submitted: boolean = false;
   errorMessage: string | null = null;
   isLoading: boolean = false;
+  canAddCompany: boolean = false;
 
   constructor(
     private tokenService: TokenService,
@@ -58,8 +57,8 @@ export class HeaderComponent implements OnInit {
 
   private setupNavLinks(): void {
     const roles = this.tokenService.getUserRoles();
-    console.log("Роли пользователя : " + roles);
     if (roles.includes('Accountant')) {
+      this.canAddCompany = true;
       this.navLinks.push(
         { path: '/warehouses', label: 'Склады' },
         { path: '/write-offs', label: 'Списания' },

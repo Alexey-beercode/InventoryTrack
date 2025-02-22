@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
 {
-    [Authorize("Accountant")]
     [ApiController]
     [Route("api/companies")]
     public class CompanyController : ControllerBase

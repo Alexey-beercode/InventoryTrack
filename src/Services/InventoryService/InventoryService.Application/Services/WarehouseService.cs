@@ -112,7 +112,8 @@ public class WarehouseService : IWarehouseService
             Type = _mapper.Map<WarehouseTypeResponseDto>(warehouse.Type),
             ItemsCount = inventoryItems.Count(),
             Quantity = inventoryItems.Sum(iw => iw.Quantity),
-            InventoryItems = inventoryItems
+            InventoryItems = inventoryItems,
+            ResponsiblePersonId = warehouse.ResponsiblePersonId
         };
     }
 

@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Presentation", "InventoryService.Presentation\InventoryService.Presentation.csproj", "{807F1102-CC90-4609-BE01-C506E6C8CD10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Application", "InventoryService.Application\InventoryService.Application.csproj", "{CEE474BE-8C01-49EA-AED4-8D3369ED64D6}"
@@ -9,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Domain", "InventoryService.Domain\InventoryService.Domain.csproj", "{CDE63F97-986E-46DF-8BAA-CFF0AF84AE6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Tests", "InventoryService.Tests\InventoryService.Tests.csproj", "{BF55DA57-DEF0-4E02-9F9B-6792C25E799D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "..\Contracts\Contracts.csproj", "{974471E4-BEDD-4ECB-803C-4E62A289F63D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +39,9 @@ Global
 		{BF55DA57-DEF0-4E02-9F9B-6792C25E799D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF55DA57-DEF0-4E02-9F9B-6792C25E799D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF55DA57-DEF0-4E02-9F9B-6792C25E799D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974471E4-BEDD-4ECB-803C-4E62A289F63D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{974471E4-BEDD-4ECB-803C-4E62A289F63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{974471E4-BEDD-4ECB-803C-4E62A289F63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{974471E4-BEDD-4ECB-803C-4E62A289F63D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

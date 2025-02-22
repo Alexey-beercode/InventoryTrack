@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace ReportService.Messaging.Messages
+namespace Contracts
 {
     public class ReportDataResponseMessage
     {

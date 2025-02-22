@@ -12,4 +12,5 @@ public class WarehouseStateResponseDto : BaseDto
     public string Location { get; set; }
     public long Quantity { get; set; }
     public List<InventoryItemResponseDto> InventoryItems { get; set; }
+    public Guid ResponsiblePersonId { get; set; }
 }

@@ -148,25 +148,44 @@ namespace ReportService.Application.Services
         {
             var history = data["Items"].AsBsonArray;
 
-            worksheet.Cell(1, 1).Value = "Тип операции";
-            worksheet.Cell(1, 2).Value = "Наименование";
-            worksheet.Cell(1, 3).Value = "Склад";
-            worksheet.Cell(1, 4).Value = "Количество";
-            worksheet.Cell(1, 5).Value = "Дата";
+            worksheet.Cell(1, 1).Value = "Наименование";
+            worksheet.Cell(1, 2).Value = "Уникальный код";
+            worksheet.Cell(1, 3).Value = "Количество";
+            worksheet.Cell(1, 4).Value = "Оценочная стоимость";
+            worksheet.Cell(1, 5).Value = "Дата доставки";
+            worksheet.Cell(1, 6).Value = "Дата истечения срока";
+            worksheet.Cell(1, 7).Value = "Статус";
+            worksheet.Cell(1, 8).Value = "Поставщик";
+            worksheet.Cell(1, 9).Value = "Склад";
+            worksheet.Cell(1, 10).Value = "Файл документа";
 
             int row = 2;
             foreach (var item in history)
             {
                 var bsonItem = item.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonItem["OperationType"].AsString;
-                worksheet.Cell(row, 2).Value = bsonItem["Name"].AsString;
-                worksheet.Cell(row, 3).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString;
-                worksheet.Cell(row, 4).Value = bsonItem["Quantity"].ToInt32();
-                worksheet.Cell(row, 5).Value = bsonItem["Date"].ToUniversalTime();
+                worksheet.Cell(row, 1).Value = bsonItem["Name"].AsString;
+                worksheet.Cell(row, 2).Value = bsonItem["UniqueCode"].AsString;
+                worksheet.Cell(row, 3).Value = bsonItem["Quantity"].ToInt32();
+                worksheet.Cell(row, 4).Value = bsonItem["EstimatedValue"].ToDecimal();
+                worksheet.Cell(row, 5).Value = bsonItem["DeliveryDate"].ToUniversalTime();
+                worksheet.Cell(row, 6).Value = bsonItem["ExpirationDate"].ToUniversalTime();
+                worksheet.Cell(row, 7).Value = bsonItem["Status"].AsString;
+                worksheet.Cell(row, 8).Value = bsonItem["Supplier"].AsString;
+
+                // Получение информации о складе (если он есть в массиве)
+                var warehouseDetails = bsonItem["WarehouseDetails"].AsBsonArray;
+                worksheet.Cell(row, 9).Value = warehouseDetails.Count > 0 
+                    ? warehouseDetails[0].AsBsonDocument["WarehouseId"].AsString 
+                    : "Нет данных";
+
+                // Запись информации о документе (если есть)
+                worksheet.Cell(row, 10).Value = bsonItem["DocumentInfo"].AsString;
+
                 row++;
             }
 
             worksheet.Columns().AdjustToContents();
         }
+
     }
 }

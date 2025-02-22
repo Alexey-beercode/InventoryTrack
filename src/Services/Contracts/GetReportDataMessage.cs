@@ -1,4 +1,6 @@
-﻿public class GetReportDataMessage
+﻿namespace Contracts;
+
+public class GetReportDataMessage
 {
     public Guid CompanyId { get; set; }
     public Guid ReportRequestId { get; set; }

@@ -9,4 +9,5 @@ public class UserRepsonseDTO
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public List<RoleDTO> Roles { get; set; }
+    public Guid WarehouseId { get; set; }
 }

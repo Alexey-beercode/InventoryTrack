@@ -1,5 +1,4 @@
-﻿# Базовый образ для запуска приложения
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 5112
 
@@ -12,6 +11,7 @@ WORKDIR /src
 COPY MovementService/MovementService.Presentation/*.csproj MovementService/MovementService.Presentation/
 COPY MovementService/MovementService.Application/*.csproj MovementService/MovementService.Application/
 COPY MovementService/MovementService.Domain/*.csproj MovementService/MovementService.Domain/
+COPY Contracts/Contracts.csproj Contracts/
 COPY MovementService/MovementService.Infrastructure/*.csproj MovementService/MovementService.Infrastructure/
 COPY Contracts/*.cs Contracts/
 

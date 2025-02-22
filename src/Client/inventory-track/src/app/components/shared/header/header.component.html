@@ -19,7 +19,7 @@
 
         <span *ngIf="company" class="company-name">Компания: {{ company?.name }}</span>
         <button
-          *ngIf="!company"
+          *ngIf="!company && canAddCompany"
           class="add-company-button"
           (click)="showCreateModal = true"
         >

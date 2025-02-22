@@ -75,7 +75,8 @@ export class ReportPageComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          this.reports = data;
+          // Применяем сортировку по дате создания (createdAt)
+          this.reports = this.sortReportsByDate(data);
           this.isLoading = false;
         },
         error: () => {
@@ -84,6 +85,16 @@ export class ReportPageComponent implements OnInit {
         },
       });
   }
+
+// Функция сортировки отчетов по дате создания (createdAt)
+  sortReportsByDate(reports: ReportResponseDto[]): ReportResponseDto[] {
+    return reports.sort((a, b) => {
+      const dateA = new Date(a.createdAt);  // Преобразуем строку в объект Date
+      const dateB = new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime(); // Сортировка от новых к старым
+    });
+  }
+
 
   openModal(): void {
     this.showModal = true;

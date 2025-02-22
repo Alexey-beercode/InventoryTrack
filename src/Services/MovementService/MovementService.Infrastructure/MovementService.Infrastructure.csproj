@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\MovementService.Domain\MovementService.Domain.csproj" />
     </ItemGroup>
 
@@ -23,12 +24,6 @@
       </PackageReference>
       <PackageReference Include="MongoDB.Bson" Version="3.1.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Compile Include="..\..\Contracts\GetReportDataMessage.cs" />
-        <Compile Include="..\..\Contracts\ReportDataResponseMessage.cs" />
-        <Compile Include="..\..\Contracts\MoveInventoryMessage.cs" />
     </ItemGroup>
 
 </Project>

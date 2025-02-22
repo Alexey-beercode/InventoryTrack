@@ -1,4 +1,5 @@
-﻿using InventoryService.Application.DTOs.Request.InventoryItem;
+﻿using Contracts;
+using InventoryService.Application.DTOs.Request.InventoryItem;
 using MassTransit;
 using InventoryService.Application.Interfaces.Services;
 

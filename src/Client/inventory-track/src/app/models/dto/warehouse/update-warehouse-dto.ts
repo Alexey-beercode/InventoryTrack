@@ -4,7 +4,7 @@ import {WarehouseType} from "./enums/warehouse-type.enum";
 export interface UpdateWarehouseDto {
   id: string;
   name: string;
-  type: WarehouseType; // WarehouseType в строковом формате
+  type: number; // WarehouseType в строковом формате
   location: string;
   companyId: string;
   responsiblePersonId: string;

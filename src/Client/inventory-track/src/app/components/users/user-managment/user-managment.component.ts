@@ -7,20 +7,19 @@ import { RoleDTO } from '../../../models/dto/role/role-dto';
 import { WarehouseResponseDto } from '../../../models/dto/warehouse/warehouse-response-dto';
 import { AddUserToWarehouseDto } from '../../../models/dto/auth/add-user-to-warehouse-dto';
 import { UpdateWarehouseDto } from '../../../models/dto/warehouse/update-warehouse-dto';
-import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
-import {LoadingSpinnerComponent} from "../../shared/loading-spinner/loading-spinner.component";
-import {BackButtonComponent} from "../../shared/back-button/back-button.component";
-import {ErrorMessageComponent} from "../../shared/error/error.component";
-import {FooterComponent} from "../../shared/footer/footer.component";
-import {HeaderComponent} from "../../shared/header/header.component";
-import {UserResponseDTO} from "../../../models/dto/user/user-response-dto";
-import {CompanyService} from "../../../services/company.service";
-import {Router, RouterModule} from "@angular/router";
-import {TokenService} from "../../../services/token.service";
-import {AuthService} from "../../../services/auth.service";
-import {map, Observable} from "rxjs";
-import {RegisterUserToCompanyDTO} from "../../../models/dto/user/register-user-to-company-dto";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { LoadingSpinnerComponent } from "../../shared/loading-spinner/loading-spinner.component";
+import { BackButtonComponent } from "../../shared/back-button/back-button.component";
+import { ErrorMessageComponent } from "../../shared/error/error.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
+import { HeaderComponent } from "../../shared/header/header.component";
+import { UserResponseDTO } from "../../../models/dto/user/user-response-dto";
+import { CompanyService } from "../../../services/company.service";
+import { TokenService } from "../../../services/token.service";
+import { AuthService } from "../../../services/auth.service";
+import { map, Observable } from "rxjs";
+import { RegisterUserToCompanyDTO } from "../../../models/dto/user/register-user-to-company-dto";
 
 @Component({
   selector: 'app-user-management',
@@ -28,7 +27,6 @@ import {RegisterUserToCompanyDTO} from "../../../models/dto/user/register-user-t
   styleUrls: ['user-managment.component.css'],
   standalone: true,
   imports: [
-    // Подключение существующих компонентов
     CommonModule,
     FormsModule,
     LoadingSpinnerComponent,
@@ -57,12 +55,13 @@ export class UserManagementComponent implements OnInit {
     password: '',
     companyId: ''
   };
+
   constructor(
     private tokenService: TokenService,
     private userService: UserService,
     private roleService: RoleService,
     private companyService: CompanyService,
-    private warehouseService:WarehouseService
+    private warehouseService: WarehouseService
   ) {}
 
   ngOnInit(): void {
@@ -73,16 +72,6 @@ export class UserManagementComponent implements OnInit {
   onCompanyIdReceived(companyId: string): void {
     this.companyId = companyId;
     this.loadWarehouses();
-  }
-  mapUserToModel(user: UserResponseDTO): UserResponseModel {
-    return {
-      id: user.id,
-      login: user.login,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: (user.roles && user.roles.length > 0) ? user.roles[0] : null, // Проверяем, что user.roles не null и имеет элементы
-      selectedRoleId: (user.roles && user.roles.length > 0) ? user.roles[0].id : null // То же самое для selectedRoleId
-    };
   }
 
   loadUsers(): void {
@@ -171,6 +160,7 @@ export class UserManagementComponent implements OnInit {
 
       const dto: UpdateWarehouseDto = {
         ...warehouse,
+        type: warehouse.type.valueOf(),
         responsiblePersonId: this.currentUserForRoleChange?.id || '',
       };
 
@@ -207,28 +197,22 @@ export class UserManagementComponent implements OnInit {
       },
     });
   }
-  deleteUser(userId:string | null){
-    this.userService.delete(userId!).subscribe(()=>{
+
+  deleteUser(userId: string | null) {
+    this.userService.delete(userId!).subscribe(() => {
       this.loadUsers();
-    })
-  }
-  private getCompanyId(userId: string | null): Observable<string> {
-    return this.companyService.getByUserId(userId).pipe(
-      map(company => company.id)
-    );
+    });
   }
 
-  private getRolesByUser(userId: string | null): Observable<RoleDTO[]> {
-    return this.roleService.getRolesByUserId(userId!);
-  }
   openAddUserModal(): void {
     this.loadWarehouses();
     this.showAddUserModal = true;
   }
 
   addUserToCompany(): void {
+    console.log("зашли в метод");
     if (!this.selectedWarehouseId || !this.companyId) return;
-
+    console.log("все хорошо");
     this.newUser.companyId = this.companyId;
 
     this.userService.registerUserToCompany(this.newUser).subscribe({
@@ -249,6 +233,4 @@ export class UserManagementComponent implements OnInit {
       },
     });
   }
-
-  protected readonly close = close;
 }

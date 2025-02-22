@@ -1,4 +1,5 @@
-﻿using AuthService.BLL.DTOs.Implementations.Requests.Auth;
+﻿using System.Security.Authentication;
+using AuthService.BLL.DTOs.Implementations.Requests.Auth;
 using AuthService.BLL.DTOs.Implementations.Responses.Auth;
 using AuthService.BLL.Exceptions;
 using AuthService.BLL.Helpers;
@@ -57,6 +58,11 @@ public class AuthService : IAuthService
             throw new EntityNotFoundException($"User with login {loginDto.Login} does not exist");
         }
 
+        var isPasswordMatches=PasswordHelper.VerifyPassword(user.PasswordHash,loginDto.Password);
+        if (!isPasswordMatches)
+        {
+            throw new InvalidCredentialException("Неправильный пароль");
+        }
         var rolesByUser = await _unitOfWork.Roles.GetRolesByUserIdAsync(user.Id, cancellationToken);
         var token = _tokenService.GenerateAccessToken(user, rolesByUser);
         return new AuthReponseDTO() { AccessToken = token, UserId = user.Id };

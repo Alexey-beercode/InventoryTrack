@@ -1,4 +1,5 @@
 using System.Text;
+using Contracts;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using InventoryService.Application.Facades;
