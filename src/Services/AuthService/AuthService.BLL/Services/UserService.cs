@@ -107,7 +107,7 @@ public class UserService:IUserService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task RegisterUserToCompany(RegisterUserToCompanyDTO registerUserToCompanyDto,
+    public async Task<Guid> RegisterUserToCompany(RegisterUserToCompanyDTO registerUserToCompanyDto,
         CancellationToken cancellationToken = default)
     {
         var company = await _unitOfWork.Companies.GetByIdAsync(registerUserToCompanyDto.CompanyId, cancellationToken);
@@ -137,6 +137,8 @@ public class UserService:IUserService
         
         await _unitOfWork.Roles.SetRoleToUserAsync(user.Id, role.Id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return user.Id;
     }
 
     public async Task AddUserToWarehouseAsync(AddUserToWarehouseDto addUserToWarehouseDto,

@@ -216,16 +216,24 @@ export class UserManagementComponent implements OnInit {
     this.newUser.companyId = this.companyId;
 
     this.userService.registerUserToCompany(this.newUser).subscribe({
-      next: () => {
+      next: (userId: string) => {
         if (this.newUser.roleId) {
           const dto: AddUserToWarehouseDto = {
-            userId: '', // ID пользователя будет возвращен от сервера при создании
+            userId: userId,
             warehouseId: this.selectedWarehouseId!,
           };
-          this.userService.addUserToWarehouse(dto).subscribe();
+          this.userService.addUserToWarehouse(dto).subscribe({
+            next: () => {
+              console.log("Пользователь успешно добавлен в склад");
+              this.loadUsers();
+              this.resetModal();
+            },
+            error: (err) => console.error("Ошибка добавления пользователя в склад:", err)
+          });
+        } else {
+          this.loadUsers();
+          this.resetModal();
         }
-        this.loadUsers();
-        this.resetModal();
       },
       error: (error) => {
         this.errorMessage = 'Ошибка создания пользователя.';

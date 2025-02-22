@@ -63,10 +63,10 @@ namespace AuthService.Controllers
         [Authorize("Accountant")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> RegisterUserToCompany([FromBody] RegisterUserToCompanyDTO registerUserToCompanyDto)
+        public async Task<ActionResult<Guid>> RegisterUserToCompany([FromBody] RegisterUserToCompanyDTO registerUserToCompanyDto)
         {
-            await _userService.RegisterUserToCompany(registerUserToCompanyDto);
-            return StatusCode(StatusCodes.Status201Created);
+            var userId = await _userService.RegisterUserToCompany(registerUserToCompanyDto);
+            return Ok(userId);
         }
 
         [HttpPut]

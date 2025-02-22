@@ -18,7 +18,7 @@ public interface IUserService
 
     public Task DeleteAsync(Guid userId, CancellationToken cancellationToken = default);
     public Task UpdateAsync(UpdateUserDTO userDto, CancellationToken cancellationToken = default);
-    Task RegisterUserToCompany(RegisterUserToCompanyDTO registerUserToCompanyDto,
+    Task<Guid> RegisterUserToCompany(RegisterUserToCompanyDTO registerUserToCompanyDto,
         CancellationToken cancellationToken = default);
 
     Task AddUserToWarehouseAsync(AddUserToWarehouseDto addUserToWarehouseDto,

@@ -49,9 +49,9 @@ export class UserService {
     return this.http.get<UserResponseDTO[]>(url);
   }
 
-  registerUserToCompany(dto: RegisterUserToCompanyDTO): Observable<void> {
+  registerUserToCompany(dto: RegisterUserToCompanyDTO): Observable<string> {
     const url = `${this.baseUrl}${this.apiUrls.registerUserToCompany}`;
-    return this.http.post<void>(url, dto);
+    return this.http.post<string>(url, dto);
   }
 
   update(dto: UpdateUserDTO): Observable<void> {
