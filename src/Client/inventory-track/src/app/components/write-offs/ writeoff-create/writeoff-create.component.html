@@ -1,0 +1,54 @@
+<app-header title="Создание списания"></app-header>
+
+<div class="container">
+  <app-back-button></app-back-button>
+
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+
+  <form #writeOffForm="ngForm" (ngSubmit)="submitWriteOffRequest(writeOffForm)" class="writeoff-form" novalidate>
+
+    <!-- Материальная ценность -->
+    <div class="form-group">
+      <label for="item">Материальная ценность</label>
+      <select id="item" name="item" [(ngModel)]="selectedItemId" (ngModelChange)="updateMaxQuantity()" required #itemSelect="ngModel" class="form-control">
+        <option *ngFor="let item of items" [value]="item.id">{{ item.name }} ({{ item.quantity }} шт.)</option>
+      </select>
+      <div *ngIf="itemSelect.invalid && itemSelect.touched" class="error">⚠️ Выберите товар!</div>
+    </div>
+
+    <!-- Количество -->
+    <div class="form-group">
+      <label for="quantity">Количество</label>
+      <input id="quantity" name="quantity" type="number" min="1" [max]="maxQuantity" [(ngModel)]="quantity" required #quantityInput="ngModel" class="form-control"/>
+      <small>Доступно: {{ maxQuantity }} шт.</small>
+      <div *ngIf="quantityInput.invalid && quantityInput.touched" class="error">⚠️ Укажите корректное количество!</div>
+      <div *ngIf="quantity > maxQuantity" class="error">⚠️ Недостаточно товаров на складе!</div>
+    </div>
+
+    <!-- Причина списания -->
+    <div class="form-group">
+      <label for="reason">Причина списания</label>
+      <select id="reason" name="reason" [(ngModel)]="selectedReasonId" required #reasonSelect="ngModel" class="form-control">
+        <option *ngFor="let reason of writeOffReasons" [value]="reason.id">{{ reason.reason }}</option>
+        <option value="other">Другое...</option>
+      </select>
+      <div *ngIf="reasonSelect.invalid && reasonSelect.touched" class="error">⚠️ Выберите причину списания!</div>
+    </div>
+
+    <!-- Другая причина (если выбрано "Другое") -->
+    <div class="form-group" *ngIf="selectedReasonId === 'other'">
+      <label for="anotherReason">Другая причина</label>
+      <input id="anotherReason" name="anotherReason" type="text" [(ngModel)]="anotherReason" required #anotherReasonInput="ngModel" class="form-control"/>
+      <div *ngIf="anotherReasonInput.invalid && anotherReasonInput.touched" class="error">⚠️ Укажите причину списания!</div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="button-group">
+      <button type="submit" class="btn-primary" [disabled]="writeOffForm.invalid || quantity > maxQuantity">Сохранить</button>
+      <button type="button" class="btn-secondary" (click)="cancel()">Отмена</button>
+    </div>
+
+  </form>
+</div>
+
+<app-footer></app-footer>

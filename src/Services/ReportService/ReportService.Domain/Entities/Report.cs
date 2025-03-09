@@ -13,4 +13,7 @@ public class Report : BaseEntity
     public ReportType ReportType { get; set; }
     public DateSelect DateSelect { get; set; }
     public DateTime CreatedAt { get; set; }
+    
+    [BsonRepresentation(BsonType.String)]
+    public Guid CompanyId{get;set;}
 }

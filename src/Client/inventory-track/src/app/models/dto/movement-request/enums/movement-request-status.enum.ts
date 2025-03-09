@@ -1,6 +1,5 @@
 export enum MovementRequestStatus {
-  Pending ,
-  Approved ,
-  Rejected ,
-  Completed ,
+  Processing = 0,
+  Rejected = 1,
+  Completed = 2
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { WarehouseService } from '../../../services/warehouse.service';
 import { RoleService } from '../../../services/role.service';
@@ -65,18 +65,40 @@ export class UserManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadUsers();
     this.loadRoles();
   }
 
   onCompanyIdReceived(companyId: string): void {
+    if (!companyId) return;
+
     this.companyId = companyId;
-    this.loadWarehouses();
+    this.isLoading = true;
+
+    this.loadWarehouses(() => {
+      this.loadUsers();
+    });
   }
+
+  loadWarehouses(callback?: () => void): void {
+    if (!this.companyId) return;
+
+    this.warehouseService.getWarehousesByCompany(this.companyId).subscribe({
+      next: (warehouses) => {
+        this.warehouses = warehouses;
+        if (callback) callback(); // Вызываем loadUsers() только после загрузки складов
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка загрузки складов';
+        this.isLoading = false;
+      },
+    });
+  }
+
 
   loadUsers(): void {
     this.isLoading = true;
-    this.userService.getAll().subscribe({
+    this.userService.getByCompanyId(this.companyId!).subscribe({
       next: (users) => {
         this.users = users.map((user) => ({
           id: user.id,
@@ -117,18 +139,6 @@ export class UserManagementComponent implements OnInit {
     } else {
       this.updateUserRole(user);
     }
-  }
-
-  loadWarehouses(): void {
-    if (!this.companyId) return; // Проверка на наличие companyId
-    this.isLoading = true;
-    this.warehouseService.getWarehousesByCompany(this.companyId).subscribe({
-      next: (warehouses) => {
-        this.warehouses = warehouses;
-        this.isLoading = false;
-      },
-      error: () => (this.errorMessage = 'Ошибка загрузки складов'),
-    });
   }
 
   assignWarehouse(): void {

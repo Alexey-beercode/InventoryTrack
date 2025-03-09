@@ -72,6 +72,7 @@ export const environment = {
       getAllStates: '/api/warehouses/states',
       getStateById: '/api/warehouses/states/{id}',
       getStatesByCompany: '/api/warehouses/states/by-company/{companyId}',
+      getStateByResponsiblePerson:'/api/warehouses/states/by-person/{responsiblePersonId}',
       update: '/api/warehouses/update',
     },
     movementRequest: {
@@ -108,7 +109,8 @@ export const environment = {
       getPaginated: '/api/report/paginated',
       getAll: '/api/report',
       delete: '/api/report/{id}',
-      create: '/api/report/create'
+      create: '/api/report/create',
+      getByCompanyId: '/api/report/by-company-id/{companyId}'
     },
     role: {
       getAll: '/api/roles', // Получить все роли

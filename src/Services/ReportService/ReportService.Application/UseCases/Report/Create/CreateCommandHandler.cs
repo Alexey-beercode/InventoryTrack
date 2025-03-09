@@ -27,7 +27,8 @@ public class CreateCommandHandler : IRequestHandler<CreateCommand>
             Data = reportData,
             ReportType = request.ReportType,
             DateSelect = request.DateSelect,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            CompanyId = request.CompanyId
         };
 
         // Сохраняем отчет в базе данных

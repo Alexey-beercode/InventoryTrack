@@ -1,10 +1,12 @@
 <app-header
-  title="Перемещения">
-  <!--(companyIdEmitter)="onCompanyIdReceived($event)"-->
-></app-header>
+  title="Перемещения"
+  (userEmitter)="onUserReceived($event)">
+</app-header>
 
 <div class="container">
   <h2>Список перемещений</h2>
+
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
 
   <div *ngIf="isLoading" class="loading-container">
     <app-loading-spinner></app-loading-spinner>
@@ -17,27 +19,28 @@
       <div>На склад</div>
       <div>Количество</div>
       <div>Статус</div>
+      <div>Действия</div>
     </div>
     <div *ngFor="let movement of movements" class="table-row">
       <div>{{ getItemName(movement.itemId) }}</div>
-      <div>{{ movement.sourceWarehouseId }}</div>
-      <div>{{ movement.destinationWarehouseId }}</div>
+      <div>{{ getWarehouseName(movement.sourceWarehouseId) }}</div>
+      <div>{{ getWarehouseName(movement.destinationWarehouseId) }}</div>
       <div>{{ movement.quantity }}</div>
       <div>{{ movement.status.name }}</div>
+      <div class="actions">
+        <button *ngIf="movement.status.value === MovementRequestStatus.Processing" class="approve-btn" (click)="approveMovement(movement.id)">
+          ✅ Одобрить
+        </button>
+        <button *ngIf="movement.status.value === MovementRequestStatus.Processing" class="reject-btn" (click)="rejectMovement(movement.id)">
+          ❌ Отклонить
+        </button>
+      </div>
     </div>
   </div>
 
   <div *ngIf="!isLoading && movements.length === 0" class="no-data">
     <p>Перемещения отсутствуют.</p>
   </div>
-
-  <button (click)="openMovementModal()" class="btn">Создать перемещение</button>
-
-  <app-movement-modal
-    *ngIf="showMovementModal"
-    (close)="closeMovementModal()"
-    [companyId]="companyId"
-  ></app-movement-modal>
 </div>
 
 <app-footer></app-footer>

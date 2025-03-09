@@ -13,6 +13,14 @@ import {MovementListComponent} from "./components/movements/movement-list/moveme
 import {
   WarehouseItemsTableComponent
 } from "./components/warehouses/warehouse-items-table/warehouse-items-table.component";
+import {
+  CreateInventoryItemComponent
+} from "./components/inventory-items/create-inventory-item/create-inventory-item.component";
+import {
+  CreateMovementRequestComponent
+} from "./components/movements/create-movement-request/create-movement-request.component";
+import {WarehouseViewComponent} from "./components/warehouses/warehouse-view/warehouse-view.component";
+import {WriteOffCreateComponent} from "./components/write-offs/ writeoff-create/writeoff-create.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent,canActivate: [AuthGuard] },
@@ -26,5 +34,9 @@ export const routes: Routes = [
   {path: 'reports', component:ReportPageComponent,canActivate :[AuthGuard]},
   {path: 'write-offs',component : WriteOffListComponent,canActivate : [AuthGuard]},
   {path:'movements',component:MovementListComponent, canActivate: [AuthGuard]},
-  {path:'warehouse/:id' , component:WarehouseItemsTableComponent, canActivate: [AuthGuard]}
+  {path:'warehouse/:id' , component:WarehouseItemsTableComponent, canActivate: [AuthGuard]},
+  {path:'create-item',component:CreateInventoryItemComponent,canActivate: [AuthGuard] },
+  {path: 'create-movement' , component: CreateMovementRequestComponent, canActivate : [AuthGuard]},
+  {path: 'warehouse-view' , component: WarehouseViewComponent, canActivate: [AuthGuard]},
+  {path:'create-write-off' , component: WriteOffCreateComponent , canActivate: [AuthGuard]},
 ];

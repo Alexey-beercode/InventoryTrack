@@ -21,6 +21,8 @@ public interface IMovementRequestService
 
     Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsBySourceWarehouseIdAsync(Guid sourceWarehouseId,
         CancellationToken cancellationToken = default);
+    Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsByAnyWarehouseIdAsync(Guid warehouseId,
+        CancellationToken cancellationToken = default);
 
     Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsByDestinationWarehouseIdAsync(
         Guid destinationWarehouseId, CancellationToken cancellationToken = default);

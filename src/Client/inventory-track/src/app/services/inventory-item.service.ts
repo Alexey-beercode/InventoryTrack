@@ -17,9 +17,10 @@ export class InventoryItemService {
 
   constructor(private http: HttpClient) {}
 
-  createInventoryItem(dto: CreateInventoryItemDto): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}${this.apiUrls.create}`, dto);
+  createInventoryItem(formData: FormData): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}${this.apiUrls.create}`, formData);
   }
+
 
   getAllInventoryItems(): Observable<InventoryItemResponseDto[]> {
     return this.http.get<InventoryItemResponseDto[]>(`${this.baseUrl}${this.apiUrls.getAll}`);

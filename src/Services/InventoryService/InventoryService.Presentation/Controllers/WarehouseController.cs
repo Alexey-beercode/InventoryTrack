@@ -139,6 +139,15 @@ namespace InventoryService.Controllers
             var warehouseStates = await _warehouseService.GetWarehousesStatesByCompanyIdAsync(companyId, cancellationToken);
             return Ok(warehouseStates);
         }
+        
+        [HttpGet("states/by-person/{responsiblePersonId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<WarehouseStateResponseDto>>> GetWarehousesStatesByResponsiblePersonIdAsync(
+            Guid responsiblePersonId, CancellationToken cancellationToken)
+        {
+            var warehouseState = await _warehouseService.GetStateByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
+            return Ok(warehouseState);
+        }
 
         [HttpPut("update")]
         [ProducesResponseType(StatusCodes.Status200OK)]

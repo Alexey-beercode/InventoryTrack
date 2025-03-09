@@ -27,6 +27,7 @@ namespace AuthService.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UserRepsonseDTO>> GetById(Guid id)

@@ -43,7 +43,15 @@ namespace MovementService.Infrastructure.Repositories
                 .Where(m => !m.IsDeleted && m.DestinationWarehouseId == destinationWarehouseId)
                 .ToListAsync(cancellationToken);
         }
-        
+
+        public async Task<IEnumerable<MovementRequest>> GetByAnyWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet
+                .Where(m => !m.IsDeleted &&
+                            (m.DestinationWarehouseId == warehouseId || m.SourceWarehouseId == warehouseId))
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<IEnumerable<MovementRequest>> GetByStatusAsync(MovementRequestStatus status, CancellationToken cancellationToken = default)
         {
             return await _dbSet

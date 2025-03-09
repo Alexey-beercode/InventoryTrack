@@ -9,4 +9,5 @@ public class ReportResponseDto
     public ReportType ReportType { get; set; }
     public DateSelect DateSelect { get; set; }
     public DateTime CreatedAt { get; set; }
+    public Guid CompanyId { get; set; }
 }

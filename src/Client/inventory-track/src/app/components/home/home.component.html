@@ -1,2 +1,7 @@
+<div *ngIf="isAccountant; else warehouseView">
+  <app-warehouse-states-list></app-warehouse-states-list>
+</div>
 
-<app-warehouse-states-list></app-warehouse-states-list>
+<ng-template #warehouseView>
+  <app-warehouse-view></app-warehouse-view>
+</ng-template>

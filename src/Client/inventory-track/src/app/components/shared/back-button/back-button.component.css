@@ -10,6 +10,9 @@
   align-items: center;
   box-shadow: var(--box-shadow);
   transition: background-color 0.3s ease;
+
+  /* ✅ Добавляем отступы */
+  margin: 20px;
 }
 
 .back-button i {

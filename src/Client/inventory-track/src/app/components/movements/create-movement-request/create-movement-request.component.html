@@ -1,0 +1,66 @@
+<app-header
+  title="Создание заявки на перемещение"
+  (userEmitter)="onUserReceived($event)"
+  (companyIdEmitter)="onCompanyIdReceived($event)">
+</app-header>
+
+<div class="container">
+  <app-back-button></app-back-button>
+
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Выбор склада источника -->
+    <div class="form-group">
+      <label for="sourceWarehouse">Выберите склад</label>
+      <select id="sourceWarehouse" [(ngModel)]="selectedSourceWarehouse" (ngModelChange)="loadItems()" class="form-control">
+        <option *ngFor="let warehouse of warehouses" [ngValue]="warehouse">{{ warehouse.name }}</option>
+      </select>
+    </div>
+
+    <!-- Выбор товара -->
+    <!-- Выбор товара -->
+    <div class="form-group" *ngIf="selectedSourceWarehouse">
+      <label for="item">Выберите товар</label>
+      <select id="item" [(ngModel)]="selectedItem" class="form-control">
+        <option *ngFor="let item of items" [ngValue]="item">
+          {{ item.name }} ({{ getMaxQuantity(item, selectedSourceWarehouse.id) }})
+        </option>
+      </select>
+    </div>
+
+
+    <!-- Количество -->
+    <!-- Выбор количества -->
+    <div class="form-group" *ngIf="selectedItem && selectedSourceWarehouse">
+      <label for="quantity">Количество</label>
+      <input
+        type="number"
+        id="quantity"
+        [(ngModel)]="transferQuantity"
+        class="form-control"
+        min="1"
+        [max]="getMaxQuantity(selectedItem, selectedSourceWarehouse.id)"
+      />
+      <small>Доступно: {{ getMaxQuantity(selectedItem, selectedSourceWarehouse.id) }}</small>
+    </div>
+
+
+    <!-- Склад назначения -->
+    <div class="form-group" *ngIf="destinationWarehouse">
+      <label>Склад назначения</label>
+      <p><strong>{{ destinationWarehouse.name }}</strong></p>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="button-group">
+      <button (click)="createMovementRequest()" class="btn-primary" [disabled]="!selectedItem || !transferQuantity">Создать</button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

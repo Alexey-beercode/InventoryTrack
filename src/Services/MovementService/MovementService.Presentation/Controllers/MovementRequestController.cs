@@ -33,7 +33,7 @@ public class MovementRequestController : ControllerBase
     }
     
     [HttpPost("{id}/approve")]
-    [Authorize(Policy = "Accountant")]
+    [Authorize(Policy = "Warehouse Manager")]
     public async Task<ActionResult> ApproveMovementRequest([FromBody] ChangeStatusDto changeStatusDto, CancellationToken cancellationToken)
     {
         _logger.LogStartRequest("Approve Movement Request", "requestId", changeStatusDto.RequestId.ToString());
@@ -92,7 +92,7 @@ public class MovementRequestController : ControllerBase
     public async Task<ActionResult<IEnumerable<MovementRequestResponseDto>>> GetMovementRequestsByWarehouse(Guid warehouseId, CancellationToken cancellationToken)
     {
         _logger.LogStartRequest("Get Movement Requests by Warehouse", "warehouseId", warehouseId.ToString());
-        var result = await _movementRequestService.GetMovementRequestsBySourceWarehouseIdAsync(warehouseId, cancellationToken);
+        var result = await _movementRequestService.GetMovementRequestsByAnyWarehouseIdAsync(warehouseId, cancellationToken);
         _logger.LogEndOfOperation("Get Movement Requests by Warehouse", "retrieved movement requests by warehouse");
         return Ok(result);
     }

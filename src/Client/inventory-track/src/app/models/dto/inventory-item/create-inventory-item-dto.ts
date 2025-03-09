@@ -3,9 +3,9 @@ export class CreateInventoryItemDto {
   uniqueCode!: string;
   quantity!: number;
   estimatedValue!: number;
-  expirationDate!: Date;
+  expirationDate!: string;  // 🔥 Изменено на string
   supplierId!: string;
   warehouseId!: string;
-  deliveryDate!: Date;
+  deliveryDate!: string;  // 🔥 Изменено на string
   documentFile!: File;
 }

@@ -12,7 +12,7 @@ import {HeaderComponent} from "../shared/header/header.component";
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NgOptimizedImage, FooterComponent, HeaderComponent],
+  imports: [CommonModule, FormsModule, RouterLink, FooterComponent, HeaderComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
     // Добавим логирование для отладки
     console.log('Checking token status...');
     const currentToken = this.tokenService.getAccessToken();
-    console.log('Current token:', currentToken);
 
     this.tokenService.isLoggedIn().subscribe({
       next: (isValid) => {

@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/notification.service';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.css'],
+  imports: [
+    NgIf
+  ],
   standalone: true
 })
 export class NotificationComponent implements OnInit {

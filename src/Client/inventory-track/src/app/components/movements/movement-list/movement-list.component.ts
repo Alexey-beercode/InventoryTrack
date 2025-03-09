@@ -1,102 +1,17 @@
-/*
 import { Component, OnInit } from '@angular/core';
 import { MovementRequestResponseDto } from '../../../models/dto/movement-request/movement-request-response-dto';
 import { MovementRequestService } from '../../../services/movement-request.service';
 import { InventoryItemService } from '../../../services/inventory-item.service';
-import { InventoryItemResponseDto } from '../../../models/dto/inventory-item/inventory-item-response-dto';
-import {LoadingSpinnerComponent} from "../../shared/loading-spinner/loading-spinner.component";
-import {HeaderComponent} from "../../shared/header/header.component";
-import {NgForOf, NgIf} from "@angular/common";
-import {MovementModalComponent} from "../movement-modal/movement-modal.component";
-import {FooterComponent} from "../../shared/footer/footer.component";
-
-@Component({
-  selector: 'app-movement-list',
-  templateUrl: './movement-list.component.html',
-  styleUrls: ['./movement-list.component.css'],
-  standalone: true,
-  imports: [
-    LoadingSpinnerComponent,
-    HeaderComponent,
-    NgIf,
-    NgForOf,
-    MovementModalComponent,
-    FooterComponent
-  ]
-})
-export class MovementListComponent implements OnInit {
-  movements: MovementRequestResponseDto[] = [];
-  items: Record<string, string> = {}; // Хранение пар itemId -> itemName
-  isLoading = false;
-  showMovementModal = false;
-  companyId: string = '';
-
-  constructor(
-    private movementService: MovementRequestService,
-    private itemService: InventoryItemService
-  ) {}
-
-  ngOnInit(): void {
-    this.loadMovements();
-  }
-
-  onCompanyIdReceived(companyId: string): void {
-    if (companyId) {
-      this.companyId = companyId;
-    }
-  }
-
-  loadMovements(): void {
-    this.isLoading = true;
-    this.movementService.getByStatus('Processing').subscribe({
-      next: (data) => {
-        this.movements = data;
-        this.loadItemNames(); // Подгружаем имена items
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Ошибка загрузки перемещений:', err);
-        this.isLoading = false;
-      },
-    });
-  }
-
-  loadItemNames(): void {
-    const itemIds = Array.from(new Set(this.movements.map((m) => m.itemId)));
-    itemIds.forEach((itemId) => {
-      this.itemService.getInventoryItemById(itemId).subscribe({
-        next: (item: InventoryItemResponseDto) => {
-          this.items[itemId] = item.name;
-        },
-        error: (err) => console.error(`Ошибка загрузки имени item ${itemId}:`, err),
-      });
-    });
-  }
-
-  getItemName(itemId: string): string {
-    return this.items[itemId] || 'Загрузка...';
-  }
-
-  openMovementModal(): void {
-    this.showMovementModal = true;
-  }
-
-  closeMovementModal(): void {
-    this.showMovementModal = false;
-    this.loadMovements(); // Перезагрузить список после создания
-  }
-}
-*/
-import { Component, OnInit } from '@angular/core';
-import { MovementRequestResponseDto } from '../../../models/dto/movement-request/movement-request-response-dto';
-import { mockMovements } from './mock-movements'; // Импорт моковых данных
-import { InventoryItemService } from '../../../services/inventory-item.service';
-import { InventoryItemResponseDto } from '../../../models/dto/inventory-item/inventory-item-response-dto';
-import {HeaderComponent} from "../../shared/header/header.component";
-import {LoadingSpinnerComponent} from "../../shared/loading-spinner/loading-spinner.component";
-import {MovementModalComponent} from "../movement-modal/movement-modal.component";
-import {FooterComponent} from "../../shared/footer/footer.component";
-import {NgForOf, NgIf} from "@angular/common";
+import { WarehouseService } from '../../../services/warehouse.service';
+import { UserResponseDTO } from '../../../models/dto/user/user-response-dto';
+import { TokenService } from '../../../services/token.service';
+import { HeaderComponent } from "../../shared/header/header.component";
+import { LoadingSpinnerComponent } from "../../shared/loading-spinner/loading-spinner.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
+import { ErrorMessageComponent } from "../../shared/error/error.component";
+import { NgForOf, NgIf } from "@angular/common";
+import { MovementRequestStatus } from '../../../models/dto/movement-request/enums/movement-request-status.enum';
+import { ChangeStatusDto } from '../../../models/dto/movement-request/change-status-dto';
 
 @Component({
   selector: 'app-movement-list',
@@ -106,73 +21,138 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     HeaderComponent,
     LoadingSpinnerComponent,
-    MovementModalComponent,
     FooterComponent,
+    ErrorMessageComponent,
     NgIf,
     NgForOf
   ]
 })
 export class MovementListComponent implements OnInit {
   movements: MovementRequestResponseDto[] = [];
-  items: Record<string, string> = {}; // Хранение пар itemId -> itemName
+  items: Record<string, string> = {}; // Хранение itemId -> itemName
+  warehouses: Record<string, string> = {}; // Хранение warehouseId -> warehouseName
   isLoading = false;
-  showMovementModal = false;
-  companyId: string = '';
+  errorMessage: string | null = null;
+  user: UserResponseDTO | null = null;
+  userRoles: string[] = [];
 
-  constructor(private itemService: InventoryItemService) {}
+  constructor(
+    private movementService: MovementRequestService,
+    private itemService: InventoryItemService,
+    private warehouseService: WarehouseService,
+    private tokenService: TokenService
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  onUserReceived(user: UserResponseDTO | null): void {
+    if (!user) {
+      this.errorMessage = "⚠️ Пользовательские данные не получены.";
+      return;
+    }
+
+    this.user = user;
+    this.userRoles = this.tokenService.getUserRoles();
     this.loadMovements();
   }
 
+  /** 📌 Загружаем все перемещения */
   loadMovements(): void {
-    // Вместо реального запроса используем моковые данные
-    this.movements = mockMovements;
-    this.loadItemNames(); // Подгружаем имена items
-  }
+    this.isLoading = true;
+    this.errorMessage = null;
 
-  loadItemNames(): void {
-    const itemIds = Array.from(new Set(this.movements.map((m) => m.itemId)));
-    itemIds.forEach((itemId) => {
-      // Используем моковые данные для подгрузки
-      const mockItem: InventoryItemResponseDto = {
-        id: itemId,
-        name: `Item ${itemId}`,
-        uniqueCode: `Unique-${itemId}`,
-        quantity: 100,
-        estimatedValue: 500,
-        expirationDate: new Date('2025-12-31'),
-        supplier: {
-          id: 'supplier-1',
-          name: 'Supplier Mock',
-          phoneNumber: '123456789',
-          postalAddress: 'Mock Address',
-          accountNumber: '12345',
-          companyId: 'company-1',
-        },
-        deliveryDate: new Date(),
-        documentId: 'doc-1',
-        status: { value: 'Available', name: 'Доступен' },
-        warehouseDetails: [
-          { warehouseId: 'wh-1', warehouseName: 'Mock Warehouse 1', quantity: 50 },
-        ],
-        documentInfo: { id: 'doc-1', fileName: 'mock-doc.pdf', fileType: 'application/pdf' },
-      };
-      this.items[itemId] = mockItem.name;
+    this.movementService.getByWarehouse(this.user?.warehouseId!).subscribe({
+      next: (data) => {
+        this.movements = data;
+        this.loadItemNames();
+        this.loadWarehouseNames();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = '❌ Ошибка загрузки перемещений.';
+        this.isLoading = false;
+      }
     });
   }
 
+  /** 📌 Подгружаем названия товаров */
+  loadItemNames(): void {
+    const itemIds = new Set(this.movements.map((m) => m.itemId));
+    itemIds.forEach((itemId) => {
+      this.itemService.getInventoryItemById(itemId).subscribe({
+        next: (item) => this.items[itemId] = item.name,
+        error: () => this.errorMessage = `❌ Ошибка загрузки товара.`
+      });
+    });
+  }
+
+  /** 📌 Подгружаем названия складов */
+  loadWarehouseNames(): void {
+    const warehouseIds = new Set(
+      this.movements.flatMap(m => [m.sourceWarehouseId, m.destinationWarehouseId])
+    );
+
+    warehouseIds.forEach((warehouseId) => {
+      if (!this.warehouses[warehouseId]) {
+        this.warehouseService.getWarehouseById(warehouseId).subscribe({
+          next: (warehouse) => this.warehouses[warehouseId] = warehouse.name,
+          error: () => this.errorMessage = `❌ Ошибка загрузки склада.`
+        });
+      }
+    });
+  }
+
+  /** 📌 Возвращает название товара */
   getItemName(itemId: string): string {
     return this.items[itemId] || 'Загрузка...';
   }
 
-  openMovementModal(): void {
-    this.showMovementModal = true;
+  /** 📌 Возвращает название склада */
+  getWarehouseName(warehouseId: string): string {
+    return this.warehouses[warehouseId] || 'Загрузка...';
   }
 
-  closeMovementModal(): void {
-    this.showMovementModal = false;
-    this.loadMovements(); // Перезагрузить список после создания
+  /** ✅ Одобрить перемещение (только `Processing`) */
+  approveMovement(movementId: string): void {
+    if (!this.user) {
+      this.errorMessage = '❌ Ошибка: пользователь не найден!';
+      return;
+    }
+
+    const dto: ChangeStatusDto = {
+      userId: this.user.id,
+      requestId: movementId
+    };
+
+    this.movementService.approve(dto).subscribe({
+      next: () => {
+        alert("✅ Перемещение одобрено!");
+        this.loadMovements();
+      },
+      error: () => alert("❌ Ошибка при одобрении перемещения!")
+    });
   }
+
+  /** ❌ Отклонить перемещение (только `Processing`) */
+  rejectMovement(movementId: string): void {
+    if (!this.user) {
+      this.errorMessage = '❌ Ошибка: пользователь не найден!';
+      return;
+    }
+
+    const dto: ChangeStatusDto = {
+      userId: this.user.id,
+      requestId: movementId
+    };
+
+    this.movementService.reject(dto).subscribe({
+      next: () => {
+        alert("❌ Перемещение отклонено!");
+        this.loadMovements();
+      },
+      error: () => alert("❌ Ошибка при отклонении перемещения!")
+    });
+  }
+
+  protected readonly MovementRequestStatus = MovementRequestStatus;
 }
-

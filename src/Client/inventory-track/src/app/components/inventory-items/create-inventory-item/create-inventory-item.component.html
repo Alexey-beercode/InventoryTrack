@@ -1,0 +1,55 @@
+<app-header title="Добавление материальной ценности" (companyIdEmitter)="onUserReceived($event)"></app-header>
+
+<div class="create-inventory-container">
+  <app-back-button></app-back-button>
+
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+
+  <!-- Добавил `#inventoryForm="ngForm"` в тег формы -->
+  <form #inventoryForm="ngForm" (ngSubmit)="createInventoryItem(inventoryForm)" class="create-inventory-form" novalidate>
+
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input id="name" name="name" type="text" [(ngModel)]="newInventoryItem.name" required #name="ngModel" />
+      <div *ngIf="name.invalid && name.touched" class="error">⚠️ Название обязательно!</div>
+    </div>
+
+    <div class="form-group">
+      <label for="uniqueCode">Уникальный код</label>
+      <input id="uniqueCode" name="uniqueCode" type="text" [(ngModel)]="newInventoryItem.uniqueCode" required #uniqueCode="ngModel" />
+      <div *ngIf="uniqueCode.invalid && uniqueCode.touched" class="error">⚠️ Уникальный код обязателен!</div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Количество</label>
+      <input id="quantity" name="quantity" type="number" min="1" [(ngModel)]="newInventoryItem.quantity" required #quantity="ngModel" />
+      <div *ngIf="quantity.invalid && quantity.touched" class="error">⚠️ Количество должно быть больше 0!</div>
+    </div>
+
+    <div class="form-group">
+      <label for="estimatedValue">Оценочная стоимость</label>
+      <input id="estimatedValue" name="estimatedValue" type="number" [(ngModel)]="newInventoryItem.estimatedValue" required #estimatedValue="ngModel" />
+      <div *ngIf="estimatedValue.invalid && estimatedValue.touched" class="error">⚠️ Укажите стоимость!</div>
+    </div>
+
+    <input id="expirationDate" name="expirationDate" type="date"
+           [(ngModel)]="newInventoryItem.expirationDate" required #expirationDate="ngModel" />
+
+    <input id="deliveryDate" name="deliveryDate" type="date"
+           [(ngModel)]="newInventoryItem.deliveryDate" required #deliveryDate="ngModel" />
+
+
+    <div class="form-group">
+      <label for="documentFile">Документ</label>
+      <input id="documentFile" name="documentFile" type="file" (change)="onFileSelected($event)" required />
+    </div>
+
+    <div class="create-inventory-buttons">
+      <button type="submit" class="btn-primary">Сохранить</button>
+      <button type="button" class="btn-secondary" (click)="cancel()">Отмена</button>
+    </div>
+
+  </form>
+</div>
+
+<app-footer></app-footer>

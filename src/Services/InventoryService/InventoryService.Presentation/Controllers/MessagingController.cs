@@ -14,16 +14,13 @@ public class MessagingController : ControllerBase
 {
     private readonly IInventoryItemService _inventoryItemService;
     private readonly IWarehouseService _warehouseService;
-    private readonly ILogger<MessagingController> _logger;
 
     public MessagingController(
         IInventoryItemService inventoryItemService,
-        IWarehouseService warehouseService,
-        ILogger<MessagingController> logger)
+        IWarehouseService warehouseService )
     {
         _inventoryItemService = inventoryItemService;
         _warehouseService = warehouseService;
-        _logger = logger;
     }
 
     [HttpGet("items/{id:guid}")]
@@ -59,6 +56,29 @@ public class MessagingController : ControllerBase
         };
 
         return Ok(response);
+    }
+    
+    [HttpGet("warehouseState/{responsiblePersonId:guid}")]
+    public async Task<ActionResult<BsonDocument>> GetWarehouseStateByReponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken)
+    {
+        var warehouse = await _warehouseService.GetStateByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
+        if (warehouse == null) return NotFound();
+
+        var response = new BsonDocument
+        {
+            { "Name", warehouse.Name },
+            { "Location", warehouse.Location },
+            { "Type", warehouse.Type?.Name }
+        };
+
+        return Ok(response);
+    }
+
+    [HttpGet("items/by-warehouse/{id:guid}")]
+    public async Task<ActionResult> GetItemsByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken)
+    {
+        var items=await _inventoryItemService.GetInventoryItemsByWarehouseAsync(warehouseId, cancellationToken);
+        return Ok(CreateDataForItems(items));
     }
 
     [HttpGet("report-data")]
@@ -131,7 +151,7 @@ public class MessagingController : ControllerBase
                     { "EstimatedValue", item.EstimatedValue },
                     { "ExpirationDate", item.ExpirationDate },
                     { "DeliveryDate", item.DeliveryDate },
-                    { "Status", item.Status?.Name ?? "Unknown" }, // Убедимся, что статус не null
+                    { "Status", item.Status?.Name ?? "Unknown" }, 
                     { "Supplier", item.Supplier != null ? item.Supplier.Name : string.Empty },
                     { "WarehouseDetails", new BsonArray(item.WarehouseDetails.Select(wd => new BsonDocument
                         {

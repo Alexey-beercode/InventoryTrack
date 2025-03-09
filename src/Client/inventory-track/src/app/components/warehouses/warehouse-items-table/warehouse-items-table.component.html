@@ -1,18 +1,29 @@
-<app-header title="Склад: {{ warehouseState.name }}"></app-header>
+<app-header title="Склад: {{ warehouseState?.name || 'Загрузка...' }}"></app-header>
 
 <div class="container">
-  <div class="warehouse-info">
-    <h2>{{ warehouseState.name }}</h2>
-    <p><strong>Тип:</strong> {{ warehouseState.type.name }}</p>
-    <p><strong>Местоположение:</strong> {{ warehouseState.location }}</p>
-    <p><strong>Количество ценностей:</strong> {{ warehouseState.itemsCount }}</p>
-    <p><strong>Общее количество:</strong> {{ warehouseState.quantity }}</p>
+  <app-back-button></app-back-button>
+
+  <!-- Ошибка -->
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+
+  <!-- Спиннер -->
+  <div *ngIf="isLoading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <div class="items-table">
-    <h3>Материальные ценности</h3>
+  <!-- Данные склада -->
+  <div *ngIf="!isLoading && warehouseState" class="warehouse-info">
+    <h2>{{ warehouseState.name }}</h2>
+    <p><strong>Тип:</strong> {{ warehouseState.type?.name || 'Неизвестно' }}</p>
+    <p><strong>Местоположение:</strong> {{ warehouseState.location || 'Не указано' }}</p>
+    <p><strong>Количество ценностей:</strong> {{ warehouseState.itemsCount || 0 }}</p>
+    <p><strong>Общее количество:</strong> {{ warehouseState.quantity || 0 }}</p>
+  </div>
 
-    <table>
+  <!-- Таблица товаров -->
+  <div *ngIf="!isLoading && inventoryItems.length > 0" class="items-table">
+    <h3>Материальные ценности</h3>
+    <table class="styled-table">
       <thead>
       <tr>
         <th>Название</th>
@@ -29,11 +40,16 @@
         <td>{{ item.uniqueCode }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.supplier }}</td>
-        <td>{{ item.estimatedValue  }} бел. руб.</td>
+        <td>{{ item.estimatedValue | number:'1.2-2' }} бел. руб.</td>
         <td>{{ item.expirationDate | date: 'dd.MM.yyyy' }}</td>
       </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Нет данных -->
+  <div *ngIf="!isLoading && inventoryItems.length === 0" class="no-data">
+    <p>❌ В этом складе пока нет материальных ценностей.</p>
   </div>
 </div>
 

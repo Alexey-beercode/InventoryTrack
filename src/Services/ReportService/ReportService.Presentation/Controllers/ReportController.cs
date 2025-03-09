@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ReportService.Application.UseCases.Report.Create;
 using ReportService.Application.UseCases.Report.Delete;
 using ReportService.Application.UseCases.Report.GetAll;
+using ReportService.Application.UseCases.Report.GetByCompanyId;
 using ReportService.Application.UseCases.Report.GetByDateRange;
 using ReportService.Application.UseCases.Report.GetByDateSelect;
 using ReportService.Application.UseCases.Report.GetById;
@@ -70,6 +71,13 @@ public class ReportController : ControllerBase
     public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var reports = await _mediator.Send(new GetAllQuery(),cancellationToken);
+        return Ok(reports);
+    }
+    
+    [HttpGet("by-company-id/{companyId:guid}")]
+    public async Task<IActionResult> GetByCompanyIdAsync(Guid companyId,CancellationToken cancellationToken = default)
+    {
+        var reports = await _mediator.Send(new GetByCompanyIdQuery(){CompanyId = companyId},cancellationToken);
         return Ok(reports);
     }
 

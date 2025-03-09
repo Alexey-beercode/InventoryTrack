@@ -112,6 +112,12 @@ namespace MovementService.Application.Services
             return _mapper.Map<IEnumerable<MovementRequestResponseDto>>(movementRequests);
         }
 
+        public async Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsByAnyWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
+        { 
+            var movementRequests=await _unitOfWork.MovementRequests.GetByAnyWarehouseIdAsync(warehouseId, cancellationToken);
+            return _mapper.Map<IEnumerable<MovementRequestResponseDto>>(movementRequests);
+        }
+
         public async Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsByDestinationWarehouseIdAsync(Guid destinationWarehouseId, CancellationToken cancellationToken = default)
         {
             var movementRequests = await _unitOfWork.MovementRequests.GetByDestinationWarehouseIdAsync(destinationWarehouseId, cancellationToken);

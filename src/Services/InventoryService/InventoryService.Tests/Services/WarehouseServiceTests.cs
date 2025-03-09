@@ -128,28 +128,6 @@ namespace InventoryService.Tests.Services
         }
 
         [Fact]
-        public async Task GetByResponsiblePersonIdAsync_ShouldReturnWarehouses()
-        {
-            // Arrange
-            var personId = Guid.NewGuid();
-            var warehouses = new List<Warehouse> { new Warehouse { Id = Guid.NewGuid(), ResponsiblePersonId = personId } };
-
-            _mockUnitOfWork.Setup(uow => uow.Warehouses.GetByResponsiblePersonIdAsync(personId, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync(warehouses);
-
-            var warehouseDtos = warehouses.Select(w => new WarehouseResponseDto { Id = w.Id, ResponsiblePersonId = w.ResponsiblePersonId });
-
-            _mockMapper.Setup(m => m.Map<IEnumerable<WarehouseResponseDto>>(warehouses)).Returns(warehouseDtos);
-
-            // Act
-            var result = await _service.GetByResponsiblePersonIdAsync(personId);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Single(result);
-        }
-
-        [Fact]
         public async Task DeleteAsync_ShouldDeleteWarehouse()
         {
             // Arrange

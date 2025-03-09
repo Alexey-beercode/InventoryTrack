@@ -15,6 +15,8 @@ public interface IMovementRequestRepository : IBaseRepository<MovementRequest>
 
     Task<IEnumerable<MovementRequest>> GetByDestinationWarehouseIdAsync(Guid destinationWarehouseId,
         CancellationToken cancellationToken = default);
+    Task<IEnumerable<MovementRequest>> GetByAnyWarehouseIdAsync(Guid warehouseId,
+        CancellationToken cancellationToken = default);
 
     Task<IEnumerable<MovementRequest>> GetByStatusAsync(MovementRequestStatus status,
         CancellationToken cancellationToken = default);

@@ -26,11 +26,10 @@ public class WarehouseRepository : BaseRepository<Warehouse>, IWarehouseReposito
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Warehouse>> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
+    public async Task<Warehouse> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
-            .Where(w => !w.IsDeleted && w.ResponsiblePersonId == responsiblePersonId)
-            .ToListAsync(cancellationToken);
+            .FirstOrDefaultAsync(w => !w.IsDeleted && w.ResponsiblePersonId == responsiblePersonId, cancellationToken);
     }
 
     public async Task<IEnumerable<Warehouse>> GetByNameAsync(string name, CancellationToken cancellationToken = default)

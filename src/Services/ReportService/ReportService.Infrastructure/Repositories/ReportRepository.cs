@@ -54,4 +54,11 @@ public class ReportRepository : BaseRepository<Report>, IReportRepository
         var cursor = await _collection.FindAsync(filter);
         return await cursor.ToListAsync();
     }
+
+    public async Task<IEnumerable<Report>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<Report>.Filter.Eq(r => r.CompanyId, companyId);
+        var cursor = await _collection.FindAsync(filter);
+        return await cursor.ToListAsync();
+    }
 }

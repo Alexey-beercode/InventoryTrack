@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WriteOffService.Domain.Entities;
 using WriteOffService.Infrastructure.Config.Database.Configurations;
+using WriteOffService.Infrastructure.Extensions;
 
 namespace WriteOffService.Infrastructure.Config.Database;
 
@@ -22,5 +23,6 @@ public class WriteOffDbContext : DbContext
         modelBuilder.ApplyConfiguration(new WriteOffActConfiguration());
         modelBuilder.ApplyConfiguration(new WriteOffReasonConfiguration());
         modelBuilder.ApplyConfiguration(new WriteOffRequestConfiguration());
+        modelBuilder.SeedWriteOffsReasonsData();
     }
 }

@@ -21,23 +21,30 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.table-header, .table-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  display: table;
 }
 
 .table-header {
+  display: table-header-group;
   background-color: #f0f0f0;
   font-weight: bold;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-header div, .table-row div {
+  display: table-cell;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
 }
 
 .table-row:hover {
   background-color: #f9f9f9;
 }
+
 
 .modal {
   position: fixed;
@@ -79,4 +86,37 @@
 .btn-secondary {
   background-color: #ccc;
   color: black;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.approve-btn:hover {
+  background-color: #45a049;
+}
+
+.reject-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.reject-btn:hover {
+  background-color: #e53935;
 }

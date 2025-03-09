@@ -1,0 +1,34 @@
+<app-header
+  title="Состояние складов"
+  (companyIdEmitter)="onCompanyIdReceived($event)"
+  (userEmitter)="onUserReceived($event)"
+></app-header>
+
+<div *ngIf="companyId">
+  <div class="warehouse-states-container">
+    <div class="warehouse-states-content">
+      <div *ngIf="isLoading" class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && warehouseStates.length === 0" class="no-warehouses">
+        <p>У вас пока нет данных по состоянию складов.</p>
+      </div>
+
+      <div *ngIf="!isLoading && warehouseStates.length > 0" class="warehouse-states-list">
+        <div *ngFor="let state of warehouseStates" class="warehouse-card">
+          <h3>{{ state.name }}</h3>
+          <p><strong>Тип:</strong> {{ state.type.name }}</p>
+          <p><strong>Местоположение:</strong> {{ state.location }}</p>
+          <p><strong>Количество материальных ценностей:</strong> {{ state.itemsCount }}</p>
+          <p><strong>Общее количество:</strong> {{ state.quantity }}</p>
+          <div class="warehouse-card-buttons">
+            <button class="details-button" [routerLink]="['/warehouse', state.id]">Подробнее</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

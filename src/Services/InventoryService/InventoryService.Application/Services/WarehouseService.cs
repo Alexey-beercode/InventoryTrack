@@ -55,10 +55,10 @@ public class WarehouseService : IWarehouseService
         return _mapper.Map<IEnumerable<WarehouseResponseDto>>(warehouses);
     }
 
-    public async Task<IEnumerable<WarehouseResponseDto>> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
+    public async Task<WarehouseResponseDto> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
     {
         var warehouses = await _unitOfWork.Warehouses.GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
-        return _mapper.Map<IEnumerable<WarehouseResponseDto>>(warehouses);
+        return _mapper.Map<WarehouseResponseDto>(warehouses);
     }
 
     public async Task<IEnumerable<WarehouseResponseDto>> GetByNameAsync(string name, CancellationToken cancellationToken = default)
@@ -104,6 +104,7 @@ public class WarehouseService : IWarehouseService
     {
         var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(id, cancellationToken);
         var inventoryItems = await GetInventoryItemsByWarehouseAsync(id, cancellationToken);
+
         return new WarehouseStateResponseDto
         {
             Id = warehouse.Id,
@@ -111,11 +112,41 @@ public class WarehouseService : IWarehouseService
             Location = warehouse.Location,
             Type = _mapper.Map<WarehouseTypeResponseDto>(warehouse.Type),
             ItemsCount = inventoryItems.Count(),
-            Quantity = inventoryItems.Sum(iw => iw.Quantity),
+            Quantity = inventoryItems.Sum(iw => iw.WarehouseDetails
+                .Where(wd => wd.WarehouseId == id) // Фильтруем только по текущему складу
+                .Sum(wd => wd.Quantity)), // Складываем количество
             InventoryItems = inventoryItems,
             ResponsiblePersonId = warehouse.ResponsiblePersonId
         };
     }
+
+    public async Task<WarehouseStateResponseDto> GetStateByResponsiblePersonIdAsync(Guid responsiblePersonId,
+        CancellationToken cancellationToken)
+    {
+        var warehouse = await GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
+
+        if (warehouse is null)
+        {
+            throw new EntityNotFoundException("Склад не найден");
+        }
+        var inventoryItems = await GetInventoryItemsByWarehouseAsync(warehouse.Id, cancellationToken);
+
+        return new WarehouseStateResponseDto
+        {
+            Id = warehouse.Id,
+            Name = warehouse.Name,
+            Location = warehouse.Location,
+            Type = _mapper.Map<WarehouseTypeResponseDto>(warehouse.Type),
+            ItemsCount = inventoryItems.Count(),
+            Quantity = inventoryItems.Sum(iw => iw.WarehouseDetails
+                .Where(wd => wd.WarehouseId == warehouse.Id) // Фильтруем только по текущему складу
+                .Sum(wd => wd.Quantity)), // Складываем количество
+            InventoryItems = inventoryItems,
+            ResponsiblePersonId = warehouse.ResponsiblePersonId
+        };
+    }
+    
+
 
     public async Task<IEnumerable<WarehouseStateResponseDto>> GetWarehousesStatesByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
     {

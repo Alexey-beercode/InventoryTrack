@@ -65,6 +65,9 @@ export class ReportService {
     return this.http.get<ReportResponseDto[]>(`${this.baseUrl}${this.apiUrls.getAll}`);
   }
 
+  getByCompanyId(companyId: string): Observable<ReportResponseDto[]> {
+    return this.http.get<ReportResponseDto[]>(`${this.baseUrl}${this.apiUrls.getByCompanyId.replace('{companyId}', companyId)}`);
+  }
   // Удалить отчет
   delete(id: string): Observable<void> {
     return this.http.delete<void>(

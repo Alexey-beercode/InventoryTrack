@@ -1,0 +1,62 @@
+:host {
+  --primary-color: #4A90E2;
+  --primary-dark: #357ABD;
+  --card-background: #ffffff;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+.warehouse-states-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.warehouse-states-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.no-warehouses {
+  text-align: center;
+  color: #333;
+}
+
+.warehouse-states-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.warehouse-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  transition: transform 0.2s;
+}
+
+.warehouse-card:hover {
+  transform: scale(1.02);
+}
+
+.details-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.details-button:hover {
+  background-color: var(--primary-dark);
+}
