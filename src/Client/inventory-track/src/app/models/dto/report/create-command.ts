@@ -5,4 +5,5 @@ export interface CreateCommand {
   reportType: ReportType;
   dateSelect: DateSelect;
   companyId: string;
+  warehouseId?:string;
 }

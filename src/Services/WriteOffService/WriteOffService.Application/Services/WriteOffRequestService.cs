@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using WriteOffService.Application.DTOs.Request.WriteOffRequest;
 using WriteOffService.Application.DTOs.Response.WriteOffRequest;
 using WriteOffService.Application.Exceptions;
@@ -20,14 +22,16 @@ public class WriteOffRequestService : IWriteOffRequestService
     private readonly IDocumentService _documentService;
     private readonly IWriteOffReasonService _writeOffReasonService;
     private readonly WriteOffsRequestProducer _writeOffsRequestProducer;
+    private readonly ILogger<WriteOffRequestService> _logger;
 
-    public WriteOffRequestService(IMapper mapper, IUnitOfWork unitOfWork, IDocumentService documentService, IWriteOffReasonService writeOffReasonService, WriteOffsRequestProducer writeOffsRequestProducer)
+    public WriteOffRequestService(IMapper mapper, IUnitOfWork unitOfWork, IDocumentService documentService, IWriteOffReasonService writeOffReasonService, WriteOffsRequestProducer writeOffsRequestProducer, ILogger<WriteOffRequestService> logger)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _documentService = documentService;
         _writeOffReasonService = writeOffReasonService;
         _writeOffsRequestProducer = writeOffsRequestProducer;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
@@ -36,17 +40,32 @@ public class WriteOffRequestService : IWriteOffRequestService
         return await AttachDocumentsToRequestsAsync(requests, cancellationToken);
     }
 
+    public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByCompanyIdAsync(Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        var requests = await _unitOfWork.WriteOffRequests.GetByCompanyIdAsync(companyId, cancellationToken);
+        return await AttachDocumentsToRequestsAsync(requests, cancellationToken);
+    }
+
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetFilteredPagedRequestsAsync(WriteOffRequestFilterDto filterDto, CancellationToken cancellationToken = default)
     {
         var filterModel = _mapper.Map<FilterWriteOffrequestModel>(filterDto);
         var filteredRequests = await _unitOfWork.WriteOffRequests.GetFilteredAndPagedAsync(filterModel, cancellationToken);
+        _logger.LogInformation(JsonSerializer.Serialize(filteredRequests));
         return await AttachDocumentsToRequestsAsync(filteredRequests, cancellationToken);
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByStatusAsync(RequestStatus status, CancellationToken cancellationToken = default)
     {
         var requests = await _unitOfWork.WriteOffRequests.GetByStatusAsync(status, cancellationToken);
-        return await AttachDocumentsToRequestsAsync(requests, cancellationToken);
+        var requestsDtos = _mapper.Map<IEnumerable<WriteOffRequestResponseDto>>(requests);
+        return requestsDtos;
+    }
+
+    public async Task<IEnumerable<WriteOffRequestResponseDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var requests = await _unitOfWork.WriteOffRequests.GetAllAsync(cancellationToken);
+        return _mapper.Map<IEnumerable<WriteOffRequestResponseDto>>(requests);
     }
 
     public async Task<WriteOffRequestResponseDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -75,6 +94,12 @@ public class WriteOffRequestService : IWriteOffRequestService
         newRequest.ApprovedByUserId = null;
         newRequest.Status = RequestStatus.Requested;
         newRequest.RequestDate = DateTime.UtcNow;
+        if (createDto.AnotherReason != null)
+        {
+            await _writeOffReasonService.CreateAsync(createDto.AnotherReason, cancellationToken);
+            var reason=await _unitOfWork.WriteOffReasons.GetByNameAsync(createDto.AnotherReason, cancellationToken);
+            newRequest.Reason = reason;
+        }
 
         await _unitOfWork.WriteOffRequests.CreateAsync(newRequest, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -92,11 +117,17 @@ public class WriteOffRequestService : IWriteOffRequestService
 
         request.Status = RequestStatus.Created;
         request.ApprovedByUserId = approveDto.ApprovedByUserId;
-
-        await AddDocumentsToRequestAsync(request, approveDto.Documents, cancellationToken);
+        
 
         _unitOfWork.WriteOffRequests.Update(request);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var writeOffMessage = new WriteOffInventoryMessage
+        {
+            ItemId =request.ItemId,
+            WarehouseId = request.WarehouseId,
+            Quantity = request.Quantity
+        };
+        await _writeOffsRequestProducer.SendWriteOffMessageAsync(writeOffMessage);
     }
 
     public async Task RejectAsync(Guid requestId, Guid approvedByUserId, CancellationToken cancellationToken = default)
@@ -139,9 +170,7 @@ public class WriteOffRequestService : IWriteOffRequestService
             await _writeOffsRequestProducer.SendWriteOffMessageAsync(writeOffMessage);
         }
     }
-
     
-
     private async Task<IEnumerable<WriteOffRequestResponseDto>> AttachDocumentsToRequestsAsync(
         IEnumerable<WriteOffRequest> requests, CancellationToken cancellationToken)
     {
@@ -154,6 +183,17 @@ public class WriteOffRequestService : IWriteOffRequestService
 
         return requestsDtos;
     }
+    public async Task UploadDocumentsAsync(Guid requestId, List<IFormFile> documents, CancellationToken cancellationToken = default)
+    {
+        var request = await _unitOfWork.WriteOffRequests.GetByIdAsync(requestId, cancellationToken)
+                      ?? throw new EntityNotFoundException("WriteOffRequest", requestId);
+
+        await AddDocumentsToRequestAsync(request, documents, cancellationToken);
+
+        _unitOfWork.WriteOffRequests.Update(request);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
 
     private async Task SetWriteOffReasonAsync(CreateWriteOffRequestDto createDto, WriteOffRequest newRequest, CancellationToken cancellationToken)
     {

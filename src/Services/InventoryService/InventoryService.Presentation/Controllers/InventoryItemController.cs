@@ -23,10 +23,10 @@ namespace InventoryService.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Policy = "Warehouse Manager")]
+       [Authorize(Policy = "Warehouse Manager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateInventoryItem([FromForm] CreateInventoryItemDto dto, 
+        public async Task<IActionResult> CreateInventoryItem([FromBody] CreateInventoryItemDto dto, 
             CancellationToken cancellationToken)
         {
             _logger.LogInformation("Creating new inventory item: {Name}", dto.Name);
@@ -112,7 +112,8 @@ namespace InventoryService.Controllers
             await _inventoryItemService.UpdateInventoryItemStatusAsync(dto, cancellationToken);
             return NoContent();
         }
-
+        
+        
         [HttpDelete("{id:guid}")]
         [Authorize(Policy = "Warehouse Manager")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

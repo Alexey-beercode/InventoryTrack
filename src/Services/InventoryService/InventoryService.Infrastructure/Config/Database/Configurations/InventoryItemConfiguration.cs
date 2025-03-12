@@ -36,6 +36,7 @@ public class InventoryItemConfiguration : IEntityTypeConfiguration<InventoryItem
         
         builder.HasOne(i => i.Document)
             .WithMany()
-            .HasForeignKey(i => i.DocumentId);
+            .HasForeignKey(i => i.DocumentId)
+            .IsRequired(false);
     }
 }

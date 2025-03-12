@@ -33,10 +33,10 @@
             <select
               [(ngModel)]="user.selectedRoleId"
               name="role"
-            class="role-select"
-            (change)="onRoleChange(user)"
+              class="role-select"
+              (change)="onRoleChange(user)"
             >
-            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
             </select>
           </ng-container>
           <ng-template #readonlyRole>
@@ -44,29 +44,10 @@
           </ng-template>
         </div>
         <div class="table-item">
-          <button class="delete-button" (click)="deleteUser(user.id)">
+          <button class="delete-button" *ngIf="user.role?.name !== 'Бухгалтер'" (click)="deleteUser(user.id)">
             <i class="fas fa-trash"></i>
           </button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модалка для выбора склада -->
-  <div class="modal" *ngIf="showWarehouseModal">
-    <div class="modal-content">
-      <h2>Выберите склад</h2>
-      <div class="form-group">
-        <label>Склады:</label>
-        <select [(ngModel)]="selectedWarehouseId" class="form-select" name="warehouse">
-          <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">
-            {{ warehouse.name }}
-          </option>
-        </select>
-      </div>
-      <div class="modal-actions">
-        <button (click)="assignWarehouse()" class="save-button">Сохранить</button>
-        <button (click)="resetModal()" class="cancel-button">Отмена</button>
       </div>
     </div>
   </div>
@@ -94,14 +75,8 @@
         </div>
         <div class="form-group">
           <label>Роль</label>
-          <select [(ngModel)]="newUser.roleId" name="roleId" required class="role-select" (change)="loadWarehouses()">
+          <select [(ngModel)]="newUser.roleId" name="roleId" required class="role-select">
             <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
-          </select>
-        </div>
-        <div *ngIf="warehouses.length > 0" class="form-group">
-          <label>Склад</label>
-          <select [(ngModel)]="selectedWarehouseId" name="warehouse" class="form-select">
-            <option *ngFor="let warehouse of warehouses" [value]="warehouse.id">{{ warehouse.name }}</option>
           </select>
         </div>
         <div class="modal-actions">

@@ -88,7 +88,7 @@ namespace InventoryService.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        [Authorize(Policy = "WarehouseManager")]
+        [Authorize(Policy = "Accountant")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteWarehouse(Guid id, 

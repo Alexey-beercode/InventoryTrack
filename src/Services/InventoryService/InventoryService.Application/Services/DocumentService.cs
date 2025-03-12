@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using BookingService.Application.Exceptions;
+using InventoryService.Application.DTOs.Request.InventoryItem;
 using InventoryService.Application.DTOs.Response.Document;
 using InventoryService.Application.Interfaces.Services;
 using InventoryService.Domain.Entities;
@@ -20,21 +21,15 @@ public class DocumentService : IDocumentService
         _mapper = mapper;
     }
 
-    public async Task<Document> CreateDocumentAsync(IFormFile file,CancellationToken cancellationToken=default)
+    public async Task<Document> CreateDocumentAsync(DocumentDto documentDto,CancellationToken cancellationToken=default)
     {
-        if (file == null || file.Length == 0)
-        {
-            throw new ValidationException("File is required");
-        }
         
-        using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream);
-
         var document = new Document
         {
-            FileName = file.FileName,
-            FileType = file.ContentType,
-            FileData = memoryStream.ToArray()
+            Id = Guid.NewGuid(),
+            FileName = documentDto.FileName,
+            FileType = documentDto.FileType,
+            FileData = Convert.FromBase64String(documentDto.FileBase64)
         };
 
         await _unitOfWork.Documents.CreateAsync(document);

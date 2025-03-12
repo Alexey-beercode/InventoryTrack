@@ -1,6 +1,7 @@
 ﻿using InventoryService.Application.DTOs.Request.InventoryItem;
 using InventoryService.Application.DTOs.Response.InventoryItem;
 using InventoryService.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace InventoryService.Application.Interfaces.Services;
 
@@ -18,5 +19,7 @@ public interface IInventoryItemService
     Task UpdateInventoryItemAsync(Guid id, UpdateInventoryItemDto dto, CancellationToken cancellationToken = default);
     Task DeleteInventoryItemAsync(Guid id, CancellationToken cancellationToken = default);
     Task UpdateInventoryItemStatusAsync(ChangeInventoryItemStatusDto inventoryItemStatusDto, CancellationToken cancellationToken = default);
+
+    Task AddDocumentToInventoryItemAsync(DocumentDto file,string inventoryItemName, CancellationToken cancellationToken = default);
 }
 

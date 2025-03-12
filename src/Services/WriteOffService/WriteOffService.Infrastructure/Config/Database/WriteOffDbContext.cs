@@ -23,6 +23,6 @@ public class WriteOffDbContext : DbContext
         modelBuilder.ApplyConfiguration(new WriteOffActConfiguration());
         modelBuilder.ApplyConfiguration(new WriteOffReasonConfiguration());
         modelBuilder.ApplyConfiguration(new WriteOffRequestConfiguration());
-        modelBuilder.SeedWriteOffsReasonsData();
+       modelBuilder.SeedWriteOffsReasonsData();
     }
 }

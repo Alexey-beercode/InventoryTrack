@@ -3,43 +3,88 @@
   (companyIdEmitter)="onCompanyIdReceived($event)"
   (userEmitter)="onUserReceived($event)"
 ></app-header>
+
 <div *ngIf="companyId">
-<div class="warehouse-states-container">
-  <div class="warehouse-states-header">
-    <button class="add-warehouse-button" (click)="openCreateModal()">Добавить склад</button>
-  </div>
-
-  <div class="warehouse-states-content">
-    <div *ngIf="isLoading" class="loading-container">
-      <app-loading-spinner></app-loading-spinner>
+  <div class="warehouse-states-container">
+    <div class="warehouse-states-header">
+      <button class="add-warehouse-button" (click)="openCreateModal()">Добавить склад</button>
     </div>
 
-    <div *ngIf="!isLoading && warehouseStates.length === 0" class="no-warehouses">
-      <p>У вас пока нет данных по состоянию складов.</p>
-    </div>
+    <div class="warehouse-states-content">
+      <div *ngIf="isLoading" class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
 
-    <div *ngIf="!isLoading && warehouseStates.length > 0" class="warehouse-states-list">
-      <div *ngFor="let state of warehouseStates" class="warehouse-card">
-        <h3>{{ state.name }}</h3>
-        <p><strong>Тип:</strong> {{ state.type.name }}</p>
-        <p><strong>Местоположение:</strong> {{ state.location }}</p>
-        <p><strong>Количество метериальных ценностей:</strong> {{ state.itemsCount }}</p>
-        <p><strong>Общее количество:</strong> {{ state.quantity }}</p>
-        <div class="warehouse-card-buttons">
-          <button class="details-button" [routerLink]="['/warehouse', state.id]">Подробнее</button>
-          <button class="details-button">Удалить склад</button>
+      <div *ngIf="!isLoading && warehouseStates.length === 0" class="no-warehouses">
+        <p>У вас пока нет данных по состоянию складов.</p>
+      </div>
+
+      <div *ngIf="!isLoading && warehouseStates.length > 0" class="warehouse-states-list">
+        <div *ngFor="let state of warehouseStates" class="warehouse-card">
+          <h3>{{ state.name }}</h3>
+          <p><strong>Тип:</strong> {{ state.type.name }}</p>
+          <p><strong>Местоположение:</strong> {{ state.location }}</p>
+          <p><strong>Количество материальных ценностей:</strong> {{ state.itemsCount }}</p>
+          <p><strong>Общее количество:</strong> {{ state.quantity }}</p>
+
+          <p *ngIf="!state.responsiblePersonId || state.responsiblePersonId === userId" class="no-manager">
+            🚨 <i>Складу не назначен начальник</i>
+          </p>
+
+          <div class="warehouse-card-buttons">
+            <button class="details-button" [routerLink]="['/warehouse', state.id]">Подробнее</button>
+            <button *ngIf="!state.responsiblePersonId || state.responsiblePersonId === userId"
+                    class="assign-button"
+                    (click)="assignManager(state.id, state.type.name)">
+              Назначить начальника
+            </button>
+
+            <button class="delete-button" (click)="openDeleteConfirmModal(state.id, state.name)">Удалить</button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
+
+<!-- Модалка подтверждения удаления -->
+<div *ngIf="showDeleteConfirmModal" class="modal-overlay">
+  <div class="modal">
+    <h2>Удаление склада</h2>
+    <p>Вы уверены, что хотите удалить склад <b>{{ selectedWarehouseName }}</b>?</p>
+    <div class="modal-actions">
+      <button (click)="deleteWarehouse()" class="save-button">Удалить</button>
+      <button (click)="showDeleteConfirmModal = false" class="cancel-button">Отмена</button>
+    </div>
+  </div>
 </div>
+
+<!-- 📌 Модалка назначения начальника -->
+<div *ngIf="showAssignManagerModal" class="modal-overlay">
+  <div class="modal">
+    <h2>Выбор начальника склада</h2>
+
+    <div class="form-group" *ngIf="errorMessage">
+      <p class="error-message">{{ errorMessage }}</p>
+    </div>
+
+    <div class="form-group" *ngIf="!errorMessage">
+      <label for="managerSelect">Выберите начальника:</label>
+      <select [(ngModel)]="selectedManagerId" id="managerSelect" class="form-select">
+        <option *ngFor="let user of filteredUsers" [value]="user.id">
+          {{ user.firstName }} {{ user.lastName }} ({{ user.roles[0]?.name }})
+        </option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button  (click)="confirmAssignManager()" class="save-button" [disabled]="!!errorMessage">Назначить</button>
+      <button (click)="showAssignManagerModal = false" class="cancel-button">Отмена</button>
+    </div>
+  </div>
 </div>
-<app-create-warehouse
-  *ngIf="showCreateModal"
-  [companyId]="companyId"
-  [userId]="userId"
-  (close)="closeCreateModal()"
-  (refreshList)="loadWarehouseStates()"
-></app-create-warehouse>
+
+<app-create-warehouse *ngIf="showCreateModal" [companyId]="companyId" [userId]="userId" (close)="closeCreateModal()" (refreshList)="loadWarehouseStates()"></app-create-warehouse>
+
 
 <app-footer></app-footer>

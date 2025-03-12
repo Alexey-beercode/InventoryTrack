@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MongoDB.Bson;
 using ReportService.Domain.Interfaces.Repositories;
 using ReportService.Infrastructure.Messaging.Producers;
 
@@ -17,14 +18,16 @@ public class CreateCommandHandler : IRequestHandler<CreateCommand>
 
     public async Task Handle(CreateCommand request, CancellationToken cancellationToken)
     {
-        // Запрашиваем данные отчета
-        var reportData = await _reportProducer.RequestReportDataAsync(request.CompanyId, request.ReportType, request.DateSelect);
+        var jsonReportData = await _reportProducer.RequestReportDataAsync(request.CompanyId, request.ReportType, request.DateSelect, request.WarehouseId);
+
+        // Преобразуем JSON в BsonDocument перед сохранением в БД
+        var bsonReportData = BsonDocument.Parse(jsonReportData);
 
         // Создаем новый отчет
         var report = new Domain.Entities.Report
         {
             Name = $"{request.ReportType}_{DateTime.UtcNow:yyyyMMddHHmmss}",
-            Data = reportData,
+            Data = bsonReportData,
             ReportType = request.ReportType,
             DateSelect = request.DateSelect,
             CreatedAt = DateTime.UtcNow,

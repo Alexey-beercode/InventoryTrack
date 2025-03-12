@@ -1,7 +1,11 @@
 :host {
-  --primary-color: #4A90E2; /* Основной светло-синий цвет */
+  --primary-color: #4A90E2; /* Основной синий цвет */
   --primary-dark: #357ABD; /* Темный синий для наведения */
-  --card-background: #ffffff; /* Фон карточек */
+  --danger-color: #E74C3C; /* Красный цвет для удаления */
+  --danger-dark: #C0392B; /* Темно-красный для наведения */
+  --success-color: #2ECC71; /* Зеленый цвет для назначения */
+  --success-dark: #27AE60; /* Темно-зеленый для наведения */
+  --card-background: #ffffff;
   --border-radius: 8px;
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -12,6 +16,18 @@
   line-height: 1.6;
 }
 
+.add-warehouse-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.add-warehouse-button:hover {
+  background-color: var(--primary-dark);
+}
 .warehouse-states-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -33,7 +49,9 @@
 
 .no-warehouses {
   text-align: center;
-  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #555;
 }
 
 .warehouse-states-list {
@@ -46,57 +64,164 @@
   background-color: var(--card-background);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  padding: 15px;
-  transition: transform 0.2s;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s ease-in-out;
 }
 
 .warehouse-card:hover {
   transform: scale(1.02);
 }
 
-.add-warehouse-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
+/* 📌 Надпись "Складу не назначен начальник" */
+.no-manager {
+  color: var(--danger-color);
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 5px;
+  background-color: rgba(231, 76, 60, 0.1);
   border-radius: var(--border-radius);
-  cursor: pointer;
+  margin-top: 5px;
 }
 
-.add-warehouse-button:hover {
-  background-color: var(--primary-dark);
+/* 📌 Блок кнопок */
+.warehouse-card-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
 }
 
+/* 📌 Кнопка "Подробнее" */
 .details-button {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border-radius: var(--border-radius);
   cursor: pointer;
-  margin-top: 10px; /* Отступ сверху */
-  margin-right: 10px; /* Отступ между кнопками */
+  flex: 1;
+  font-size: 0.9rem;
+  transition: background 0.2s ease-in-out;
 }
 
 .details-button:hover {
   background-color: var(--primary-dark);
 }
 
-.warehouse-card {
-  background-color: var(--card-background);
+/* 📌 Кнопка "Назначить начальника" */
+.assign-button {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  padding: 20px;
-  display: flex; /* Добавляем flex-контейнер */
-  flex-direction: column; /* Расположение кнопок вертикально */
-  gap: 10px; /* Пространство между кнопками и текстом */
-  transition: transform 0.2s;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9rem;
+  transition: background 0.2s ease-in-out;
 }
 
-.warehouse-card-buttons {
+.assign-button:hover {
+  background-color: var(--success-dark);
+}
+
+/* 📌 Кнопка "Удалить склад" */
+/* 📌 Кнопка "Удалить склад" */
+.delete-button {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9rem;
+  transition: background 0.2s ease-in-out;
+  display: flex; /* Используем flexbox */
+  align-items: center; /* Выравниваем текст по вертикали */
+  justify-content: center; /* Выравниваем текст по горизонтали */
+  text-align: center;
+}
+
+.delete-button:hover {
+  background-color: var(--danger-dark);
+}
+
+/* 📌 Оверлей для модального окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: flex-start; /* Выравнивание кнопок слева */
-  gap: 10px; /* Промежуток между кнопками */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 📌 Стилизация модального окна */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 📌 Стили для кнопок внутри модалки */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
   margin-top: 15px;
+}
+
+.save-button {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  flex: 1;
+  transition: background 0.2s ease-in-out;
+}
+
+.save-button:hover {
+  background-color: var(--success-dark);
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  flex: 1;
+  transition: background 0.2s ease-in-out;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
 }
 

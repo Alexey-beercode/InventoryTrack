@@ -12,18 +12,25 @@ public class WarehouseProfile : Profile
 {
     public WarehouseProfile()
     {
+        // Маппинг одного склада
         CreateMap<Warehouse, WarehouseResponseDto>()
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => MapWarehouseType(src.Type)));
-        
+
+        // Маппинг списка складов
+        CreateMap<List<Warehouse>, List<WarehouseResponseDto>>().ConvertUsing((src, dest, context) =>
+            src.Select(warehouse => context.Mapper.Map<WarehouseResponseDto>(warehouse)).ToList()
+        );
+
         CreateMap<WarehouseType, WarehouseTypeResponseDto>()
             .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => GetEnumDisplayName(src)));
 
         CreateMap<CreateWarehouseDto, Warehouse>();
-        
+
         CreateMap<Warehouse, WarehouseStateResponseDto>()
             .ForMember(dest => dest.ItemsCount, opt => opt.Ignore()) 
             .ForMember(dest => dest.Quantity, opt => opt.Ignore());  
+
         CreateMap<Warehouse, WarehouseDetailsDto>().ReverseMap();
         
         CreateMap<InventoriesItemsWarehouses, WarehouseDetailsDto>()
@@ -37,6 +44,8 @@ public class WarehouseProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.First().InventoryItem.Name))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Sum(iw => iw.Quantity)))
             .ForMember(dest => dest.WarehouseDetails, opt => opt.MapFrom(src => src));
+
+        CreateMap<UpdateWarehouseDto, Warehouse>();
     }
 
     private WarehouseTypeResponseDto MapWarehouseType(WarehouseType type)
@@ -47,14 +56,14 @@ public class WarehouseProfile : Profile
             Name = GetEnumDisplayName(type)
         };
     }
+
     private string GetEnumDisplayName<TEnum>(TEnum enumValue) where TEnum : Enum
     {
         return Enum.GetName(typeof(TEnum), enumValue) switch
         {
-            "Production" => "Производственный", //For WarehouseType
-            "Internal" => "Внутренний",     //For WarehouseType
-            _ => enumValue.ToString(),      //Default fallback
+            "Production" => "Производственный",
+            "Internal" => "Внутренний",
+            _ => enumValue.ToString(),
         };
     }
-
 }

@@ -7,5 +7,5 @@ export class CreateInventoryItemDto {
   supplierId!: string;
   warehouseId!: string;
   deliveryDate!: string;  // 🔥 Изменено на string
-  documentFile!: File;
+  documentId!: string;
 }

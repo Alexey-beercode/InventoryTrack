@@ -1,26 +1,38 @@
+/* Основной контейнер хедера */
 .header {
   background-color: var(--primary-color);
   color: #fff;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 15px 20px;
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Контейнер для элементов */
 .header-container {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
+/* Заголовок */
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Навигация */
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 15px;
+  flex-grow: 1;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .nav-link {
@@ -30,6 +42,7 @@
   padding: 8px 12px;
   border-radius: var(--border-radius);
   transition: background-color 0.3s, transform 0.2s;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -37,39 +50,37 @@
   transform: translateY(-2px);
 }
 
+/* Блок с информацией о пользователе */
 .user-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  min-width: 220px;
+  justify-content: flex-end;
 }
 
+/* Информация о пользователе */
 .user-info {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 5px;
+  text-align: right;
 }
 
 .user-name {
   font-weight: bold;
   font-size: 16px;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .company-name {
   font-size: 14px;
   color: var(--accent-color);
+  white-space: nowrap;
 }
 
-.add-company-button {
-  background-color: var(--accent-color);
-  border: none;
-  padding: 8px 12px;
-  color: #fff;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 14px;
-}
-
+/* Кнопка выхода */
 .logout-button {
   background-color: var(--primary-dark);
   border: none;
@@ -78,6 +89,25 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 14px;
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  background-color: var(--primary-color);
+}
+
+/* Модальное окно */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
@@ -96,21 +126,10 @@
   text-align: center;
   font-weight: bold;
 }
-.modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
+/* Стилизация формы */
 .form-group {
-  margin-bottom: 20px; /* Увеличили отступ между элементами формы */
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -128,17 +147,17 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: var(--border-radius);
-  font-size: 16px; /* Более удобный размер текста */
+  font-size: 16px;
 }
 
 .form-group textarea {
-  height: 100px; /* Увеличена высота текстовых областей */
+  height: 100px;
   resize: none;
 }
 
 .modal-buttons {
   display: flex;
-  justify-content: space-between; /* Кнопки будут равномерно распределены */
+  justify-content: space-between;
   gap: 15px;
 }
 
@@ -150,7 +169,6 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -176,9 +194,61 @@
   font-size: 14px;
   margin-top: 5px;
   font-weight: bold;
-  display: block; /* Убедитесь, что ошибка занимает свою строку */
+  display: block;
   line-height: 1.5;
 }
 
+/* 📌 Адаптивность */
+@media (max-width: 900px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
 
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  .user-actions {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .user-info {
+    align-items: center;
+    text-align: center;
+  }
+}
+/* Кнопка добавления компании */
+.add-company-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.add-company-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.add-company-button:active {
+  transform: translateY(0);
+}
+
+/* 📌 Адаптивность */
+@media (max-width: 900px) {
+  .add-company-button {
+    width: 100%;
+    text-align: center;
+  }
+}
 

@@ -15,7 +15,7 @@ public class CreateInventoryItemDtoValidator : AbstractValidator<CreateInventory
         RuleFor(x => x.SupplierId).NotEmpty();
         RuleFor(x => x.WarehouseId).NotEmpty();
         RuleFor(x => x.DeliveryDate).GreaterThan(DateTime.UtcNow);
-        RuleFor(x => x.DocumentFile).NotNull().Must(BeAValidFile).WithMessage("Invalid file provided.");
+     //   RuleFor(x => x.DocumentFile).NotNull().Must(BeAValidFile).WithMessage("Invalid file provided.");
     }
     private bool BeAValidFile(IFormFile file)
     {

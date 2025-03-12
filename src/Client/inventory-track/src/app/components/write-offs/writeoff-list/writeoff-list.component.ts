@@ -48,11 +48,8 @@ export class WriteOffListComponent implements OnInit {
   loadWriteOffRequests(): void {
     this.isLoading = true;
 
-    const filter = {
-      status: this.filterStatus,
-    };
 
-    this.writeOffRequestService.getFiltered(filter).subscribe({
+    this.writeOffRequestService.getByStatus(this.filterStatus.toString()).subscribe({
       next: (data) => {
         this.writeOffRequests = data;
         this.isLoading = false;

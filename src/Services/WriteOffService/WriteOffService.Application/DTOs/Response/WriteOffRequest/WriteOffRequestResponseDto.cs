@@ -12,6 +12,7 @@ public class WriteOffRequestResponseDto : BaseDto
     public Guid ItemId { get; set; }
     public Guid WarehouseId { get; set; }
     public long Quantity { get; set; }
+    public Guid CompanyId { get; set; }
     public RequestStatusResponseDto Status { get; set; }
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }

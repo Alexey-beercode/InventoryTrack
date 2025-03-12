@@ -15,7 +15,7 @@
 
       <div class="form-group">
         <label for="type">Тип склада</label>
-        <select id="type" name="type" [(ngModel)]="newWarehouse.type" required>
+        <select id="type" name="type" [(ngModel)]="newWarehouse.type" (change)="filterUsersByType()" required>
           <option [value]="0">Производственный</option>
           <option [value]="1">Внутренний</option>
         </select>
@@ -30,6 +30,29 @@
           [(ngModel)]="newWarehouse.location"
           required
         />
+      </div>
+
+      <!-- Чекбокс "Назначить начальника склада" -->
+      <div class="form-group checkbox-group">
+        <input
+          type="checkbox"
+          id="assignManager"
+          [(ngModel)]="assignManager"
+          (change)="filterUsersByType()"
+          name="assignManager"
+        />
+        <label for="assignManager">Назначить начальника склада</label>
+      </div>
+
+      <!-- Поле для выбора начальника (отображается, если включен чекбокс) -->
+      <div class="form-group" *ngIf="assignManager">
+        <label for="responsiblePerson">Начальник склада</label>
+        <select id="responsiblePerson" name="responsiblePerson" [(ngModel)]="newWarehouse.responsiblePersonId" [disabled]="noSuitableUsers">
+          <option *ngFor="let user of filteredUsers" [value]="user.id">
+            {{ user.firstName }} {{ user.lastName }} ({{ user.roles[0]?.name }})
+          </option>
+        </select>
+        <p *ngIf="noSuitableUsers" class="error-message">Нет доступных пользователей. Будет назначен бухгалтер</p>
       </div>
 
       <div class="modal-buttons">

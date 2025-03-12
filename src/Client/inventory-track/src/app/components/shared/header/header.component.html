@@ -1,23 +1,27 @@
 <header class="header">
   <div class="header-container">
-    <h1>{{ title }}</h1>
+    <!-- Заголовок -->
+    <h1 class="header-title">{{ title }}</h1>
+
+    <!-- Навигация -->
     <nav *ngIf="navLinks.length > 0 && !isAuthorize" class="nav-links">
       <a *ngFor="let link of navLinks" [routerLink]="link.path" class="nav-link">
         {{ link.label }}
       </a>
     </nav>
+
+    <!-- Блок пользователя -->
     <div *ngIf="!isAuthorize" class="user-actions">
       <div class="user-info">
-    <span
-      class="user-name"
-      (click)="navigateToUserDetails()"
-      style="cursor: pointer; text-decoration: underline;"
-    >
-  {{ user?.firstName }} {{ user?.lastName }}
-</span>
+        <!-- Имя пользователя -->
+        <span class="user-name" (click)="navigateToUserDetails()">
+          {{ user?.firstName }} {{ user?.lastName }}
+        </span>
 
-
+        <!-- Информация о компании -->
         <span *ngIf="company" class="company-name">Компания: {{ company?.name }}</span>
+
+        <!-- Кнопка добавления компании -->
         <button
           *ngIf="!company && canAddCompany"
           class="add-company-button"
@@ -26,84 +30,44 @@
           Добавить компанию
         </button>
       </div>
+
+      <!-- Кнопка выхода -->
       <button class="logout-button" (click)="logout()">Выйти</button>
     </div>
   </div>
 
-  <!-- Модальное окно -->
+  <!-- Модальное окно для создания компании -->
   <div class="modal" *ngIf="showCreateModal">
     <div class="modal-content">
       <h2 class="modal-title">Создание компании</h2>
       <form #companyForm="ngForm" (ngSubmit)="createCompany(companyForm)">
         <div class="form-group">
           <label for="name">Название компании</label>
-          <input
-            id="name"
-            type="text"
-            [(ngModel)]="newCompany.name"
-            name="name"
-            required
-          />
-          <app-error-message
-            *ngIf="companyForm.controls['name']?.invalid && submitted"
-            [message]="'Название компании обязательно.'"
-          ></app-error-message>
+          <input id="name" type="text" [(ngModel)]="newCompany.name" name="name" required />
+          <app-error-message *ngIf="companyForm.controls['name']?.invalid && submitted" [message]="'Название компании обязательно.'"></app-error-message>
         </div>
 
         <div class="form-group">
           <label for="unp">УНП</label>
-          <input
-            id="unp"
-            type="text"
-            [(ngModel)]="newCompany.unp"
-            name="unp"
-            required
-            minlength="9"
-            maxlength="9"
-          />
-          <app-error-message
-            *ngIf="companyForm.controls['unp']?.invalid && submitted"
-            [message]="'УНП должен быть 9 цифр.'"
-          ></app-error-message>
+          <input id="unp" type="text" [(ngModel)]="newCompany.unp" name="unp" required minlength="9" maxlength="9" />
+          <app-error-message *ngIf="companyForm.controls['unp']?.invalid && submitted" [message]="'УНП должен быть 9 цифр.'"></app-error-message>
         </div>
 
         <div class="form-group">
           <label for="legalAddress">Юридический адрес</label>
-          <textarea
-            id="legalAddress"
-            [(ngModel)]="newCompany.legalAddress"
-            name="legalAddress"
-            required
-          ></textarea>
-          <app-error-message
-            *ngIf="companyForm.controls['legalAddress']?.invalid && submitted"
-            [message]="'Юридический адрес обязателен.'"
-          ></app-error-message>
+          <textarea id="legalAddress" [(ngModel)]="newCompany.legalAddress" name="legalAddress" required></textarea>
+          <app-error-message *ngIf="companyForm.controls['legalAddress']?.invalid && submitted" [message]="'Юридический адрес обязателен.'"></app-error-message>
         </div>
 
         <div class="form-group">
           <label for="postalAddress">Почтовый адрес</label>
-          <textarea
-            id="postalAddress"
-            [(ngModel)]="newCompany.postalAddress"
-            name="postalAddress"
-            required
-          ></textarea>
-          <app-error-message
-            *ngIf="companyForm.controls['postalAddress']?.invalid && submitted"
-            [message]="'Почтовый адрес обязателен.'"
-          ></app-error-message>
+          <textarea id="postalAddress" [(ngModel)]="newCompany.postalAddress" name="postalAddress" required></textarea>
+          <app-error-message *ngIf="companyForm.controls['postalAddress']?.invalid && submitted" [message]="'Почтовый адрес обязателен.'"></app-error-message>
         </div>
 
         <div class="modal-buttons">
           <button type="submit" class="btn-primary">Сохранить</button>
-          <button
-            type="button"
-            class="btn-secondary"
-            (click)="showCreateModal = false"
-          >
-            Отмена
-          </button>
+          <button type="button" class="btn-secondary" (click)="showCreateModal = false">Отмена</button>
         </div>
       </form>
     </div>

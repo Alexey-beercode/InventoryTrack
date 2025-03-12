@@ -1,4 +1,5 @@
-﻿using InventoryService.Application.DTOs.Response.Document;
+﻿using InventoryService.Application.DTOs.Request.InventoryItem;
+using InventoryService.Application.DTOs.Response.Document;
 using InventoryService.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,15 +21,13 @@ namespace InventoryService.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Guid>> UploadDocument(IFormFile file, 
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<Guid>> UploadDocument([FromBody] DocumentDto documentDto,CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Uploading document: {FileName}", file.FileName);
-            var document = await _documentService.CreateDocumentAsync(file, cancellationToken);
-            return StatusCode(StatusCodes.Status201Created, document.Id);
+            var document = await _documentService.CreateDocumentAsync(documentDto, cancellationToken);
+            return Ok(document.Id);
         }
 
         [HttpGet("{id:guid}/info")]

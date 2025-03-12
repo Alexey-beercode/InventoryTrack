@@ -14,7 +14,7 @@ public interface IWarehouseService
     Task<IEnumerable<WarehouseResponseDto>> GetByCompanyIdAsync(Guid companyId,
         CancellationToken cancellationToken = default);
 
-    Task<WarehouseResponseDto> GetByResponsiblePersonIdAsync(Guid responsiblePersonId,
+    Task<IEnumerable<WarehouseResponseDto>> GetByResponsiblePersonIdAsync(Guid responsiblePersonId,
         CancellationToken cancellationToken = default);
 
     Task<IEnumerable<WarehouseResponseDto>> GetByNameAsync(string name, CancellationToken cancellationToken = default);

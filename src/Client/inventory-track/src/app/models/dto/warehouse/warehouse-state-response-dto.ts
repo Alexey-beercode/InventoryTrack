@@ -9,4 +9,5 @@ export class WarehouseStateResponseDto {
   location!: string;
   quantity!: number;
   inventoryItems!: InventoryItemResponseDto[];
+  responsiblePersonId!:string;
 }

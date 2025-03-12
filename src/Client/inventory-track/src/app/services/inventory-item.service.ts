@@ -17,10 +17,45 @@ export class InventoryItemService {
 
   constructor(private http: HttpClient) {}
 
-  createInventoryItem(formData: FormData): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}${this.apiUrls.create}`, formData);
+  createInventoryItem(dto: CreateInventoryItemDto): Observable<InventoryItemResponseDto> {
+    return this.http.post<InventoryItemResponseDto>(
+      `${this.baseUrl}${this.apiUrls.create}`,
+      dto
+    );
   }
 
+  uploadDocument(file: File): Observable<string> {
+    return new Observable((observer) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1]; // Получаем base64-строку
+        const fileName = file.name; // Название файла
+        const fileType = file.type; // MIME-тип файла
+
+        // Отправляем данные на сервер
+        this.http.post<string>(`${this.baseUrl}/api/documents/upload`, {
+          fileBase64: base64String,
+          fileName: fileName,
+          fileType: fileType
+        }).subscribe({
+          next: (response) => {
+            observer.next(response);
+            observer.complete();
+          },
+          error: (err) => {
+            observer.error(err);
+          }
+        });
+      };
+
+      reader.onerror = (error) => {
+        observer.error(error);
+      };
+
+      reader.readAsDataURL(file); // Читаем файл как Data URL
+    });
+  }
 
   getAllInventoryItems(): Observable<InventoryItemResponseDto[]> {
     return this.http.get<InventoryItemResponseDto[]>(`${this.baseUrl}${this.apiUrls.getAll}`);

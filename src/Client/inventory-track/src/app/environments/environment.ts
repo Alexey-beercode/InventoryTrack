@@ -49,6 +49,7 @@ export const environment = {
       update: '/api/inventory-items/{id}',
       updateStatus: '/api/inventory-items/status',
       delete: '/api/inventory-items/{id}',
+      addDocument: '/api/inventory-items/add-document/{name}'
     },
     supplier: {
       getAll: '/api/suppliers',
@@ -98,9 +99,11 @@ export const environment = {
       create: '/api/write-off-requests',
       update: '/api/write-off-requests',
       delete: '/api/write-off-requests/{id}',
-      reject: 'api/write-off-requests/reject/{id}',
-      approve: 'api/write-off-requests/approve'
+      reject: '/api/write-off-requests/reject/{id}',  // 👈 добавлен `/`
+      approve: "/api/write-off-requests/{id}/approve",
+      uploadDocuments: "/api/write-off-requests/{id}/upload-documents"
     },
+
     report: {
       getById: '/api/report/id/{id}',
       getByDateRange: '/api/report/by-date-range/{startDate}/{endDate}',

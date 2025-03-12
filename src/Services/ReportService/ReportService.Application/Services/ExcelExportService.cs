@@ -7,6 +7,15 @@ namespace ReportService.Application.Services
 {
     public class ExcelExportService : IExcelExportService
     {
+        
+        private string FormatDate(BsonDocument doc, string fieldName)
+        {
+            if (doc.Contains(fieldName) && doc[fieldName].BsonType == BsonType.DateTime)
+            {
+                return doc[fieldName].ToUniversalTime().ToString("dd/MM/yyyy");
+            }
+            return "";
+        }
         public async Task<byte[]> GenerateExcelReportAsync(Report report)
         {
             using var workbook = new XLWorkbook();
@@ -38,51 +47,139 @@ namespace ReportService.Application.Services
         }
 
         public void GenerateStockStateSheet(IXLWorksheet worksheet, BsonDocument data)
+        {
+            worksheet.Cell(1, 1).Value = "Склад";
+            worksheet.Cell(1, 2).Value = "Наименование";
+            worksheet.Cell(1, 3).Value = "Уникальный код";
+            worksheet.Cell(1, 4).Value = "Количество";
+            worksheet.Cell(1, 5).Value = "Оценочная стоимость";
+            worksheet.Cell(1, 6).Value = "Срок годности";
+            worksheet.Cell(1, 7).Value = "Поставщик";
+            worksheet.Cell(1, 8).Value = "Дата поступления";
+
+            // 1️⃣ Проверяем тип данных: Warehouses или единичный склад
+            if (data.Contains("Warehouses") && data["Warehouses"].BsonType == BsonType.Array)
+            {
+                GenerateMultiWarehouseSheet(worksheet, data["Warehouses"].AsBsonArray);
+            }
+            else if (data.Contains("items") && data["items"].BsonType == BsonType.Array && data.Contains("warehouse"))
+            {
+                GenerateSingleWarehouseSheet(worksheet, data["items"].AsBsonArray, data["warehouse"].AsString);
+            }
+            else
+            {
+                worksheet.Cell(2, 1).Value = "❌ Данные отсутствуют или формат не распознан";
+                worksheet.Range(2, 1, 2, 8).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            }
+
+            worksheet.Columns().AdjustToContents();
+        }
+
+        private void GenerateSingleWarehouseSheet(IXLWorksheet worksheet, BsonArray items, string warehouseName)
+        {
+            int row = 2;
+
+            worksheet.Cell(row, 1).Value = warehouseName;
+            worksheet.Range(row, 1, row, 8).Merge().Style.Font.Bold = true;
+            worksheet.Range(row, 1, row, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            row++;
+
+            foreach (var item in items)
+            {
+                var bsonItem = item.AsBsonDocument;
+
+                worksheet.Cell(row, 1).Value = warehouseName;
+                worksheet.Cell(row, 2).Value = bsonItem.GetValue("name", "").AsString;
+                worksheet.Cell(row, 3).Value = bsonItem.GetValue("uniqueCode", "").AsString;
+                worksheet.Cell(row, 4).Value = bsonItem.GetValue("quantity", 0).ToInt32();
+                worksheet.Cell(row, 5).Value = bsonItem.GetValue("estimatedValue", 0.0M).ToDecimal();
+
+                worksheet.Cell(row, 6).Value = FormatDate(bsonItem, "expirationDate");
+                worksheet.Cell(row, 7).Value = bsonItem.GetValue("supplier", "").AsString;
+                worksheet.Cell(row, 8).Value = FormatDate(bsonItem, "deliveryDate");
+
+                row++;
+            }
+        }
+
+        private void GenerateMultiWarehouseSheet(IXLWorksheet worksheet, BsonArray warehouses)
+        {
+            int row = 2;
+
+            foreach (var warehouse in warehouses)
+            {
+                var bsonWarehouse = warehouse.AsBsonDocument;
+                string warehouseName = bsonWarehouse.GetValue("Name", "").AsString;
+
+                worksheet.Cell(row, 1).Value = warehouseName;
+                worksheet.Range(row, 1, row, 8).Merge().Style.Font.Bold = true;
+                worksheet.Range(row, 1, row, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                row++;
+
+                if (!bsonWarehouse.Contains("Items") || bsonWarehouse["Items"].BsonType != BsonType.Array)
+                {
+                    worksheet.Cell(row, 2).Value = "Нет товаров";
+                    row++;
+                    continue;
+                }
+
+                var items = bsonWarehouse["Items"].AsBsonArray;
+                foreach (var item in items)
+                {
+                    var bsonItem = item.AsBsonDocument;
+
+                    worksheet.Cell(row, 1).Value = warehouseName; 
+                    worksheet.Cell(row, 2).Value = bsonItem.GetValue("Name", "").AsString;
+                    worksheet.Cell(row, 3).Value = bsonItem.GetValue("UniqueCode", "").AsString;
+                    worksheet.Cell(row, 4).Value = bsonItem.GetValue("Quantity", 0).ToInt32();
+                    worksheet.Cell(row, 5).Value = bsonItem.GetValue("EstimatedValue", 0.0M).ToDecimal();
+            
+                    worksheet.Cell(row, 6).Value = FormatDate(bsonItem, "ExpirationDate");
+                    worksheet.Cell(row, 7).Value = bsonItem.GetValue("Supplier", "").AsString;
+                    worksheet.Cell(row, 8).Value = FormatDate(bsonItem, "DeliveryDate");
+
+                    row++;
+                }
+            }
+        }
+
+
+
+private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
 {
-    // Устанавливаем заголовки
+    if (!data.Contains("Movements") || data["Movements"].IsBsonNull)
+    {
+        worksheet.Cell(1, 1).Value = "Данные отсутствуют";
+        worksheet.Range(1, 1, 1, 6).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        worksheet.Columns().AdjustToContents();
+        return;
+    }
+
+    var movements = data["Movements"].AsBsonArray;
+
     worksheet.Cell(1, 1).Value = "Наименование";
-    worksheet.Cell(1, 2).Value = "Уникальный код";
-    worksheet.Cell(1, 3).Value = "Количество";
-    worksheet.Cell(1, 4).Value = "Оценочная стоимость";
-    worksheet.Cell(1, 5).Value = "Срок годности";
-    worksheet.Cell(1, 6).Value = "Поставщик";
-    worksheet.Cell(1, 7).Value = "Склад";
-    worksheet.Cell(1, 8).Value = "Дата поступления";
+    worksheet.Cell(1, 2).Value = "Склад отправления";
+    worksheet.Cell(1, 3).Value = "Склад назначения";
+    worksheet.Cell(1, 4).Value = "Количество";
+    worksheet.Cell(1, 5).Value = "Дата запроса";
+    worksheet.Cell(1, 6).Value = "Статус";
 
-    // Проверяем, существует ли поле "Items"
-    if (!data.Contains("Items") || data["Items"].IsBsonNull)
-    {
-        worksheet.Cell(2, 1).Value = "Данные отсутствуют";
-        worksheet.Range(2, 1, 2, 8).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        worksheet.Columns().AdjustToContents();
-        return;
-    }
-
-    // Получаем массив "Items"
-    var items = data["Items"].AsBsonArray;
-
-    // Если массив пуст, добавляем сообщение
-    if (!items.Any())
-    {
-        worksheet.Cell(2, 1).Value = "Данные отсутствуют";
-        worksheet.Range(2, 1, 2, 8).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        worksheet.Columns().AdjustToContents();
-        return;
-    }
-
-    // Заполняем строки данными
     int row = 2;
-    foreach (var item in items)
+    foreach (var movement in movements)
     {
-        var bsonItem = item.AsBsonDocument;
-        worksheet.Cell(row, 1).Value = bsonItem.GetValue("Name", "").AsString; // Наименование
-        worksheet.Cell(row, 2).Value = bsonItem.GetValue("UniqueCode", "").AsString; // Уникальный код
-        worksheet.Cell(row, 3).Value = bsonItem.GetValue("Quantity", 0).ToInt32(); // Количество
-        worksheet.Cell(row, 4).Value = bsonItem.GetValue("EstimatedValue", 0.0M).ToDecimal(); // Оценочная стоимость
-        worksheet.Cell(row, 5).Value = bsonItem.GetValue("ExpirationDate", BsonNull.Value).ToNullableUniversalTime(); // Срок годности
-        worksheet.Cell(row, 6).Value = bsonItem.GetValue("SupplierName", "").AsString; // Поставщик
-        worksheet.Cell(row, 7).Value = bsonItem["WarehouseDetails"][0]["WarehouseName"].AsString; 
-        worksheet.Cell(row, 8).Value = bsonItem.GetValue("DeliveryDate", BsonNull.Value).ToNullableUniversalTime(); // Дата поступления
+        var bsonMovement = movement.AsBsonDocument;
+
+        worksheet.Cell(row, 1).Value = bsonMovement.GetValue("ItemName", "Неизвестный товар").AsString;
+        worksheet.Cell(row, 2).Value = bsonMovement.GetValue("SourceWarehouseName", "Неизвестный склад").AsString;
+        worksheet.Cell(row, 3).Value = bsonMovement.GetValue("DestinationWarehouseName", "Неизвестный склад").AsString;
+        worksheet.Cell(row, 4).Value = bsonMovement.GetValue("Quantity", 0).ToInt32();
+
+        // Форматирование даты запроса
+        worksheet.Cell(row, 5).Value = bsonMovement.Contains("RequestDate") && bsonMovement["RequestDate"].BsonType != BsonType.Null
+            ? bsonMovement["RequestDate"].ToUniversalTime().ToString("dd/MM/yyyy")
+            : "";
+
+        worksheet.Cell(row, 6).Value = bsonMovement.GetValue("Status", "Неизвестный статус").AsString;
         row++;
     }
 
@@ -90,59 +187,44 @@ namespace ReportService.Application.Services
 }
 
 
-        private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
-        {
-            var movements = data["Movements"].AsBsonArray;
 
-            worksheet.Cell(1, 1).Value = "Наименование";
-            worksheet.Cell(1, 2).Value = "Склад отправления";
-            worksheet.Cell(1, 3).Value = "Склад назначения";
-            worksheet.Cell(1, 4).Value = "Количество";
-            worksheet.Cell(1, 5).Value = "Дата запроса";
-            worksheet.Cell(1, 6).Value = "Статус";
 
-            int row = 2;
-            foreach (var movement in movements)
-            {
-                var bsonMovement = movement.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonMovement["Name"].AsString;
-                worksheet.Cell(row, 2).Value = bsonMovement["SourceWarehouseId"].AsString; // Склад отправления
-                worksheet.Cell(row, 3).Value = bsonMovement["DestinationWarehouseId"].AsString; // Склад назначения
-                worksheet.Cell(row, 4).Value = bsonMovement["Quantity"].ToInt32(); // Количество
-                worksheet.Cell(row, 5).Value = bsonMovement["RequestDate"].ToUniversalTime(); // Дата запроса
-                worksheet.Cell(row, 6).Value = bsonMovement["Status"].AsString; // Статус
-                row++;
-            }
+private void GenerateWriteOffsSheet(IXLWorksheet worksheet, BsonDocument data)
+{
+    if (!data.Contains("WriteOffs") || data["WriteOffs"].IsBsonNull)
+    {
+        worksheet.Cell(1, 1).Value = "Данные отсутствуют";
+        worksheet.Range(1, 1, 1, 6).Merge().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        worksheet.Columns().AdjustToContents();
+        return;
+    }
 
-            worksheet.Columns().AdjustToContents();
-        }
+    var writeOffs = data["WriteOffs"].AsBsonArray;
 
-        private void GenerateWriteOffsSheet(IXLWorksheet worksheet, BsonDocument data)
-        {
-            var writeOffs = data["WriteOffs"].AsBsonArray;
+    worksheet.Cell(1, 1).Value = "Наименование";
+    worksheet.Cell(1, 2).Value = "Склад";
+    worksheet.Cell(1, 3).Value = "Количество";
+    worksheet.Cell(1, 4).Value = "Причина";
+    worksheet.Cell(1, 5).Value = "Дата запроса";
+    worksheet.Cell(1, 6).Value = "Утверждено пользователем";
 
-            worksheet.Cell(1, 1).Value = "Наименование";
-            worksheet.Cell(1, 2).Value = "Склад";
-            worksheet.Cell(1, 3).Value = "Количество";
-            worksheet.Cell(1, 4).Value = "Причина";
-            worksheet.Cell(1, 5).Value = "Дата запроса";
-            worksheet.Cell(1, 6).Value = "Утверждено пользователем";
+    int row = 2;
+    foreach (var writeOff in writeOffs)
+    {
+        var bsonWriteOff = writeOff.AsBsonDocument;
+        worksheet.Cell(row, 1).Value = bsonWriteOff["ItemName"].AsString;
+        worksheet.Cell(row, 2).Value = bsonWriteOff["WarehouseName"].AsString;
+        worksheet.Cell(row, 3).Value = bsonWriteOff["Quantity"].ToInt32();
+        worksheet.Cell(row, 4).Value = bsonWriteOff["Reason"].AsString;
+        worksheet.Cell(row, 5).Value = bsonWriteOff["RequestDate"].ToUniversalTime();
+        worksheet.Cell(row, 6).Value = bsonWriteOff.GetValue("ApprovedByUser", "Не утверждено").AsString; // ✅ Фикс
 
-            int row = 2;
-            foreach (var writeOff in writeOffs)
-            {
-                var bsonWriteOff = writeOff.AsBsonDocument;
-                worksheet.Cell(row, 1).Value = bsonWriteOff["ItemName"].AsString;
-                worksheet.Cell(row, 2).Value = bsonWriteOff["WarehouseName"].AsString;
-                worksheet.Cell(row, 3).Value = bsonWriteOff["Quantity"].ToInt32();
-                worksheet.Cell(row, 4).Value = bsonWriteOff["Reason"].AsString;
-                worksheet.Cell(row, 5).Value = bsonWriteOff["RequestDate"].ToUniversalTime();
-                worksheet.Cell(row, 6).Value = bsonWriteOff["ApprovedByUser"].AsString;
-                row++;
-            }
+        row++;
+    }
 
-            worksheet.Columns().AdjustToContents();
-        }
+    worksheet.Columns().AdjustToContents();
+}
+
 
         private void GenerateItemsHistorySheet(IXLWorksheet worksheet, BsonDocument data)
         {
@@ -188,4 +270,5 @@ namespace ReportService.Application.Services
         }
 
     }
+
 }

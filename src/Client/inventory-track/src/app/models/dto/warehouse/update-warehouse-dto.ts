@@ -8,4 +8,5 @@ export interface UpdateWarehouseDto {
   location: string;
   companyId: string;
   responsiblePersonId: string;
+  accountantId : string;
 }

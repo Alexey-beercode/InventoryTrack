@@ -9,4 +9,5 @@ public class CreateWarehouseDto
     public string Location { get; set; }
     public Guid CompanyId { get; set; }
     public Guid ResponsiblePersonId { get; set; }
+    public Guid AccountantId { get; set; }
 }

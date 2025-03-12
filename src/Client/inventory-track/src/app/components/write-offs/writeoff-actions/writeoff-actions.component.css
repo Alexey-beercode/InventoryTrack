@@ -16,16 +16,49 @@
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 15px;
+  background: var(--card-background);
+  box-shadow: var(--box-shadow);
 }
 .actions {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 15px;
 }
+
 .approve-btn {
-  background-color: green;
+  background-color: #4CAF50;
   color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
 }
+
+.approve-btn:hover {
+  background-color: #388E3C;
+}
+
 .reject-btn {
-  background-color: red;
+  background-color: #F44336;
   color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
 }
+
+.reject-btn:hover {
+  background-color: #D32F2F;
+}
+
+input[type="file"] {
+  margin-top: 10px;
+}
+

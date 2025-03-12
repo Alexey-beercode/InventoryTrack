@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WriteOffService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Added_seed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -89,6 +91,16 @@ namespace WriteOffService.Infrastructure.Migrations
                         principalTable: "WriteOffRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "WriteOffReasons",
+                columns: new[] { "Id", "IsDeleted", "Reason" },
+                values: new object[,]
+                {
+                    { new Guid("0ee65a30-f969-4903-ba74-03d6924ccb98"), false, "Поломка" },
+                    { new Guid("56501935-b306-4287-9e64-e2bf6651a15b"), false, "Истёк срок годности" },
+                    { new Guid("900151c2-80ee-4512-8fe1-1119707890a7"), false, "По причине продажи" }
                 });
 
             migrationBuilder.CreateIndex(

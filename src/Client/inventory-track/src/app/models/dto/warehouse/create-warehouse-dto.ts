@@ -5,5 +5,6 @@ export class CreateWarehouseDto {
   type!: WarehouseType;
   location!: string;
   companyId!: string;
-  responsiblePersonId!: string;
+  responsiblePersonId!: null | string;
+  accountantId: string | null = null;
 }

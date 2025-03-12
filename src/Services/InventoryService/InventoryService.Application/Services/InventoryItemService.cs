@@ -7,6 +7,7 @@ using InventoryService.Application.Interfaces.Services;
 using InventoryService.Domain.Entities;
 using InventoryService.Domain.Enums;
 using InventoryService.Domain.Interfaces.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 
 namespace InventoryService.Application.Services;
 
@@ -35,26 +36,39 @@ public class InventoryItemService : IInventoryItemService
 
         var supplier = await _unitOfWork.Suppliers.GetByIdAsync(dto.SupplierId, cancellationToken)
                        ?? throw new EntityNotFoundException($"Supplier with ID '{dto.SupplierId}' not found.");
-
-        var document = await _documentService.CreateDocumentAsync(dto.DocumentFile, cancellationToken)
-                       ?? throw new InvalidOperationException("Document is invalid or incomplete.");
-
+        var warehouse=await _unitOfWork.Warehouses.GetByIdAsync(dto.WarehouseId, cancellationToken) 
+                      ?? throw new EntityNotFoundException($"Warehouse with ID '{dto.WarehouseId}' not found.");
         var inventoryItem = _mapper.Map<InventoryItem>(dto);
-        inventoryItem.DocumentId = document.Id;
+        inventoryItem.DocumentId = dto.DocumentId;
         inventoryItem.SupplierId = supplier.Id;
         inventoryItem.Status = InventoryItemStatus.Created;
-
+        inventoryItem.DeliveryDate=inventoryItem.DeliveryDate.ToUniversalTime();
+        inventoryItem.ExpirationDate = inventoryItem.ExpirationDate.ToUniversalTime();
         await _unitOfWork.InventoryItems.CreateAsync(inventoryItem, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var inventoryWarehouse = new InventoriesItemsWarehouses
         {
             ItemId = inventoryItem.Id,
-            WarehouseId = dto.WarehouseId,
+            WarehouseId = warehouse.Id,
             Quantity = dto.Quantity
         };
 
         await _unitOfWork.InventoriesItemsWarehouses.CreateAsync(inventoryWarehouse, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task AddDocumentToInventoryItemAsync(DocumentDto file,string inventoryItemName, CancellationToken cancellationToken = default)
+    {
+        var existingItem = await _unitOfWork.InventoryItems.GetByNameAsync(inventoryItemName);
+        if (existingItem is null)
+        {
+            throw new EntityNotFoundException("Item does not exists");
+        }
+        var document = await _documentService.CreateDocumentAsync(file, cancellationToken)
+                       ?? throw new InvalidOperationException("Document is invalid or incomplete.");
+        existingItem.DocumentId=document.Id;
+        _unitOfWork.InventoryItems.Update(existingItem);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 

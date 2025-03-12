@@ -1,28 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {FormsModule, NgForm} from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { InventoryItemService } from '../../../services/inventory-item.service';
 import { SupplierService } from '../../../services/supplier.service';
 import { CreateInventoryItemDto } from '../../../models/dto/inventory-item/create-inventory-item-dto';
 import { SupplierResponseDto } from '../../../models/dto/supplier/supplier-response-dto';
+import { CommonModule } from '@angular/common';
+import { ErrorMessageComponent } from '../../shared/error/error.component';
+import { BackButtonComponent } from '../../shared/back-button/back-button.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
-import { CommonModule } from '@angular/common';
-import { BackButtonComponent } from "../../shared/back-button/back-button.component";
-import { ErrorMessageComponent } from '../../shared/error/error.component';
+import { UserResponseDTO } from '../../../models/dto/user/user-response-dto';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-inventory-item',
   templateUrl: './create-inventory-item.component.html',
   styleUrls: ['./create-inventory-item.component.css'],
   standalone: true,
-  imports: [
-    HeaderComponent,
-    FooterComponent,
-    CommonModule,
-    BackButtonComponent,
-    ErrorMessageComponent,
-    FormsModule,
-  ],
+  imports: [CommonModule, FormsModule, ErrorMessageComponent, BackButtonComponent, HeaderComponent, FooterComponent],
 })
 export class CreateInventoryItemComponent implements OnInit {
   newInventoryItem: CreateInventoryItemDto = {
@@ -30,45 +25,37 @@ export class CreateInventoryItemComponent implements OnInit {
     uniqueCode: '',
     quantity: 1,
     estimatedValue: 0,
-    expirationDate: '',  // Дата как строка `yyyy-MM-dd`
+    expirationDate: '',
     supplierId: '',
     warehouseId: '',
     deliveryDate: '',
-    documentFile: null as any,
+    documentId: ''
   };
 
+  documentFile: File | null = null;
   suppliers: SupplierResponseDto[] = [];
   warehouseId: string = '';
   errorMessage: string | null = null;
 
   constructor(
     private inventoryItemService: InventoryItemService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
     this.loadSuppliers();
-    this.initDefaultDates();
   }
 
-  /** 📌 Инициализируем даты в `yyyy-MM-dd` формате для `ngModel` */
-  private initDefaultDates(): void {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    this.newInventoryItem.expirationDate = this.formatDateForInput(tomorrow);
-    this.newInventoryItem.deliveryDate = this.formatDateForInput(today);
-  }
-
-  /** 📌 Получаем ID склада из хедера */
-  onUserReceived(warehouseId: string): void {
-    if (warehouseId) {
-      this.warehouseId = warehouseId;
-      this.newInventoryItem.warehouseId = warehouseId;
-    } else {
-      this.errorMessage = "❌ Не удалось получить склад пользователя.";
+  /** 📌 Получаем объект пользователя из `userEmitter` и устанавливаем склад */
+  onUserReceived(user: UserResponseDTO): void {
+    if (!user || !user.warehouseId) {
+      this.errorMessage = "❌ У пользователя нет закрепленного склада.";
+      return;
     }
+
+    this.warehouseId = user.warehouseId;
+    this.newInventoryItem.warehouseId = this.warehouseId;
   }
 
   /** 📌 Загружаем список поставщиков */
@@ -83,66 +70,58 @@ export class CreateInventoryItemComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.newInventoryItem.documentFile = input.files[0];
-    } else {
-      this.errorMessage = '⚠️ Выберите файл!';
+      this.documentFile = input.files[0];
     }
-  }
-
-  /** 📌 Преобразуем `Date` → `yyyy-MM-dd` (для `<input type="date">`) */
-  private formatDateForInput(date: Date): string {
-    return date.toISOString().split('T')[0];
   }
 
   /** 📌 Создаёт материальную ценность */
   createInventoryItem(form: NgForm): void {
-    console.log('🔥 Кнопка "Сохранить" нажата');
-
     if (form.invalid) {
-      console.warn('⚠️ Форма невалидна, отправка отменена');
       this.errorMessage = '⚠️ Заполните все обязательные поля!';
       return;
     }
 
-    this.errorMessage = null;
+    if (!this.newInventoryItem.warehouseId) {
+      this.errorMessage = '⚠️ Нельзя создать ценность без склада!';
+      return;
+    }
 
-    // 🔹 Преобразуем строки `yyyy-MM-dd` в `Date`
-    const expirationDate = new Date(this.newInventoryItem.expirationDate);
-    const deliveryDate = new Date(this.newInventoryItem.deliveryDate);
+    if (this.documentFile) {
+      this.uploadDocumentAndCreateItem(form);
+    } else {
+      this.createItem(form);
+    }
+  }
 
-    console.log('📆 Даты перед отправкой:');
-    console.log('   📌 expirationDate:', expirationDate.toISOString());
-    console.log('   📌 deliveryDate:', deliveryDate.toISOString());
+  private uploadDocumentAndCreateItem(form: NgForm): void {
+    if (!this.documentFile) {
+      this.createItem(form);
+      return;
+    }
 
-    console.log('📤 Отправляем данные:', {
-      name: this.newInventoryItem.name,
-      uniqueCode: this.newInventoryItem.uniqueCode,
-      quantity: this.newInventoryItem.quantity,
-      estimatedValue: this.newInventoryItem.estimatedValue,
-      expirationDate: expirationDate,
-      deliveryDate: deliveryDate,
-      supplierId: this.newInventoryItem.supplierId,
-      warehouseId: this.newInventoryItem.warehouseId,
-      documentFile: this.newInventoryItem.documentFile,
+    this.inventoryItemService.uploadDocument(this.documentFile).subscribe({
+      next: (documentId: string) => {
+        console.log('✅ Документ загружен, ID:', documentId);
+        this.newInventoryItem.documentId = documentId;
+        this.createItem(form);
+      },
+      error: (error) => {
+        console.error('❌ Ошибка загрузки документа:', error);
+        this.errorMessage = '❌ Ошибка загрузки документа.';
+      },
     });
+  }
 
-    const formData = new FormData();
-    formData.append('name', this.newInventoryItem.name.trim());
-    formData.append('uniqueCode', this.newInventoryItem.uniqueCode.trim());
-    formData.append('quantity', this.newInventoryItem.quantity.toString());
-    formData.append('estimatedValue', this.newInventoryItem.estimatedValue.toString());
-    formData.append('expirationDate', expirationDate.toISOString());
-    formData.append('deliveryDate', deliveryDate.toISOString());
-    formData.append('supplierId', this.newInventoryItem.supplierId);
-    formData.append('warehouseId', this.newInventoryItem.warehouseId);
-    formData.append('documentFile', this.newInventoryItem.documentFile);
-
-    this.inventoryItemService.createInventoryItem(formData).subscribe({
-      next: () => {
-        console.log('✅ Материальная ценность успешно добавлена!');
-        alert('✅ Материальная ценность успешно добавлена!');
+  /** 📌 Создание элемента */
+  private createItem(form: NgForm): void {
+    this.inventoryItemService.createInventoryItem(this.newInventoryItem).subscribe({
+      next: (createdItem) => {
+        console.log('✅ Материальная ценность создана:', createdItem);
+        this.errorMessage = null;
         form.resetForm();
-        this.initDefaultDates(); // Сбрасываем даты после отправки
+        this.resetNewInventoryItem();
+        this.router.navigate(['/'])
+        // ✅ Обнуляем DTO после создания
       },
       error: (error) => {
         console.error('❌ Ошибка создания:', error);
@@ -151,6 +130,22 @@ export class CreateInventoryItemComponent implements OnInit {
     });
   }
 
+  /** 📌 Сброс DTO после создания */
+  private resetNewInventoryItem(): void {
+    this.newInventoryItem = {
+      name: '',
+      uniqueCode: '',
+      quantity: 1,
+      estimatedValue: 0,
+      expirationDate: '',
+      supplierId: '',
+      warehouseId: this.warehouseId, // Оставляем склад
+      deliveryDate: '',
+      documentId: ''
+    };
+  }
+
+  /** 📌 Отмена и возврат назад */
   cancel(): void {
     window.history.back();
   }

@@ -126,7 +126,6 @@ export class MovementListComponent implements OnInit {
 
     this.movementService.approve(dto).subscribe({
       next: () => {
-        alert("✅ Перемещение одобрено!");
         this.loadMovements();
       },
       error: () => alert("❌ Ошибка при одобрении перемещения!")
@@ -147,7 +146,6 @@ export class MovementListComponent implements OnInit {
 
     this.movementService.reject(dto).subscribe({
       next: () => {
-        alert("❌ Перемещение отклонено!");
         this.loadMovements();
       },
       error: () => alert("❌ Ошибка при отклонении перемещения!")

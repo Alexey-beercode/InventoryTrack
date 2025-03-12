@@ -9,6 +9,7 @@ using InventoryService.Application.Interfaces.Services;
 using InventoryService.Domain.Entities;
 using InventoryService.Domain.Enums;
 using InventoryService.Domain.Interfaces.UnitOfWork;
+using Microsoft.Extensions.Logging;
 
 namespace InventoryService.Application.Services;
 
@@ -17,12 +18,14 @@ public class WarehouseService : IWarehouseService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IInventoryItemFacade _inventoryItemFacade;
+    private readonly ILogger<WarehouseService> _logger;
 
-    public WarehouseService(IMapper mapper, IUnitOfWork unitOfWork, IInventoryItemFacade inventoryItemFacade)
+    public WarehouseService(IMapper mapper, IUnitOfWork unitOfWork, IInventoryItemFacade inventoryItemFacade, ILogger<WarehouseService> logger)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _inventoryItemFacade = inventoryItemFacade;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<WarehouseResponseDto>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -55,10 +58,10 @@ public class WarehouseService : IWarehouseService
         return _mapper.Map<IEnumerable<WarehouseResponseDto>>(warehouses);
     }
 
-    public async Task<WarehouseResponseDto> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<WarehouseResponseDto>> GetByResponsiblePersonIdAsync(Guid responsiblePersonId, CancellationToken cancellationToken = default)
     {
         var warehouses = await _unitOfWork.Warehouses.GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
-        return _mapper.Map<WarehouseResponseDto>(warehouses);
+        return _mapper.Map<IEnumerable<WarehouseResponseDto>>(warehouses);
     }
 
     public async Task<IEnumerable<WarehouseResponseDto>> GetByNameAsync(string name, CancellationToken cancellationToken = default)
@@ -123,7 +126,8 @@ public class WarehouseService : IWarehouseService
     public async Task<WarehouseStateResponseDto> GetStateByResponsiblePersonIdAsync(Guid responsiblePersonId,
         CancellationToken cancellationToken)
     {
-        var warehouse = await GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
+        var warehouses = (await GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken)).ToList();
+        var warehouse = warehouses.First();
 
         if (warehouse is null)
         {
@@ -145,8 +149,6 @@ public class WarehouseService : IWarehouseService
             ResponsiblePersonId = warehouse.ResponsiblePersonId
         };
     }
-    
-
 
     public async Task<IEnumerable<WarehouseStateResponseDto>> GetWarehousesStatesByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
     {
@@ -165,6 +167,7 @@ public class WarehouseService : IWarehouseService
     public async Task CreateAsync(CreateWarehouseDto createWarehouseDto, CancellationToken cancellationToken = default)
     {
         var warehouse = _mapper.Map<Warehouse>(createWarehouseDto);
+        await CheckSamePersonAsync(createWarehouseDto.AccountantId,createWarehouseDto.ResponsiblePersonId,cancellationToken);
         await _unitOfWork.Warehouses.CreateAsync(warehouse, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
@@ -176,7 +179,8 @@ public class WarehouseService : IWarehouseService
         {
             throw new EntityNotFoundException("Склад", updateWarehouseDto.Id);
         }
-
+        
+        await CheckSamePersonAsync(updateWarehouseDto.AccountantId, updateWarehouseDto.ResponsiblePersonId, cancellationToken,warehouse);
         _mapper.Map(updateWarehouseDto, warehouse);
         _unitOfWork.Warehouses.Update(warehouse);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -185,25 +189,74 @@ public class WarehouseService : IWarehouseService
     private async Task<List<InventoryItemResponseDto>> GetInventoryItemsByWarehouseAsync(Guid warehouseId, 
         CancellationToken cancellationToken = default)
     {
-        var itemsWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByWarehouseIdAsync(warehouseId, cancellationToken);
         var inventoryItemsDtos = new List<InventoryItemResponseDto>();
-        
+
+        var itemsWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByWarehouseIdAsync(warehouseId, cancellationToken);
+        if (itemsWarehouses == null)
+        {
+            _logger.LogWarning("Для склада {WarehouseId} не найдено привязанных товаров.", warehouseId);
+            return inventoryItemsDtos; // Возвращаем пустой список
+        }
+
         foreach (var itemWarehouse in itemsWarehouses)
         {
             var inventoryItem = await _unitOfWork.InventoryItems.GetByIdCreatedAsync(itemWarehouse.ItemId, cancellationToken);
             if (inventoryItem == null)
             {
+                _logger.LogWarning("Инвентарный предмет с ID {ItemId} не найден.", itemWarehouse.ItemId);
                 continue;
             }
-            
+
             var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(inventoryItem.Id, cancellationToken);
-            
-            var itemDto = await _inventoryItemFacade.GetFullInventoryItemDto(itemWarehouses, inventoryItem, cancellationToken);
-            
-            inventoryItemsDtos.Add(itemDto);
+            if (itemWarehouses == null)
+            {
+                _logger.LogWarning("Для предмета {ItemId} не найдено привязок к складам.", inventoryItem.Id);
+                itemWarehouses = new List<InventoriesItemsWarehouses>(); // Даем пустой список
+            }
+
+            try
+            {
+                var itemDto = await _inventoryItemFacade.GetFullInventoryItemDto(itemWarehouses, inventoryItem, cancellationToken);
+                inventoryItemsDtos.Add(itemDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении DTO для инвентарного предмета {ItemId}.", inventoryItem.Id);
+            }
         }
-        
+
         return inventoryItemsDtos;
+    }
+
+    private async Task CheckSamePersonAsync(Guid accountantId, Guid responsiblePersonId, 
+        CancellationToken cancellationToken = default, Warehouse? warehouse = null)
+    {
+
+        if (accountantId == responsiblePersonId)
+        {
+            return;
+        }
+        var warehousesWithSamePerson = await _unitOfWork.Warehouses
+            .GetByResponsiblePersonIdAsync(responsiblePersonId, cancellationToken);
+    
+        if (warehousesWithSamePerson == null || !warehousesWithSamePerson.Any())
+        {
+            _logger.LogInformation("Нет складов с ответственным лицом {ResponsiblePersonId}.", responsiblePersonId);
+            return;
+        }
+
+        foreach (var warehouseWithSamePerson in warehousesWithSamePerson)
+        {
+            if (warehouse == null || warehouseWithSamePerson.Id != warehouse.Id)
+            {
+                _logger.LogInformation(
+                    "Обновление склада {WarehouseId}: смена ответственного с {OldPersonId} на {NewPersonId}.",
+                    warehouseWithSamePerson.Id, responsiblePersonId, accountantId);
+
+                warehouseWithSamePerson.ResponsiblePersonId = accountantId;
+                _unitOfWork.Warehouses.Update(warehouseWithSamePerson);
+            }
+        }
     }
 
 }

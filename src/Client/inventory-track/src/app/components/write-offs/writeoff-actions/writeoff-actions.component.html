@@ -1,12 +1,14 @@
 <div class="writeoff-card">
-  <h3>Заявка №{{ writeOffRequest.id }}</h3>
-  <p><strong>Склад:</strong> {{ writeOffRequest.warehouseId }}</p>
+  <h3>Заявка № {{ writeOffRequest.id }}</h3>
+  <p><strong>Склад:</strong> {{ warehouseName }}</p>
   <p><strong>Причина:</strong> {{ writeOffRequest.reason.reason }}</p>
   <p><strong>Дата:</strong> {{ writeOffRequest.requestDate | customDate }}</p>
 
+  <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+
   <div *ngIf="writeOffRequest.status.value === RequestStatus.Requested" class="actions">
     <input type="file" (change)="onFileSelected($event)" />
-    <button class="approve-btn" (click)="approve()">Одобрить</button>
-    <button class="reject-btn" (click)="reject()">Отклонить</button>
+    <button class="approve-btn" (click)="approve()">✅ Одобрить</button>
+    <button class="reject-btn" (click)="reject()">❌ Отклонить</button>
   </div>
 </div>

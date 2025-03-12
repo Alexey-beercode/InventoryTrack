@@ -13,7 +13,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BackButtonComponent } from "../../shared/back-button/back-button.component";
+import { BackButtonComponent } from '../../shared/back-button/back-button.component';
 import { ErrorMessageComponent } from '../../shared/error/error.component';
 import { Router } from '@angular/router';
 
@@ -33,6 +33,7 @@ import { Router } from '@angular/router';
 })
 export class WriteOffCreateComponent implements OnInit {
   warehouseId: string = '';
+  companyId: string = '';
   items: InventoryItemResponseDto[] = [];
   writeOffReasons: WriteOffReasonResponseDto[] = [];
   selectedReasonId: string = '';
@@ -51,12 +52,16 @@ export class WriteOffCreateComponent implements OnInit {
     private router: Router
   ) {}
 
+  onCompanyIdReceived(companyId: string) {
+    this.companyId = companyId;
+    console.log("📌 Получен companyId из HeaderComponent:", this.companyId);
+  }
   ngOnInit(): void {
-    this.loadUserWarehouse();
+    this.loadUserWarehouseAndCompany();
   }
 
-  /** 📌 Загружаем ID склада пользователя */
-  loadUserWarehouse(): void {
+  /** 📌 Загружаем ID склада и компании пользователя */
+  loadUserWarehouseAndCompany(): void {
     const userId = this.tokenService.getUserId();
     if (!userId) {
       this.errorMessage = "❌ Ошибка: пользователь не найден.";
@@ -66,7 +71,7 @@ export class WriteOffCreateComponent implements OnInit {
     this.userService.getById(userId).subscribe({
       next: (user: UserResponseDTO) => {
         if (user.warehouseId) {
-          this.warehouseId = user.warehouseId;
+          this.warehouseId = user.warehouseId;// 📌 Получаем ID компании
           this.loadInventoryItems();
           this.loadWriteOffReasons();
         } else {
@@ -115,30 +120,36 @@ export class WriteOffCreateComponent implements OnInit {
   }
 
   /** 📌 Отправка запроса на списание */
+  /** 📌 Отправка запроса на списание */
   submitWriteOffRequest(form: NgForm): void {
     if (form.invalid || this.quantity > this.maxQuantity) {
       this.errorMessage = "⚠️ Заполните все обязательные поля и укажите корректное количество!";
       return;
     }
 
+    // ✅ Если выбрана "Другая причина", то reasonId должен быть null
     const request: CreateWriteOffRequestDto = {
       itemId: this.selectedItemId,
       warehouseId: this.warehouseId,
       quantity: this.quantity,
-      reasonId: this.selectedReasonId,
-      anotherReason: this.selectedReasonId === 'other' ? this.anotherReason : undefined
+      reasonId: this.selectedReasonId !== 'other' ? this.selectedReasonId : null,  // 🔥 Фикс ошибки
+      anotherReason: this.selectedReasonId === 'other' ? this.anotherReason : undefined,
+      companyId: this.companyId, // 📌 Передаем companyId
     };
+
+    console.log("📤 Отправляемый запрос на списание:", request); // 🔍 Лог для проверки
 
     this.writeOffRequestService.create(request).subscribe({
       next: () => {
-        alert('✅ Запрос на списание успешно создан!');
         this.router.navigate(['/']);
       },
-      error: () => {
+      error: (err) => {
+        console.error("❌ Ошибка при создании запроса:", err);
         this.errorMessage = "❌ Ошибка при создании запроса.";
       },
     });
   }
+
 
   /** 📌 Метод отмены и возврата */
   cancel(): void {

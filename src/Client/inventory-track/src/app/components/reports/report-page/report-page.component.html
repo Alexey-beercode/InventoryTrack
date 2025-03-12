@@ -37,11 +37,12 @@
       <div class="form-group">
         <label for="reportType">Тип отчета</label>
         <select id="reportType" [(ngModel)]="selectedReportType" name="reportType">
-          <option *ngFor="let type of reportTypes" [value]="type">
+          <option *ngFor="let type of reportTypes" [value]="type" >
             {{ type | enumLabel: 'ReportType' }}
           </option>
         </select>
       </div>
+
 
       <div class="form-group">
         <label for="dateSelect">Временной диапазон</label>

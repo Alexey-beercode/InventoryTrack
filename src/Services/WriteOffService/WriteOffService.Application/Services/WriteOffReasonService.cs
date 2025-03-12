@@ -19,7 +19,7 @@ public class WriteOffReasonService : IWriteOffReasonService
 
     public async Task<IEnumerable<WriteOffReasonResponseDto>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var reasons = await _unitOfWork.WriteOffReasons.GetAllAsync(cancellationToken);
+        var reasons = (await _unitOfWork.WriteOffReasons.GetAllAsync(cancellationToken)).Where(reason => reason.Reason=="По причине продажи" || reason.Reason == "Истёк срок годности" || reason.Reason=="Поломка");
         return _mapper.Map<IEnumerable<WriteOffReasonResponseDto>>(reasons);
     }
 

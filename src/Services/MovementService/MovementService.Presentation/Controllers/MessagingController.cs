@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MovementService.Domain.Entities;
 using MovementService.Domain.Interfaces.UnitOfWork;
 
 namespace MovementService.Presentation.Controllers;
@@ -21,6 +22,23 @@ public class MessagingController : ControllerBase
         [FromQuery] int dateSelect,
         CancellationToken cancellationToken)
     {
+         var movementRequests = await GetMovementsAsync(dateSelect,cancellationToken);
+
+        return Content(GetData(movementRequests).ToJson(), "application/json");
+    }
+
+    [HttpGet("report-data/by-warehouse")]
+    public async Task<ActionResult<BsonDocument>> GetMovementReportDataByWarehouse(
+        [FromQuery] Guid warehouseId,
+        [FromQuery] int dateSelect,
+        CancellationToken cancellationToken)
+    {
+        var movementRequests = await GetMovementsAsync(dateSelect,cancellationToken);
+
+        return Content(GetData(movementRequests.Where(request=>request.DestinationWarehouseId==warehouseId || request.SourceWarehouseId==warehouseId)).ToJson(), "application/json");
+    }
+    private async Task<IEnumerable<MovementRequest>> GetMovementsAsync(int dateSelect,CancellationToken cancellationToken=default)
+    {
         var startDate = dateSelect switch
         {
             0 => DateTime.UtcNow.AddDays(-1),
@@ -33,8 +51,19 @@ public class MessagingController : ControllerBase
         var endDate = DateTime.UtcNow;
 
         var movements = await _unitOfWork.MovementRequests.GetByDateRangeAsync(startDate, endDate, cancellationToken);
+        return movements;
+    }
 
-        var response = new BsonDocument
+    private static readonly Dictionary<string, string> MovementStatusTranslations = new()
+    {
+        { "Processing", "В обработке" },
+        { "Rejected", "Отклонено" },
+        { "Completed", "Завершено" }
+    };
+
+    private BsonDocument GetData(IEnumerable<MovementRequest> movements)
+    {
+        return new BsonDocument
         {
             {
                 "Movements", new BsonArray(movements.Select(movement => new BsonDocument
@@ -43,13 +72,12 @@ public class MessagingController : ControllerBase
                     { "SourceWarehouseId", movement.SourceWarehouseId.ToString() },
                     { "DestinationWarehouseId", movement.DestinationWarehouseId.ToString() },
                     { "Quantity", movement.Quantity },
-                    { "Status", movement.Status.ToString() },
+                    { "Status", MovementStatusTranslations.GetValueOrDefault(movement.Status.ToString(), "Неизвестный статус") },
                     { "RequestDate", movement.RequestDate },
                     { "ApprovedByUserId", movement.ApprovedByUserId.ToString() }
                 }))
             }
         };
-
-        return Content(response.ToJson(), "application/json");
     }
+
 }

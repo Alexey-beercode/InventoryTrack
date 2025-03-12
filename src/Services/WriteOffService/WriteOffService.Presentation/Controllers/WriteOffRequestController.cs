@@ -80,7 +80,7 @@ namespace WriteOffService.Presentation.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Warehouse Manager,Department Head")]
+        [Authorize(Policy = "WarehouseOrDepartmentHead")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -120,20 +120,35 @@ namespace WriteOffService.Presentation.Controllers
             await _writeOffRequestService.DeleteWriteOffRequestAsync(id, cancellationToken);
             return Ok();
         }
-        
-        [HttpPut("approve")]
+        [HttpPut("{id:guid}/approve")]
         [Authorize(Policy = "Accountant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Approve(
-            [FromForm] ApproveWriteOffRequestDto approveDto,
+            Guid id,
+            [FromBody] ApproveWriteOffRequestDto approveDto,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Approving write-off request: {Id}", approveDto.Id);
+            _logger.LogInformation("Approving write-off request: {Id}", id);
+            approveDto.Id = id;
             await _writeOffRequestService.ApproveAsync(approveDto, cancellationToken);
             return Ok();
         }
+
+        [HttpPost("{id:guid}/upload-documents")]
+        [Authorize(Policy = "Accountant")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> UploadDocuments(
+            Guid id,
+            [FromForm] List<IFormFile> documents,
+            CancellationToken cancellationToken)
+        {
+            return Ok();
+        }
+
 
         [HttpPut("reject/{id:guid}")]
         [Authorize(Policy = "Accountant")]

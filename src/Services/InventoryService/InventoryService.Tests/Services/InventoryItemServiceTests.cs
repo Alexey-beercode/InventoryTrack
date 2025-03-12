@@ -11,6 +11,7 @@ using InventoryService.Domain.Entities;
 using InventoryService.Domain.Enums;
 using InventoryService.Domain.Interfaces.UnitOfWork;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace InventoryService.Tests.Services;
@@ -21,13 +22,16 @@ public class InventoryItemServiceTests
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IDocumentService> _documentServiceMock;
     private readonly InventoryItemService _service;
+    private readonly Mock<ILogger<InventoryItemFacade>> _mockLoggerFacade;
 
     public InventoryItemServiceTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _mapperMock = new Mock<IMapper>();
         _documentServiceMock = new Mock<IDocumentService>();
-        IInventoryItemFacade inventoryItemFacade = new InventoryItemFacade(_unitOfWorkMock.Object, _mapperMock.Object);
+        _mockLoggerFacade = new Mock<ILogger<InventoryItemFacade>>();
+        
+        IInventoryItemFacade inventoryItemFacade = new InventoryItemFacade(_unitOfWorkMock.Object, _mapperMock.Object,_mockLoggerFacade.Object);
         _service = new InventoryItemService(_unitOfWorkMock.Object, _mapperMock.Object, _documentServiceMock.Object,
             inventoryItemFacade);
     }

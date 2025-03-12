@@ -3,6 +3,7 @@ export interface CreateWriteOffRequestDto {
   itemId: string;
   warehouseId: string;
   quantity: number;
-  reasonId: string;
+  reasonId?: string | null;
   anotherReason?: string;
+  companyId:string;
 }

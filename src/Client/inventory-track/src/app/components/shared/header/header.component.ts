@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
         { path: '/warehouse-view', label: 'Мой склад' },
         { path: '/movements', label: 'Заявки на перемещение' },
         {path: '/create-item',label: 'Оформить материальную ценность'},
-        {path: '/create-item',label: 'Сформировать отчет'},
+        {path: '/reports',label: 'Сформировать отчет'},
         { path: '/create-write-off', label: 'Оформить списание' },
 
       );
@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit {
         { path: '/warehouse-view', label: 'Склады' },
         { path: '/create-movement', label: 'Оформить перемещение' },
         { path: '/create-write-off', label: 'Оформить списание' },
-        {path: '/create-item',label: 'Сформировать отчет'},
+        {path: '/reports',label: 'Сформировать отчет'},
       );
     }
   }

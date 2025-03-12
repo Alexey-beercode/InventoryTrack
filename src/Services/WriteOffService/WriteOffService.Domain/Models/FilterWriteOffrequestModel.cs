@@ -8,9 +8,9 @@ public class FilterWriteOffrequestModel
     public Guid WarehouseId { get; set; }
     public long Quantity { get; set; }
     public Guid ReasonId { get; set; }
-    public RequestStatus Status { get; set; }
+    public RequestStatus Status { get; set; } = RequestStatus.None;
     public DateTime RequestDate { get; set; }
-    public Guid? ApprovedByUserId { get; set; }
+    public Guid? ApprovedByUserId { get; set; } // ✅ Теперь null значит "получить все"
     public int PageSize { get; set; }
     public int PageNumber { get; set; }
     public Guid CompanyId { get; set; }

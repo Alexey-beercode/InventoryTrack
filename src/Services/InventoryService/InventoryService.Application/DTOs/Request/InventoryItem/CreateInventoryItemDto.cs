@@ -12,5 +12,5 @@ public class CreateInventoryItemDto
     public Guid SupplierId { get; set; }
     public Guid WarehouseId { get; set; }
     public DateTime DeliveryDate { get; set; }
-    public IFormFile DocumentFile { get; set; }
+    public Guid DocumentId { get; set; }
 }

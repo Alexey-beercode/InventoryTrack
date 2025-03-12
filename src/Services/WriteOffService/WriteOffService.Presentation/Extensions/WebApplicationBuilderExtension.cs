@@ -135,6 +135,9 @@ public static class WebApplicationBuilderExtension
             options.AddPolicy("Accountant", policy => { policy.RequireRole("Accountant"); });
             options.AddPolicy("Warehouse Manager", policy => { policy.RequireRole("Warehouse Manager"); });
             options.AddPolicy("Department Head", policy => { policy.RequireRole("Department Head"); });
+                options.AddPolicy("WarehouseOrDepartmentHead", policy =>
+                    policy.RequireRole("Warehouse Manager", "Department Head"));
+
             
         });
     }

@@ -9,6 +9,7 @@ using InventoryService.Application.Services;
 using InventoryService.Domain.Entities;
 using InventoryService.Domain.Enums;
 using InventoryService.Domain.Interfaces.UnitOfWork;
+using Microsoft.Extensions.Logging;
 
 namespace InventoryService.Tests.Services
 {
@@ -17,13 +18,19 @@ namespace InventoryService.Tests.Services
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IMapper> _mockMapper;
         private readonly WarehouseService _service;
+        private readonly Mock<ILogger<WarehouseService>> _mockLogger;
+        private readonly Mock<ILogger<InventoryItemFacade>> _mockLoggerFacade;
 
         public WarehouseServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockMapper = new Mock<IMapper>();
-            IInventoryItemFacade inventoryItemFacade = new InventoryItemFacade(_mockUnitOfWork.Object,_mockMapper.Object);
-            _service = new WarehouseService(_mockMapper.Object, _mockUnitOfWork.Object,inventoryItemFacade);
+            _mockLogger = new Mock<ILogger<WarehouseService>>();
+            _mockLoggerFacade = new Mock<ILogger<InventoryItemFacade>>();
+
+            IInventoryItemFacade inventoryItemFacade = new InventoryItemFacade(_mockUnitOfWork.Object, _mockMapper.Object,_mockLoggerFacade.Object);
+        
+            _service = new WarehouseService(_mockMapper.Object, _mockUnitOfWork.Object, inventoryItemFacade, _mockLogger.Object);
         }
 
         [Fact]

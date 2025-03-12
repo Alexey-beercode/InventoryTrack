@@ -1,12 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { WarehouseService } from '../../../services/warehouse.service';
 import { RoleService } from '../../../services/role.service';
+import { WarehouseService } from '../../../services/warehouse.service';
 import { UserResponseModel } from '../../../models/user/register-user-to-company-model';
 import { RoleDTO } from '../../../models/dto/role/role-dto';
-import { WarehouseResponseDto } from '../../../models/dto/warehouse/warehouse-response-dto';
-import { AddUserToWarehouseDto } from '../../../models/dto/auth/add-user-to-warehouse-dto';
-import { UpdateWarehouseDto } from '../../../models/dto/warehouse/update-warehouse-dto';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { LoadingSpinnerComponent } from "../../shared/loading-spinner/loading-spinner.component";
@@ -14,12 +11,11 @@ import { BackButtonComponent } from "../../shared/back-button/back-button.compon
 import { ErrorMessageComponent } from "../../shared/error/error.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { HeaderComponent } from "../../shared/header/header.component";
-import { UserResponseDTO } from "../../../models/dto/user/user-response-dto";
 import { CompanyService } from "../../../services/company.service";
 import { TokenService } from "../../../services/token.service";
-import { AuthService } from "../../../services/auth.service";
-import { map, Observable } from "rxjs";
 import { RegisterUserToCompanyDTO } from "../../../models/dto/user/register-user-to-company-dto";
+import { UpdateWarehouseDto } from '../../../models/dto/warehouse/update-warehouse-dto';
+import {WarehouseType} from "../../../models/dto/warehouse/enums/warehouse-type.enum";
 
 @Component({
   selector: 'app-user-management',
@@ -39,14 +35,10 @@ import { RegisterUserToCompanyDTO } from "../../../models/dto/user/register-user
 export class UserManagementComponent implements OnInit {
   users: UserResponseModel[] = [];
   roles: RoleDTO[] = [];
-  warehouses: WarehouseResponseDto[] = [];
-  selectedWarehouseId: string | null = null;
-  currentUserForRoleChange: UserResponseModel | null = null;
-  showWarehouseModal = false;
-  showAddUserModal = false;
   isLoading = false;
   errorMessage: string | null = null;
   companyId: string | null = null;
+  showAddUserModal: boolean = false;
   newUser: RegisterUserToCompanyDTO = {
     roleId: '',
     firstName: '',
@@ -60,8 +52,8 @@ export class UserManagementComponent implements OnInit {
     private tokenService: TokenService,
     private userService: UserService,
     private roleService: RoleService,
-    private companyService: CompanyService,
-    private warehouseService: WarehouseService
+    private warehouseService: WarehouseService,
+    private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
@@ -74,27 +66,8 @@ export class UserManagementComponent implements OnInit {
     this.companyId = companyId;
     this.isLoading = true;
 
-    this.loadWarehouses(() => {
-      this.loadUsers();
-    });
+    this.loadUsers();
   }
-
-  loadWarehouses(callback?: () => void): void {
-    if (!this.companyId) return;
-
-    this.warehouseService.getWarehousesByCompany(this.companyId).subscribe({
-      next: (warehouses) => {
-        this.warehouses = warehouses;
-        if (callback) callback(); // Вызываем loadUsers() только после загрузки складов
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Ошибка загрузки складов';
-        this.isLoading = false;
-      },
-    });
-  }
-
 
   loadUsers(): void {
     this.isLoading = true;
@@ -129,121 +102,110 @@ export class UserManagementComponent implements OnInit {
   }
 
   onRoleChange(user: UserResponseModel): void {
-    const selectedRole = this.roles.find((role) => role.id === user.selectedRoleId);
-    if (!selectedRole) return;
-
-    if (selectedRole.name === 'Начальник подразделения' || selectedRole.name === 'Начальник склада') {
-      this.currentUserForRoleChange = user;
-      this.loadWarehouses();
-      this.showWarehouseModal = true;
-    } else {
-      this.updateUserRole(user);
-    }
+    this.updateUserRole(user);
   }
 
-  assignWarehouse(): void {
-    if (!this.selectedWarehouseId || !this.currentUserForRoleChange) return;
-
-    const selectedRole = this.roles.find(
-      (role) => role.id === this.currentUserForRoleChange?.selectedRoleId
-    );
-
-    if (selectedRole?.name === 'Начальник подразделения') {
-      const dto: AddUserToWarehouseDto = {
-        userId: this.currentUserForRoleChange.id,
-        warehouseId: this.selectedWarehouseId,
-      };
-
-      this.userService.addUserToWarehouse(dto).subscribe({
-        next: () => {
-          this.loadUsers();
-          this.resetModal();
-        },
-        error: (error) => {
-          this.errorMessage = 'Ошибка назначения склада пользователю.';
-          console.error(error);
-        },
-      });
-    } else if (selectedRole?.name === 'Начальник склада') {
-      const warehouse = this.warehouses.find((w) => w.id === this.selectedWarehouseId);
-      if (!warehouse) return;
-
-      const dto: UpdateWarehouseDto = {
-        ...warehouse,
-        type: warehouse.type.valueOf(),
-        responsiblePersonId: this.currentUserForRoleChange?.id || '',
-      };
-
-      this.warehouseService.updateWarehouse(dto).subscribe({
-        next: () => {
-          this.loadUsers();
-          this.resetModal();
-        },
-        error: (error) => {
-          this.errorMessage = 'Ошибка обновления склада.';
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  resetModal(): void {
-    this.selectedWarehouseId = null;
-    this.currentUserForRoleChange = null;
-    this.showWarehouseModal = false;
-  }
-
-  updateUserRole(user: UserResponseModel): void {
+  async updateUserRole(user: UserResponseModel) {
     if (!user.selectedRoleId) {
       this.errorMessage = 'Роль не выбрана.';
       return;
     }
 
-    this.roleService.setRoleToUser({ userId: user.id, roleId: user.selectedRoleId }).subscribe({
-      next: () => this.loadUsers(),
-      error: (error) => {
-        this.errorMessage = 'Ошибка обновления роли пользователя.';
-        console.error(error);
-      },
-    });
+    try {
+      await this.updateWarehousesForUserChange(user.id); // Обновляем склады перед сменой роли
+
+      // Удаляем старую роль, если есть
+      if (user.role?.id) {
+        await this.roleService.removeRoleFromUser({ userId: user.id, roleId: user.role.id }).toPromise();
+      }
+
+      // Назначаем новую роль
+      await this.roleService.setRoleToUser({ userId: user.id, roleId: user.selectedRoleId! }).toPromise();
+
+      console.log(`Роль обновлена у пользователя ${user.firstName} ${user.lastName}`);
+      this.loadUsers();
+    } catch (error) {
+      console.error('Ошибка при обновлении роли пользователя:', error);
+      this.errorMessage = 'Ошибка при обновлении роли.';
+    }
   }
 
-  deleteUser(userId: string | null) {
-    this.userService.delete(userId!).subscribe(() => {
+  async deleteUser(userId: string | null) {
+    if (!userId) return;
+    try {
+      await this.updateWarehousesForUserChange(userId); // Обновляем склады перед удалением
+
+      // Удаляем пользователя после обновления складов
+      await this.userService.delete(userId).toPromise();
+      console.log(`Пользователь ${userId} удален.`);
       this.loadUsers();
-    });
+    } catch (error) {
+      console.error('Ошибка при удалении пользователя:', error);
+      this.errorMessage = 'Ошибка при удалении пользователя.';
+    }
   }
+
+  /**
+   * Метод обновления складов при изменении пользователя (удаление/смена роли)
+   */
+  private async updateWarehousesForUserChange(userId: string) {
+    try {
+      const warehouses = await this.warehouseService.getWarehousesByResponsiblePerson(userId).toPromise();
+
+      if (warehouses && warehouses.length > 0) {
+        for (const warehouse of warehouses) {
+          let warehouseType: number;
+
+          try {
+            // Преобразуем объект в JSON, а потом обратно, чтобы получить "чистый" объект
+            const warehouseTypeObj = JSON.parse(JSON.stringify(warehouse.type));
+
+            if ('value' in warehouseTypeObj) {
+              warehouseType = warehouseTypeObj.value;
+            } else if ('name' in warehouseTypeObj) {
+              // Если value нет, но есть name, маппим вручную
+              warehouseType = warehouseTypeObj.name === 'Производственный' ? 0 : 1;
+            } else {
+              warehouseType = 0; // Значение по умолчанию
+            }
+          } catch {
+            warehouseType = 0; // Фолбэк в случае ошибки
+          }
+
+          const updatedWarehouse: UpdateWarehouseDto = {
+            id: warehouse.id,
+            name: warehouse.name,
+            type: warehouseType, // Всегда число (0 или 1)
+            location: warehouse.location,
+            responsiblePersonId: this.tokenService.getUserId()!,
+            companyId: warehouse.companyId,
+            accountantId: this.tokenService.getUserId()!,
+          };
+
+          await this.warehouseService.updateWarehouse(updatedWarehouse).toPromise();
+          console.log(`Обновлен склад: ${warehouse.name}, новый ответственный: ${updatedWarehouse.responsiblePersonId}`);
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при обновлении складов пользователя:', error);
+    }
+  }
+
 
   openAddUserModal(): void {
-    this.loadWarehouses();
     this.showAddUserModal = true;
   }
 
   addUserToCompany(): void {
-    console.log("зашли в метод");
-    if (!this.selectedWarehouseId || !this.companyId) return;
-    console.log("все хорошо");
+    if (!this.companyId) return;
+
     this.newUser.companyId = this.companyId;
 
     this.userService.registerUserToCompany(this.newUser).subscribe({
-      next: (userId: string) => {
-        if (this.newUser.roleId) {
-          const dto: AddUserToWarehouseDto = {
-            userId: userId,
-            warehouseId: this.selectedWarehouseId!,
-          };
-          this.userService.addUserToWarehouse(dto).subscribe({
-            next: () => {
-              console.log("Пользователь успешно добавлен в склад");
-              this.loadUsers();
-              this.resetModal();
-            },
-            error: (err) => console.error("Ошибка добавления пользователя в склад:", err)
-          });
-        } else {
-          this.loadUsers();
-          this.resetModal();
-        }
+      next: () => {
+        this.loadUsers();
+        this.resetNewUser(); // Обнуляем форму
+        this.showAddUserModal = false;
       },
       error: (error) => {
         this.errorMessage = 'Ошибка создания пользователя.';
@@ -251,4 +213,19 @@ export class UserManagementComponent implements OnInit {
       },
     });
   }
+
+  /**
+   * Метод для сброса формы создания пользователя
+   */
+  private resetNewUser(): void {
+    this.newUser = {
+      roleId: '',
+      firstName: '',
+      lastName: '',
+      login: '',
+      password: '',
+      companyId: this.companyId ?? ''
+    };
+  }
+
 }

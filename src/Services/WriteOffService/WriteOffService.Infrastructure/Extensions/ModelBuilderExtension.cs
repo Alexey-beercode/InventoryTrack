@@ -25,10 +25,18 @@ public static class ModelBuilderExtension
             IsDeleted = false,
             Reason = "Поломка"
         };
+
+        var writeOffReason4 = new WriteOffReason()
+        {
+            Id = Guid.NewGuid(),
+            IsDeleted = false,
+            Reason = "Другое"
+        };
         
    
         modelBuilder.Entity<WriteOffReason>().HasData(writeOffReason1);
         modelBuilder.Entity<WriteOffReason>().HasData(writeOffReason2);
         modelBuilder.Entity<WriteOffReason>().HasData(writeOffReason3);
+        modelBuilder.Entity<WriteOffReason>().HasData(writeOffReason4);
     }
 }

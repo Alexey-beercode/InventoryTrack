@@ -1,5 +1,7 @@
-<app-header title="Создание списания"></app-header>
-
+<app-header
+  title="Создание списания"
+  (companyIdEmitter)="onCompanyIdReceived($event)">
+</app-header>
 <div class="container">
   <app-back-button></app-back-button>
 

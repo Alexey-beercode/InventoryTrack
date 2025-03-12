@@ -12,15 +12,15 @@ using WriteOffService.Infrastructure.Config.Database;
 namespace WriteOffService.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteOffDbContext))]
-    [Migration("20241208212701_Initial")]
-    partial class Initial
+    [Migration("20250309123850_Added_seed")]
+    partial class Added_seed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -92,6 +92,26 @@ namespace WriteOffService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WriteOffReasons", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("900151c2-80ee-4512-8fe1-1119707890a7"),
+                            IsDeleted = false,
+                            Reason = "По причине продажи"
+                        },
+                        new
+                        {
+                            Id = new Guid("56501935-b306-4287-9e64-e2bf6651a15b"),
+                            IsDeleted = false,
+                            Reason = "Истёк срок годности"
+                        },
+                        new
+                        {
+                            Id = new Guid("0ee65a30-f969-4903-ba74-03d6924ccb98"),
+                            IsDeleted = false,
+                            Reason = "Поломка"
+                        });
                 });
 
             modelBuilder.Entity("WriteOffService.Domain.Entities.WriteOffRequest", b =>

@@ -9,8 +9,7 @@ export class EnumLabelPipe implements PipeTransform {
     ReportType: {
       0: 'Состояние склада',
       1: 'Внутренние перемещения',
-      2: 'Списания',
-      3: 'История операций',
+      2: 'Списания'
     },
     DateSelect: {
       0: 'День',

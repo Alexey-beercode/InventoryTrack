@@ -9,6 +9,7 @@ namespace WriteOffService.Infrastructure.Repositories;
 
 public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWriteOffRequestRepository
 {
+    
     public WriteOffRequestRepository(WriteOffDbContext dbContext) : base(dbContext)
     {
     }
@@ -102,14 +103,17 @@ public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWrit
         if (filter.CompanyId != Guid.Empty)
             query = query.Where(r => r.CompanyId == filter.CompanyId);
 
-        if (filter.Status != RequestStatus.None)
-            query = query.Where(r => r.Status == filter.Status);
-
         if (filter.RequestDate != default)
             query = query.Where(r => r.RequestDate.Date == filter.RequestDate.Date);
 
-        if (filter.ApprovedByUserId != Guid.Empty)
-            query = query.Where(r => r.ApprovedByUserId == filter.ApprovedByUserId);
+        // 🔥 Фикс: Если ApprovedByUserId = null, возвращаем все списания
+        if (filter.ApprovedByUserId.HasValue)
+        {
+            if (filter.ApprovedByUserId != Guid.Empty)
+                query = query.Where(r => r.ApprovedByUserId == filter.ApprovedByUserId);
+            else
+                query = query.Where(r => r.ApprovedByUserId == null);
+        }
 
         if (filter.StartDate != default)
             query = query.Where(r => r.RequestDate >= filter.StartDate);
@@ -128,6 +132,5 @@ public class WriteOffRequestRepository : BaseRepository<WriteOffRequest> , IWrit
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
-
 
 }
