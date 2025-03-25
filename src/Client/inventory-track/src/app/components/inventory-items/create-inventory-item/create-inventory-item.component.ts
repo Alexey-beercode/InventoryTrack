@@ -36,6 +36,8 @@ export class CreateInventoryItemComponent implements OnInit {
   suppliers: SupplierResponseDto[] = [];
   warehouseId: string = '';
   errorMessage: string | null = null;
+  showDateError = false;
+
 
   constructor(
     private inventoryItemService: InventoryItemService,
@@ -50,7 +52,7 @@ export class CreateInventoryItemComponent implements OnInit {
   /** 📌 Получаем объект пользователя из `userEmitter` и устанавливаем склад */
   onUserReceived(user: UserResponseDTO): void {
     if (!user || !user.warehouseId) {
-      this.errorMessage = "❌ У пользователя нет закрепленного склада.";
+      this.errorMessage = "У пользователя нет закрепленного склада.";
       return;
     }
 
@@ -76,13 +78,22 @@ export class CreateInventoryItemComponent implements OnInit {
 
   /** 📌 Создаёт материальную ценность */
   createInventoryItem(form: NgForm): void {
+    this.showDateError = false;
+
+    if (
+      this.isDateInPast(this.newInventoryItem.expirationDate) ||
+      this.isDateInPast(this.newInventoryItem.deliveryDate)
+    ) {
+      this.showDateError = true;
+      return;
+    }
     if (form.invalid) {
-      this.errorMessage = '⚠️ Заполните все обязательные поля!';
+      this.errorMessage = 'Заполните все обязательные поля!';
       return;
     }
 
     if (!this.newInventoryItem.warehouseId) {
-      this.errorMessage = '⚠️ Нельзя создать ценность без склада!';
+      this.errorMessage = 'Нельзя создать ценность без склада!';
       return;
     }
 
@@ -107,13 +118,14 @@ export class CreateInventoryItemComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Ошибка загрузки документа:', error);
-        this.errorMessage = '❌ Ошибка загрузки документа.';
+        this.errorMessage = 'Ошибка загрузки документа.';
       },
     });
   }
 
   /** 📌 Создание элемента */
   private createItem(form: NgForm): void {
+
     this.inventoryItemService.createInventoryItem(this.newInventoryItem).subscribe({
       next: (createdItem) => {
         console.log('✅ Материальная ценность создана:', createdItem);
@@ -125,7 +137,7 @@ export class CreateInventoryItemComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Ошибка создания:', error);
-        this.errorMessage = '❌ Ошибка создания. Проверьте введённые данные.';
+        this.errorMessage = 'Ошибка создания. Проверьте введённые данные.';
       },
     });
   }
@@ -144,6 +156,17 @@ export class CreateInventoryItemComponent implements OnInit {
       documentId: ''
     };
   }
+
+  isDateInPast(dateStr: string): boolean {
+    if (!dateStr) return true;
+
+    const inputDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // сбрасываем время
+
+    return inputDate < today;
+  }
+
 
   /** 📌 Отмена и возврат назад */
   cancel(): void {

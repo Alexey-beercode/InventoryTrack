@@ -163,6 +163,8 @@ private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
     worksheet.Cell(1, 4).Value = "Количество";
     worksheet.Cell(1, 5).Value = "Дата запроса";
     worksheet.Cell(1, 6).Value = "Статус";
+    worksheet.Cell(1, 7).Value = "Ответственный за операцию";
+
 
     int row = 2;
     foreach (var movement in movements)
@@ -180,6 +182,7 @@ private void GenerateMovementsSheet(IXLWorksheet worksheet, BsonDocument data)
             : "";
 
         worksheet.Cell(row, 6).Value = bsonMovement.GetValue("Status", "Неизвестный статус").AsString;
+        worksheet.Cell(row, 7).Value = bsonMovement.GetValue("ResponsiblePerson", "Неизвестный пользователь").AsString;
         row++;
     }
 
@@ -207,6 +210,7 @@ private void GenerateWriteOffsSheet(IXLWorksheet worksheet, BsonDocument data)
     worksheet.Cell(1, 4).Value = "Причина";
     worksheet.Cell(1, 5).Value = "Дата запроса";
     worksheet.Cell(1, 6).Value = "Утверждено пользователем";
+    worksheet.Cell(1, 7).Value = "Ответственный за операцию";
 
     int row = 2;
     foreach (var writeOff in writeOffs)
@@ -218,14 +222,13 @@ private void GenerateWriteOffsSheet(IXLWorksheet worksheet, BsonDocument data)
         worksheet.Cell(row, 4).Value = bsonWriteOff["Reason"].AsString;
         worksheet.Cell(row, 5).Value = bsonWriteOff["RequestDate"].ToUniversalTime();
         worksheet.Cell(row, 6).Value = bsonWriteOff.GetValue("ApprovedByUser", "Не утверждено").AsString; // ✅ Фикс
+        worksheet.Cell(row, 7).Value = bsonWriteOff.GetValue("ResponsiblePerson", "Неизвестный пользователь").AsString;
 
         row++;
     }
 
     worksheet.Columns().AdjustToContents();
 }
-
-
         private void GenerateItemsHistorySheet(IXLWorksheet worksheet, BsonDocument data)
         {
             var history = data["Items"].AsBsonArray;

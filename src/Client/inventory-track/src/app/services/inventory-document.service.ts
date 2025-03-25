@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { DocumentInfoResponseDto } from '../models/dto/document/document-info-response-dto';
+import { GenerateInventoryDocumentDto } from '../models/dto/document/generate-inventory-document-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,14 @@ export class InventoryDocumentService {
       responseType: 'blob',
     });
   }
+  generateInventoryDocument(dto: GenerateInventoryDocumentDto): Observable<Blob> {
+    return this.http.post(
+      `${this.apiUrl}${environment.apiUrls.document.generate}`,
+      dto,
+      { responseType: 'blob' }
+    );
+  }
+
 
   deleteDocument(id: string): Observable<void> {
     return this.http.delete<void>(

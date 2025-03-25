@@ -93,21 +93,27 @@ namespace WriteOffService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("900151c2-80ee-4512-8fe1-1119707890a7"),
+                            Id = new Guid("63707ba8-8dce-4b33-959e-891141d63a77"),
                             IsDeleted = false,
                             Reason = "По причине продажи"
                         },
                         new
                         {
-                            Id = new Guid("56501935-b306-4287-9e64-e2bf6651a15b"),
+                            Id = new Guid("e70a3815-0c42-4ec2-baf5-58c6ee2f11eb"),
                             IsDeleted = false,
                             Reason = "Истёк срок годности"
                         },
                         new
                         {
-                            Id = new Guid("0ee65a30-f969-4903-ba74-03d6924ccb98"),
+                            Id = new Guid("5e90b547-a2d1-436e-a3be-0b9289e71960"),
                             IsDeleted = false,
                             Reason = "Поломка"
+                        },
+                        new
+                        {
+                            Id = new Guid("7c019be0-d26d-4f50-8531-33a1bb73256b"),
+                            IsDeleted = false,
+                            Reason = "Другое"
                         });
                 });
 
@@ -121,6 +127,9 @@ namespace WriteOffService.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DocumentId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsDeleted")

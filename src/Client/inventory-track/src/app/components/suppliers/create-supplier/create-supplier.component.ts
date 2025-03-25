@@ -30,6 +30,11 @@ export class CreateSupplierComponent {
 
   constructor(private supplierService: SupplierService) {}
 
+  onAccountNumberInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.newSupplier.accountNumber = input.value.replace(/[^0-9]/g, '');
+  }
+
   createSupplier(form: NgForm): void {
     this.submitted = true;
     if (!form.valid) return;

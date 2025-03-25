@@ -64,27 +64,29 @@ export class HeaderComponent implements OnInit {
         { path: '/write-offs', label: 'Списания' },
         { path: '/reports', label: 'Отчёты' },
         { path: '/suppliers', label: 'Контрагенты' },
-        { path: '/workers', label: 'Работники' }
+        { path: '/workers', label: 'Работники' },
+        { path: '/movements', label: 'Перемещения' },
       );
     }
 
     if (roles.includes('Warehouse Manager')) {
       this.navLinks.push(
         { path: '/warehouse-view', label: 'Мой склад' },
-        { path: '/movements', label: 'Заявки на перемещение' },
+        { path: '/movements', label: 'Перемещения' },
         {path: '/create-item',label: 'Оформить материальную ценность'},
-        {path: '/reports',label: 'Сформировать отчет'},
-        { path: '/create-write-off', label: 'Оформить списание' },
-
+        {path: '/reports',label: 'Отчеты'},
+        { path: '/create-write-off', label: 'Списания' },
+        {path:'/my-requests',label:'Мои заявки'}
       );
     }
 
     if (roles.includes('Department Head')) {
       this.navLinks.push(
-        { path: '/warehouse-view', label: 'Склады' },
-        { path: '/create-movement', label: 'Оформить перемещение' },
-        { path: '/create-write-off', label: 'Оформить списание' },
-        {path: '/reports',label: 'Сформировать отчет'},
+        { path: '/warehouse-view', label: 'Мой склады' },
+        { path: '/create-movement', label: 'Перемещения' },
+        { path: '/create-write-off', label: 'Списания' },
+        {path: '/reports',label: 'Отчеты'},
+        {path:'/my-requests',label:'Мои заявки'}
       );
     }
   }

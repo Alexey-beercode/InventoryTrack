@@ -10,15 +10,24 @@
   <div *ngIf="isLoading" class="loading-container">
     <app-loading-spinner></app-loading-spinner>
   </div>
+  <div *ngIf="!isLoading && inventoryItems.length > 0" class="filter-panel">
+    <input type="text" placeholder="Поиск по названию или поставщику" [(ngModel)]="filter.search" />
 
-  <!-- Данные склада -->
-  <div *ngIf="!isLoading && warehouseState" class="warehouse-info">
-    <h2>{{ warehouseState.name }}</h2>
-    <p><strong>Тип:</strong> {{ warehouseState.type?.name || 'Неизвестно' }}</p>
-    <p><strong>Местоположение:</strong> {{ warehouseState.location || 'Не указано' }}</p>
-    <p><strong>Количество ценностей:</strong> {{ warehouseState.itemsCount || 0 }}</p>
-    <p><strong>Общее количество:</strong> {{ warehouseState.quantity || 0 }}</p>
+    <input type="number" placeholder="Цена от" [(ngModel)]="filter.priceMin" />
+    <input type="number" placeholder="Цена до" [(ngModel)]="filter.priceMax" />
+
+    <input type="number" placeholder="Количество от" [(ngModel)]="filter.quantityMin" />
+    <input type="number" placeholder="Количество до" [(ngModel)]="filter.quantityMax" />
+
+    <select [(ngModel)]="filter.sortBy">
+      <option value="">Сортировать по...</option>
+      <option value="priceAsc">Цена ↑</option>
+      <option value="priceDesc">Цена ↓</option>
+      <option value="quantityAsc">Количество ↑</option>
+      <option value="quantityDesc">Количество ↓</option>
+    </select>
   </div>
+
 
   <!-- Таблица товаров -->
   <div *ngIf="!isLoading && inventoryItems.length > 0" class="items-table">
@@ -35,8 +44,8 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of inventoryItems">
-        <td>{{ item.name }}</td>
+      <tr *ngFor="let item of filteredItems()">
+      <td>{{ item.name }}</td>
         <td>{{ item.uniqueCode }}</td>
         <td>{{ item.quantity }}</td>
         <td>{{ item.supplier }}</td>
@@ -47,10 +56,6 @@
     </table>
   </div>
 
-  <!-- Нет данных -->
-  <div *ngIf="!isLoading && inventoryItems.length === 0" class="no-data">
-    <p>❌ В этом складе пока нет материальных ценностей.</p>
-  </div>
 </div>
 
 <app-footer></app-footer>

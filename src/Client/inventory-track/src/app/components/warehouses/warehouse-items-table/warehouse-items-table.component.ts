@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { BackButtonComponent } from "../../shared/back-button/back-button.component";
 import { LoadingSpinnerComponent } from "../../shared/loading-spinner/loading-spinner.component";
 import { ErrorMessageComponent } from "../../shared/error/error.component";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-warehouse-items-table',
@@ -20,7 +21,8 @@ import { ErrorMessageComponent } from "../../shared/error/error.component";
     CommonModule,
     BackButtonComponent,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    FormsModule
   ],
 })
 export class WarehouseItemsTableComponent implements OnInit {
@@ -37,6 +39,14 @@ export class WarehouseItemsTableComponent implements OnInit {
 
   isLoading = false;
   errorMessage: string | null = null;
+  filter = {
+    search: '',
+    priceMin: null as number | null,
+    priceMax: null as number | null,
+    quantityMin: null as number | null,
+    quantityMax: null as number | null,
+    sortBy: '',
+  };
 
   constructor(
     private route: ActivatedRoute, // Достаем параметры из URL
@@ -53,9 +63,50 @@ export class WarehouseItemsTableComponent implements OnInit {
         this.loadWarehouseState();
       } else {
         console.warn("⚠️ warehouseId отсутствует в URL");
-        this.errorMessage = '❌ Ошибка: ID склада не найден.';
+        this.errorMessage = 'Ошибка: ID склада не найден.';
       }
     });
+  }
+  filteredItems() {
+    let result = [...this.inventoryItems];
+
+    const search = this.filter.search?.toLowerCase().trim();
+
+    if (search) {
+      result = result.filter(item =>
+        item.name.toLowerCase().includes(search) ||
+        item.supplier.toLowerCase().includes(search)
+      );
+    }
+
+    if (this.filter.priceMin != null)
+      result = result.filter(item => item.estimatedValue >= this.filter.priceMin!);
+
+    if (this.filter.priceMax != null)
+      result = result.filter(item => item.estimatedValue <= this.filter.priceMax!);
+
+    if (this.filter.quantityMin != null)
+      result = result.filter(item => item.quantity >= this.filter.quantityMin!);
+
+    if (this.filter.quantityMax != null)
+      result = result.filter(item => item.quantity <= this.filter.quantityMax!);
+
+    switch (this.filter.sortBy) {
+      case 'priceAsc':
+        result.sort((a, b) => a.estimatedValue - b.estimatedValue);
+        break;
+      case 'priceDesc':
+        result.sort((a, b) => b.estimatedValue - a.estimatedValue);
+        break;
+      case 'quantityAsc':
+        result.sort((a, b) => a.quantity - b.quantity);
+        break;
+      case 'quantityDesc':
+        result.sort((a, b) => b.quantity - a.quantity);
+        break;
+    }
+
+    return result;
   }
 
   /** 📌 Загружаем состояние склада */
@@ -71,7 +122,7 @@ export class WarehouseItemsTableComponent implements OnInit {
         console.log("✅ Данные склада загружены:", state);
 
         if (!state) {
-          this.errorMessage = '❌ Склад не найден.';
+          this.errorMessage = 'Склад не найден.';
           this.isLoading = false;
           return;
         }
@@ -82,7 +133,7 @@ export class WarehouseItemsTableComponent implements OnInit {
       },
       error: (err) => {
         console.error("❌ Ошибка загрузки склада:", err);
-        this.errorMessage = '❌ Ошибка загрузки состояния склада.';
+        this.errorMessage = 'Ошибка загрузки состояния склада.';
         this.isLoading = false;
       }
     });
@@ -91,7 +142,7 @@ export class WarehouseItemsTableComponent implements OnInit {
   /** 📌 Обрабатываем полученные данные и заполняем `inventoryItems` */
   processItems(): void {
     if (!this.warehouseState) {
-      this.errorMessage = '❌ Данные склада не загружены.';
+      this.errorMessage = 'Данные склада не загружены.';
       return;
     }
 
@@ -114,7 +165,7 @@ export class WarehouseItemsTableComponent implements OnInit {
     console.log("📋 Итоговый список товаров:", this.inventoryItems);
 
     if (this.inventoryItems.length === 0) {
-      this.errorMessage = '❌ В этом складе пока нет материальных ценностей.';
+      this.errorMessage = 'В этом складе пока нет материальных ценностей.';
     }
   }
 }

@@ -14,4 +14,5 @@ public class WriteOffRequest : BaseEntity
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }
     public WriteOffReason Reason { get; set; }
+    public Guid DocumentId { get; set; }
 }

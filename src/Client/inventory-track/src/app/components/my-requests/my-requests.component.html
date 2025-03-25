@@ -1,0 +1,39 @@
+<app-header title="Мои заявки" (userEmitter)="onUserReceived($event!)"></app-header>
+
+<div class="requests-container">
+  <!-- Переключатель для нач. подразделения -->
+  <div *ngIf="isDepartmentManager" class="tab-switch">
+    <button [class.active]="selectedTab === 'writeoffs'" (click)="selectedTab = 'writeoffs'">Списания</button>
+    <button [class.active]="selectedTab === 'movements'" (click)="selectedTab = 'movements'">Перемещения</button>
+  </div>
+
+  <!-- Списания -->
+  <div *ngIf="selectedTab === 'writeoffs' || isStorageManager" class="requests-section">
+    <h3>Заявки на списание</h3>
+    <div *ngIf="writeOffs.length === 0" class="no-requests">Нет заявок на списание</div>
+    <div *ngFor="let writeOff of writeOffs" class="writeoff-card">
+      <h3>Заявка № {{ writeOff.id }}</h3>
+      <p><strong>Склад:</strong> {{ getWarehouseName(writeOff.warehouseId) }}</p>
+      <p><strong>Причина:</strong> {{ writeOff.reason.reason }}</p>
+      <p><strong>Дата:</strong> {{ writeOff.requestDate | customDate }}</p>
+      <p><strong>Количество:</strong> {{ writeOff.quantity }}</p>
+      <p><strong>Статус:</strong> {{ writeOff.status.name }}</p>
+    </div>
+
+  </div>
+
+  <!-- Перемещения -->
+  <div *ngIf="selectedTab === 'movements'" class="requests-section">
+    <h3>Заявки на перемещение</h3>
+    <div *ngIf="movements.length === 0" class="no-requests">Нет заявок на перемещение</div>
+    <div *ngFor="let movement of movements" class="movement-card">
+      <p><strong>Товар:</strong> {{ getItemName(movement.itemId) }}</p>
+      <p><strong>Со склада:</strong> {{ getWarehouseName(movement.sourceWarehouseId) }}</p>
+      <p><strong>На склад:</strong> {{ getWarehouseName(movement.destinationWarehouseId) }}</p>
+      <p><strong>Количество:</strong> {{ movement.quantity }}</p>
+      <p><strong>Статус:</strong> {{ movement.status.name }}</p>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

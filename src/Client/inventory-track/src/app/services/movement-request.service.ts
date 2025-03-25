@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 import { CreateMovementRequestDto } from '../models/dto/movement-request/create-movement-request-dto';
 import { ChangeStatusDto } from '../models/dto/movement-request/change-status-dto';
 import { MovementRequestResponseDto } from '../models/dto/movement-request/movement-request-response-dto';
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -56,4 +57,26 @@ export class MovementRequestService {
       `${this.baseUrl}${this.apiUrls.getByWarehouse.replace('{warehouseId}', warehouseId)}`
     );
   }
+
+  finalApprove(id: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}${this.apiUrls.finalApprove.replace('{id}', id)}`, {});
+  }
+
+  addDocumentToRequest(documentId: string, requestId: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.baseUrl}${this.apiUrls.addDocumentToRequest
+        .replace('{documentId}', documentId)
+        .replace('{requestId}', requestId)}`,
+      {}
+    );
+  }
+  generateDocument(requestId: string): Observable<File> {
+    return this.http.get(`${this.baseUrl}${this.apiUrls.generateDocument.replace('{id}', requestId)}`, {
+      responseType: 'blob'
+    }).pipe(
+      map(blob => new File([blob], `generated-document-${requestId}.xlsx`, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
+    );
+  }
+
+
 }

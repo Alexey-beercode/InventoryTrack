@@ -44,4 +44,10 @@ public class UserRepository:BaseRepository<User>,IUserRepository
     {
         return await _dbSet.Where(user => !user.IsDeleted && user.CompanyId == companyId).ToListAsync(cancellationToken);
     }
+
+    public async Task<User> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.FirstOrDefaultAsync(
+            user => !user.IsDeleted && user.WarehouseId == warehouseId, cancellationToken);
+    }
 }

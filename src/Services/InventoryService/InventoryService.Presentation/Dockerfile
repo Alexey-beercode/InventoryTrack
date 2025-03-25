@@ -9,6 +9,8 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src/Services
 
 # Копируем файлы проекта и зависимости
+# Добавь этот шаг после копирования кода
+COPY InventoryService/InventoryService.Application/Resources /app/Resources
 COPY InventoryService/InventoryService.Presentation/InventoryService.Presentation.csproj InventoryService/InventoryService.Presentation/
 COPY InventoryService/InventoryService.Application/InventoryService.Application.csproj InventoryService/InventoryService.Application/
 COPY InventoryService/InventoryService.Domain/InventoryService.Domain.csproj InventoryService/InventoryService.Domain/

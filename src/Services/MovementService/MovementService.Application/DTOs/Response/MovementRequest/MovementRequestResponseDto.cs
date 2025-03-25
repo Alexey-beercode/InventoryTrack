@@ -12,4 +12,5 @@ public class MovementRequestResponseDto : BaseDto
     public MovementRequestStatusResponseDto Status { get; set; }
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }
+    public Guid? DocumentId{get;set;}
 }

@@ -44,7 +44,7 @@ export class WarehouseViewComponent implements OnInit {
     this.userRoles = this.tokenService.getUserRoles();
 
     // 🚀 Если пользователь — начальник склада, перенаправляем его на страницу конкретного склада
-    if (this.userRoles.includes('Warehouse Manager') && this.warehouseId) {
+    if ((this.userRoles.includes('Warehouse Manager') || this.userRoles.includes('Department Head'))  && this.warehouseId) {
       this.router.navigate(['/warehouse', this.warehouseId]);
     }
   }

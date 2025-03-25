@@ -154,4 +154,11 @@ public class UserService:IUserService
         _unitOfWork.Users.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<UserRepsonseDTO> GetByWarehouseIdAsync(Guid warehouseId,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _unitOfWork.Users.GetByWarehouseIdAsync(warehouseId, cancellationToken);
+        return await _userFacade.GetFullDtoAsync(user, cancellationToken);
+    }
 }

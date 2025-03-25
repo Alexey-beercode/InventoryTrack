@@ -34,6 +34,9 @@ namespace MovementService.Infrastructure.Migrations
                     b.Property<Guid>("DestinationWarehouseId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("DocumentId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")

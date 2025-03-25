@@ -41,9 +41,25 @@ public class MovementRequestController : ControllerBase
         _logger.LogEndOfOperation("Approve Movement Request", "approved movement request");
         return Ok();
     }
+
+    [HttpPost("{id}/final-approve")]
+    [Authorize(Policy = "Accountant")]
+    public async Task<ActionResult> FinalApproveMovementRequest(Guid id, CancellationToken cancellationToken)
+    {
+        await _movementRequestService.FinalApproveMovementRequestAsync(id, cancellationToken);
+        return Ok();
+    }
+
+    [HttpPut("add-document/{documentId}/{requestId}")]
+    public async Task<IActionResult> AddDocumentToMovementrequest(Guid documentId, Guid requestId,
+        CancellationToken cancellationToken)
+    {
+        await _movementRequestService.AddDocumentToMovementRequestAsync(documentId, requestId, cancellationToken);
+        return Ok();
+    }
     
     [HttpPost("{id}/reject")]
-    [Authorize(Policy = "Warehouse Manager")]
+    [Authorize]
     public async Task<ActionResult> RejectMovementRequest(ChangeStatusDto changeStatusDto, CancellationToken cancellationToken)
     {
         _logger.LogStartRequest("Reject Movement Request", "requestId", changeStatusDto.RequestId.ToString());

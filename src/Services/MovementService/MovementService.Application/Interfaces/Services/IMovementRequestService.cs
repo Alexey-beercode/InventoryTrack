@@ -29,4 +29,9 @@ public interface IMovementRequestService
 
     Task<IEnumerable<MovementRequestResponseDto>> GetMovementRequestsByStatusAsync(MovementRequestStatus status,
         CancellationToken cancellationToken = default);
+    
+    Task FinalApproveMovementRequestAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task AddDocumentToMovementRequestAsync(Guid documentId, Guid movementId,
+        CancellationToken cancellationToken = default);
 }

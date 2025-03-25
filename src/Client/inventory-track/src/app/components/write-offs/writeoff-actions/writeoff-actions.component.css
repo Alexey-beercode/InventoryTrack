@@ -21,10 +21,11 @@
 }
 .actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 15px;
   margin-top: 15px;
 }
+
 
 .approve-btn {
   background-color: #4CAF50;
@@ -61,4 +62,98 @@
 input[type="file"] {
   margin-top: 10px;
 }
+.upload-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.upload-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.upload-modal-content .actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.upload-modal-content .actions button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  min-width: 140px;
+}
+
+.generated-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.file-icon {
+  font-size: 26px;
+}
+
+.generate-wrapper {
+  margin: 20px 0 10px;
+}
+
+.generate-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 22px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.generate-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+.download-section {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.download-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
 

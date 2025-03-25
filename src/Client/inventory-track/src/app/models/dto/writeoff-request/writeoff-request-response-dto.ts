@@ -12,5 +12,5 @@ export interface WriteOffRequestResponseDto {
   requestDate: string;
   approvedByUserId?: string;
   reason: WriteOffReasonResponseDto;
-  documents: DocumentInfoResponseDto[];
+  documentId: string;
 }

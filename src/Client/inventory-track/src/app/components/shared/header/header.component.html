@@ -49,9 +49,23 @@
 
         <div class="form-group">
           <label for="unp">УНП</label>
-          <input id="unp" type="text" [(ngModel)]="newCompany.unp" name="unp" required minlength="9" maxlength="9" />
-          <app-error-message *ngIf="companyForm.controls['unp']?.invalid && submitted" [message]="'УНП должен быть 9 цифр.'"></app-error-message>
+          <input
+            id="unp"
+            type="text"
+            name="unp"
+            [(ngModel)]="newCompany.unp"
+            required
+            minlength="9"
+            maxlength="9"
+            pattern="^[0-9]{9}$"
+            #unp="ngModel"
+          />
+          <app-error-message
+            *ngIf="(unp.invalid && unp.touched) || (companyForm.controls['unp']?.invalid && submitted)"
+            [message]="'УНП должен состоять из 9 цифр.'">
+          </app-error-message>
         </div>
+
 
         <div class="form-group">
           <label for="legalAddress">Юридический адрес</label>

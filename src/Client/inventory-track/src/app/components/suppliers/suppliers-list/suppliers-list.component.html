@@ -24,10 +24,29 @@
         <p><strong>Телефон:</strong> {{ supplier.phoneNumber }}</p>
         <p><strong>Адрес:</strong> {{ supplier.postalAddress }}</p>
         <p><strong>Номер счета:</strong> {{ supplier.accountNumber }}</p>
+
+        <div class="supplier-card-buttons">
+          <button class="delete-button" (click)="openDeleteConfirmModal(supplier.id, supplier.name)">
+            Удалить
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
+
+<div *ngIf="showDeleteConfirmModal" class="modal-overlay">
+  <div class="modal">
+    <h2>Удаление контрагента</h2>
+    <p>Вы уверены, что хотите удалить контрагента <b>{{ selectedSupplierName }}</b>?</p>
+    <div class="modal-actions">
+      <button (click)="deleteSupplier()" class="save-button">Удалить</button>
+      <button (click)="showDeleteConfirmModal = false" class="cancel-button">Отмена</button>
+    </div>
+  </div>
+</div>
+
 
 <app-create-supplier
   *ngIf="showCreateModal && companyId"

@@ -12,6 +12,7 @@ import { ErrorMessageComponent } from "../../shared/error/error.component";
 import { NgForOf, NgIf } from "@angular/common";
 import { MovementRequestStatus } from '../../../models/dto/movement-request/enums/movement-request-status.enum';
 import { ChangeStatusDto } from '../../../models/dto/movement-request/change-status-dto';
+import {InventoryDocumentService} from "../../../services/inventory-document.service";
 
 @Component({
   selector: 'app-movement-list',
@@ -35,26 +36,138 @@ export class MovementListComponent implements OnInit {
   errorMessage: string | null = null;
   user: UserResponseDTO | null = null;
   userRoles: string[] = [];
+  showUploadModal = false;
+  selectedRequestId: string | null = null;
+  selectedFile: File | null = null;
+  isAccountant = false;
+  companyId: string | null = null;
+  private userReceived = false;
+  private companyIdReceived = false;
+  generatedDocumentFile: File | null = null;
+  isDocumentGenerated = false;
+  isGeneratingDocument = false;
+
+
+
 
   constructor(
     private movementService: MovementRequestService,
     private itemService: InventoryItemService,
     private warehouseService: WarehouseService,
-    private tokenService: TokenService
+    private inventoryDocumentService:InventoryDocumentService,
   ) {}
 
   ngOnInit(): void {}
 
+  onCompanyIdReceived(companyId: string): void {
+    this.companyId = companyId;
+    this.companyIdReceived = true;
+
+    this.tryLoadAccountantMovements();
+  }
+
+  private tryLoadAccountantMovements(): void {
+    if (this.isAccountant && this.userReceived && this.companyIdReceived) {
+      this.loadMovementsForAccountant();
+    } else if (!this.isAccountant && this.userReceived) {
+      this.loadMovements();
+    }
+  }
+
   onUserReceived(user: UserResponseDTO | null): void {
     if (!user) {
-      this.errorMessage = "⚠️ Пользовательские данные не получены.";
+      this.errorMessage = "Пользовательские данные не получены.";
       return;
     }
 
     this.user = user;
-    this.userRoles = this.tokenService.getUserRoles();
-    this.loadMovements();
+    this.userRoles = this.user.roles.map(r => r.name);
+    this.isAccountant = this.userRoles.includes('Бухгалтер');
+    this.userReceived = true;
+
+    this.tryLoadAccountantMovements();
   }
+
+  generateDocument(): void {
+    if (!this.selectedRequestId) return;
+
+    const movement = this.movements.find(m => m.id === this.selectedRequestId);
+    if (!movement) {
+      this.errorMessage = 'Перемещение не найдено.';
+      return;
+    }
+
+    const dto = {
+      isWriteOff: false,
+      quantity: movement.quantity,
+      warehouseId: movement.destinationWarehouseId,
+      sourceWarehouseId: movement.sourceWarehouseId,
+      inventoryItemId: movement.itemId
+    };
+
+    this.isGeneratingDocument = true;
+    this.inventoryDocumentService.generateInventoryDocument(dto).subscribe({
+      next: (file) => {
+        const today = new Date().toLocaleDateString('ru-RU');
+        const fileName = `ТТН ${today}.xls`;
+        const generatedFile = new File([file], fileName, { type: 'application/vnd.ms-excel' });
+        this.generatedDocumentFile = generatedFile;
+        this.isDocumentGenerated = true;
+        this.isGeneratingDocument = false;
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка генерации документа';
+        this.isGeneratingDocument = false;
+      }
+    });
+  }
+
+
+
+  openUploadModal(requestId: string): void {
+    this.selectedRequestId = requestId;
+    this.showUploadModal = true;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  confirmUpload(): void {
+    const fileToUpload = this.selectedFile || this.generatedDocumentFile;
+    if (!fileToUpload || !this.selectedRequestId) return;
+
+    this.itemService.uploadDocument(fileToUpload).subscribe({
+      next: (documentId) => {
+        this.movementService.addDocumentToRequest(documentId, this.selectedRequestId!).subscribe({
+          next: () => {
+            this.movementService.finalApprove(this.selectedRequestId!).subscribe({
+              next: () => {
+                this.tryLoadAccountantMovements();
+                this.resetModal();
+              },
+              error: () => this.errorMessage = 'Ошибка при финальном утверждении'
+            });
+          },
+          error: () => this.errorMessage = 'Ошибка при прикреплении документа'
+        });
+      },
+      error: () => this.errorMessage = 'Ошибка загрузки документа'
+    });
+  }
+
+  resetModal(): void {
+    this.showUploadModal = false;
+    this.selectedFile = null;
+    this.generatedDocumentFile = null;
+    this.selectedRequestId = null;
+    this.isDocumentGenerated = false;
+  }
+
+
 
   /** 📌 Загружаем все перемещения */
   loadMovements(): void {
@@ -69,7 +182,7 @@ export class MovementListComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = '❌ Ошибка загрузки перемещений.';
+        this.errorMessage = 'Ошибка загрузки перемещений.';
         this.isLoading = false;
       }
     });
@@ -81,7 +194,7 @@ export class MovementListComponent implements OnInit {
     itemIds.forEach((itemId) => {
       this.itemService.getInventoryItemById(itemId).subscribe({
         next: (item) => this.items[itemId] = item.name,
-        error: () => this.errorMessage = `❌ Ошибка загрузки товара.`
+        error: () => this.errorMessage = `Ошибка загрузки товара.`
       });
     });
   }
@@ -96,7 +209,7 @@ export class MovementListComponent implements OnInit {
       if (!this.warehouses[warehouseId]) {
         this.warehouseService.getWarehouseById(warehouseId).subscribe({
           next: (warehouse) => this.warehouses[warehouseId] = warehouse.name,
-          error: () => this.errorMessage = `❌ Ошибка загрузки склада.`
+          error: () => this.errorMessage = `Ошибка загрузки склада.`
         });
       }
     });
@@ -115,7 +228,7 @@ export class MovementListComponent implements OnInit {
   /** ✅ Одобрить перемещение (только `Processing`) */
   approveMovement(movementId: string): void {
     if (!this.user) {
-      this.errorMessage = '❌ Ошибка: пользователь не найден!';
+      this.errorMessage = 'Ошибка: пользователь не найден!';
       return;
     }
 
@@ -126,7 +239,11 @@ export class MovementListComponent implements OnInit {
 
     this.movementService.approve(dto).subscribe({
       next: () => {
-        this.loadMovements();
+        if (this.isAccountant) {
+          this.tryLoadAccountantMovements();
+        } else {
+          this.loadMovements();
+        }
       },
       error: () => alert("❌ Ошибка при одобрении перемещения!")
     });
@@ -135,7 +252,7 @@ export class MovementListComponent implements OnInit {
   /** ❌ Отклонить перемещение (только `Processing`) */
   rejectMovement(movementId: string): void {
     if (!this.user) {
-      this.errorMessage = '❌ Ошибка: пользователь не найден!';
+      this.errorMessage = 'Ошибка: пользователь не найден!';
       return;
     }
 
@@ -146,9 +263,70 @@ export class MovementListComponent implements OnInit {
 
     this.movementService.reject(dto).subscribe({
       next: () => {
-        this.loadMovements();
+        if (this.isAccountant) {
+          this.tryLoadAccountantMovements();
+        } else {
+          this.loadMovements();
+        }
       },
       error: () => alert("❌ Ошибка при отклонении перемещения!")
+    });
+  }
+  loadMovementsForAccountant(): void {
+    if (!this.companyId) {
+      this.errorMessage = 'Компания не определена.';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.warehouseService.getWarehousesByCompany(this.companyId).subscribe({
+      next: (warehouses) => {
+        const warehouseIds = warehouses.map(w => w.id);
+        const requests = warehouseIds.map(id => this.movementService.getByWarehouse(id));
+
+        Promise.all(requests.map(r => r.toPromise()))
+          .then(results => {
+            const allMovements = results.flat();
+            const uniqueMap = new Map<string, MovementRequestResponseDto>();
+
+            for (const m of allMovements) {
+              uniqueMap.set(m!.id, m!);
+            }
+
+            this.movements = Array.from(uniqueMap.values());
+            this.loadItemNames();
+            this.loadWarehouseNames();
+          })
+          .catch(() => {
+            this.errorMessage = 'Ошибка загрузки перемещений бухгалтера.';
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка загрузки складов компании.';
+        this.isLoading = false;
+      }
+    });
+  }
+  downloadDocument(documentId: string): void {
+    this.inventoryDocumentService.downloadDocument(documentId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(
+          new Blob([blob], { type: 'application/vnd.ms-excel' }) // 📌 MIME для .xls
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `movement-document-${documentId}.xls`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка при скачивании документа';
+      }
     });
   }
 

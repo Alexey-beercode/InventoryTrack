@@ -9,4 +9,5 @@ export class MovementRequestResponseDto {
   status!: MovementRequestStatusResponseDto;
   requestDate!: Date;
   approvedByUserId?: string;
+  documentId?:string;
 }

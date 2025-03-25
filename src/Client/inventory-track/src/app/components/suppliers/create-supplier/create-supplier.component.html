@@ -52,12 +52,16 @@
           name="accountNumber"
           [(ngModel)]="newSupplier.accountNumber"
           required
+          pattern="^[0-9]+$"
+          #accountNumber="ngModel"
+          (input)="onAccountNumberInput($event)"
         />
         <app-error-message
-          *ngIf="supplierForm.controls['accountNumber']?.invalid && submitted"
-          [message]="'Номер счета обязателен.'"
+          *ngIf="(accountNumber.invalid && accountNumber.touched) || (supplierForm.controls['accountNumber']?.invalid && submitted)"
+          [message]="'Номер счета должен содержать только цифры.'"
         ></app-error-message>
       </div>
+
       <div class="modal-buttons">
         <button type="submit" class="btn-primary">Сохранить</button>
         <button type="button" class="btn-secondary" (click)="closeModal()">

@@ -23,4 +23,7 @@ public interface IUserService
 
     Task AddUserToWarehouseAsync(AddUserToWarehouseDto addUserToWarehouseDto,
         CancellationToken cancellationToken = default);
+
+    Task<UserRepsonseDTO> GetByWarehouseIdAsync(Guid warehouseId,
+        CancellationToken cancellationToken = default);
 }

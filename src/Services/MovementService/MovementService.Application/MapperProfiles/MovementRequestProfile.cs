@@ -36,7 +36,8 @@ public class MovementRequestProfile : Profile
         {
             "Processing" => "В обработке",
             "Rejected" => "Отклонено",
-            "Completed" => "Завершено",
+            "Completed" => "Одобрено",
+            "Final"=>"Финально утверждено",
             _ => enumValue.ToString(),      //Default fallback
         };
     }

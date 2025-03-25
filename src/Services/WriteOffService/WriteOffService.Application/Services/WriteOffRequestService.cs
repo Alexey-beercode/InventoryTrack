@@ -37,14 +37,14 @@ public class WriteOffRequestService : IWriteOffRequestService
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
     {
         var requests = await _unitOfWork.WriteOffRequests.GetByWarehouseIdAsync(warehouseId, cancellationToken);
-        return await AttachDocumentsToRequestsAsync(requests, cancellationToken);
+        return _mapper.Map<IEnumerable<WriteOffRequestResponseDto>> (requests);
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByCompanyIdAsync(Guid companyId,
         CancellationToken cancellationToken = default)
     {
         var requests = await _unitOfWork.WriteOffRequests.GetByCompanyIdAsync(companyId, cancellationToken);
-        return await AttachDocumentsToRequestsAsync(requests, cancellationToken);
+        return _mapper.Map<IEnumerable<WriteOffRequestResponseDto>> (requests);
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetFilteredPagedRequestsAsync(WriteOffRequestFilterDto filterDto, CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ public class WriteOffRequestService : IWriteOffRequestService
         var filterModel = _mapper.Map<FilterWriteOffrequestModel>(filterDto);
         var filteredRequests = await _unitOfWork.WriteOffRequests.GetFilteredAndPagedAsync(filterModel, cancellationToken);
         _logger.LogInformation(JsonSerializer.Serialize(filteredRequests));
-        return await AttachDocumentsToRequestsAsync(filteredRequests, cancellationToken);
+        return _mapper.Map<IEnumerable<WriteOffRequestResponseDto>> (filteredRequests);
     }
 
     public async Task<IEnumerable<WriteOffRequestResponseDto>> GetByStatusAsync(RequestStatus status, CancellationToken cancellationToken = default)
@@ -74,7 +74,6 @@ public class WriteOffRequestService : IWriteOffRequestService
             ?? throw new EntityNotFoundException("WriteOffRequest", id);
 
         var requestDto = _mapper.Map<WriteOffRequestResponseDto>(request);
-        requestDto.Documents = await _documentService.GetByRequestIdAsync(id, cancellationToken);
         return requestDto;
     }
 
@@ -117,8 +116,7 @@ public class WriteOffRequestService : IWriteOffRequestService
 
         request.Status = RequestStatus.Created;
         request.ApprovedByUserId = approveDto.ApprovedByUserId;
-        
-
+        request.DocumentId = approveDto.DocumentId;
         _unitOfWork.WriteOffRequests.Update(request);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var writeOffMessage = new WriteOffInventoryMessage
@@ -171,7 +169,7 @@ public class WriteOffRequestService : IWriteOffRequestService
         }
     }
     
-    private async Task<IEnumerable<WriteOffRequestResponseDto>> AttachDocumentsToRequestsAsync(
+    /*private async Task<IEnumerable<WriteOffRequestResponseDto>> AttachDocumentsToRequestsAsync(
         IEnumerable<WriteOffRequest> requests, CancellationToken cancellationToken)
     {
         var requestsDtos = _mapper.Map<IEnumerable<WriteOffRequestResponseDto>>(requests);
@@ -182,7 +180,7 @@ public class WriteOffRequestService : IWriteOffRequestService
         }
 
         return requestsDtos;
-    }
+    }*/
     public async Task UploadDocumentsAsync(Guid requestId, List<IFormFile> documents, CancellationToken cancellationToken = default)
     {
         var request = await _unitOfWork.WriteOffRequests.GetByIdAsync(requestId, cancellationToken)

@@ -23,7 +23,7 @@ namespace WriteOffService.Presentation.Controllers
         }
 
         [HttpGet("warehouse/{warehouseId:guid}")]
-        [Authorize(Policy = "Warehouse Manager")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

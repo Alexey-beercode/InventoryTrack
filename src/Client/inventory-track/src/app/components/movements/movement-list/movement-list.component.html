@@ -1,7 +1,9 @@
 <app-header
   title="Перемещения"
-  (userEmitter)="onUserReceived($event)">
+  (userEmitter)="onUserReceived($event)"
+  (companyIdEmitter)="onCompanyIdReceived($event)">
 </app-header>
+
 
 <div class="container">
   <h2>Список перемещений</h2>
@@ -27,16 +29,67 @@
       <div>{{ getWarehouseName(movement.destinationWarehouseId) }}</div>
       <div>{{ movement.quantity }}</div>
       <div>{{ movement.status.name }}</div>
+      <div>
+        <div  class="actions">
+          <button *ngIf="movement.status.value === MovementRequestStatus.Completed && isAccountant && movement.status.name === 'Одобрено'"
+                  class="approve-btn"
+                  (click)="openUploadModal(movement.id)">📄 Утвердить</button>
+
+          <button *ngIf="movement.status.value === MovementRequestStatus.Completed && isAccountant && movement.status.name === 'Одобрено'"
+                  class="reject-btn"
+                  (click)="rejectMovement(movement.id)">Отклонить</button>
+
+          <button *ngIf="movement.status.value === MovementRequestStatus.Processing && !isAccountant"
+                  class="approve-btn"
+                  (click)="approveMovement(movement.id)">
+            Одобрить
+          </button>
+
+          <button *ngIf="movement.status.value === MovementRequestStatus.Processing && !isAccountant"
+                  class="reject-btn"
+                  (click)="rejectMovement(movement.id)">
+            Отклонить
+          </button>
+        </div>
+
+        <!-- 📎 Кнопка скачивания Excel -->
+        <div *ngIf="movement.documentId && movement.documentId !== '00000000-0000-0000-0000-000000000000'" class="download-section">
+          <button class="download-btn" (click)="downloadDocument(movement.documentId)">
+            📥 Скачать Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="showUploadModal" class="upload-modal">
+    <div class="upload-modal-content" style="max-width: 600px;">
+      <h3>📎 Загрузка документа</h3>
+
+      <input type="file" (change)="onFileSelected($event)" />
+
+      <div *ngIf="isDocumentGenerated" class="generated-info">
+        <p>✅ Документ сформирован автоматически</p>
+        <span class="file-icon">📄</span>
+      </div>
+
+      <div *ngIf="!isDocumentGenerated" class="generate-wrapper">
+        <button class="btn generate-btn" (click)="generateDocument()" [disabled]="isGeneratingDocument">
+          {{ isGeneratingDocument ? 'Генерация...' : 'Сформировать документ' }}
+        </button>
+      </div>
+
       <div class="actions">
-        <button *ngIf="movement.status.value === MovementRequestStatus.Processing" class="approve-btn" (click)="approveMovement(movement.id)">
-          ✅ Одобрить
+        <button class="final-approve-btn" (click)="confirmUpload()" [disabled]="!selectedFile && !generatedDocumentFile">
+          Утвердить
         </button>
-        <button *ngIf="movement.status.value === MovementRequestStatus.Processing" class="reject-btn" (click)="rejectMovement(movement.id)">
-          ❌ Отклонить
-        </button>
+        <button class="btn-secondary" (click)="resetModal()">Отмена</button>
       </div>
     </div>
   </div>
+
+
+
 
   <div *ngIf="!isLoading && movements.length === 0" class="no-data">
     <p>Перемещения отсутствуют.</p>

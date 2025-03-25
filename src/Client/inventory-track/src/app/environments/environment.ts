@@ -25,6 +25,7 @@ export const environment = {
       getDocumentInfo: '/api/documents/{id}/info',
       downloadDocument: '/api/documents/{id}/download',
       deleteDocument: '/api/documents/{id}',
+      generate: '/api/documents/generate'
     },
     user: {
       getAll: '/api/users',
@@ -84,6 +85,9 @@ export const environment = {
       getById: '/api/movement-requests/{id}',
       getByStatus: '/api/movement-requests/status/{status}',
       getByWarehouse: '/api/movement-requests/warehouse/{warehouseId}',
+      finalApprove: '/api/movement-requests/{id}/final-approve',
+      addDocumentToRequest: '/api/movement-requests/add-document/{documentId}/{requestId}',
+      generateDocument: '/api/movement-requests/generate-document/{id}'
     },
     writeOffReason: {
       getAll: '/api/write-off-reasons',
@@ -101,7 +105,8 @@ export const environment = {
       delete: '/api/write-off-requests/{id}',
       reject: '/api/write-off-requests/reject/{id}',  // 👈 добавлен `/`
       approve: "/api/write-off-requests/{id}/approve",
-      uploadDocuments: "/api/write-off-requests/{id}/upload-documents"
+      uploadDocuments: "/api/write-off-requests/{id}/upload-documents",
+      generateDocument: '/api/write-off-requests/generate-document/{id}'
     },
 
     report: {

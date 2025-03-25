@@ -4,5 +4,6 @@ public enum MovementRequestStatus
 {
     Processing,
     Rejected, 
-    Completed
+    Completed,
+    Final
 }

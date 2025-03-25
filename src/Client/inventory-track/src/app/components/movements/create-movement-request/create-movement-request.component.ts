@@ -57,7 +57,7 @@ export class CreateMovementRequestComponent implements OnInit {
   /** 📌 Получаем данные пользователя и companyId из хедера */
   onUserReceived(user: UserResponseDTO | null): void {
     if (!user) {
-      this.errorMessage = '❌ Ошибка получения данных пользователя.';
+      this.errorMessage = 'Ошибка получения данных пользователя.';
       return;
     }
     this.user = user;
@@ -78,7 +78,7 @@ export class CreateMovementRequestComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = '❌ Ошибка загрузки складов компании.';
+        this.errorMessage = 'Ошибка загрузки складов компании.';
         this.isLoading = false;
       }
     });
@@ -91,7 +91,7 @@ export class CreateMovementRequestComponent implements OnInit {
         this.destinationWarehouse = warehouse;
       },
       error: () => {
-        this.errorMessage = '❌ Ошибка загрузки склада назначения.';
+        this.errorMessage = 'Ошибка загрузки склада назначения.';
       }
     });
   }
@@ -107,7 +107,7 @@ export class CreateMovementRequestComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = '❌ Ошибка загрузки товаров со склада.';
+        this.errorMessage = 'Ошибка загрузки товаров со склада.';
         this.isLoading = false;
       }
     });
@@ -115,7 +115,7 @@ export class CreateMovementRequestComponent implements OnInit {
 
   getMaxQuantity(item: InventoryItemResponseDto, warehouseId: string): number {
     if (!item || !warehouseId) {
-      console.error('❌ Ошибка: item или warehouseId отсутствует!');
+      console.error('Ошибка: item или warehouseId отсутствует!');
       return 0;
     }
 
@@ -140,14 +140,14 @@ export class CreateMovementRequestComponent implements OnInit {
   /** 📌 Создаем запрос на перемещение */
   createMovementRequest(): void {
     if (!this.selectedItem || !this.transferQuantity || this.transferQuantity < 1 || !this.selectedSourceWarehouse || !this.destinationWarehouse) {
-      this.errorMessage = '❌ Все поля должны быть заполнены!';
+      this.errorMessage = 'Все поля должны быть заполнены!';
       return;
     }
 
     const maxQuantity = this.getMaxQuantity(this.selectedItem, this.selectedSourceWarehouse.id);
 
     if (this.transferQuantity > maxQuantity) {
-      this.errorMessage = `❌ Нельзя переместить больше, чем ${maxQuantity} шт.`;
+      this.errorMessage = `Нельзя переместить больше, чем ${maxQuantity} шт.`;
       return;
     }
 
@@ -164,7 +164,7 @@ export class CreateMovementRequestComponent implements OnInit {
         this.router.navigate(['/']); // Перенаправляем после успешного создания
       },
       error: () => {
-        this.errorMessage = '❌ Ошибка создания перемещения.';
+        this.errorMessage = 'Ошибка создания перемещения.';
         this.isLoading = false;
       }
     });

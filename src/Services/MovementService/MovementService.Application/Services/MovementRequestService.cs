@@ -63,17 +63,6 @@ namespace MovementService.Application.Services
 
             _unitOfWork.MovementRequests.Update(movementRequest);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            // Отправляем сообщение в InventoryService
-            var moveMessage = new MoveInventoryMessage
-            {
-                ItemId = movementRequest.ItemId,
-                SourceWarehouseId = movementRequest.SourceWarehouseId,
-                DestinationWarehouseId = movementRequest.DestinationWarehouseId,
-                Quantity = movementRequest.Quantity
-            };
-
-            await _movementRequestProducer.SendMoveInventoryMessageAsync(moveMessage);
         }
 
 
@@ -128,6 +117,48 @@ namespace MovementService.Application.Services
         {
             var movementRequests = await _unitOfWork.MovementRequests.GetByStatusAsync(status, cancellationToken);
             return _mapper.Map<IEnumerable<MovementRequestResponseDto>>(movementRequests);
+        }
+
+        public async Task FinalApproveMovementRequestAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var movementRequest = await _unitOfWork.MovementRequests.GetByIdAsync(id, cancellationToken);
+            if (movementRequest is null)
+            {
+                throw new EntityNotFoundException($"Movement request with id : {id} are not found");
+            }
+
+            if (movementRequest.Status == MovementRequestStatus.Final)
+            {
+                throw new InvalidOperationException("Movement request already completed");
+            }
+            
+            movementRequest.Status = MovementRequestStatus.Final;
+
+            _unitOfWork.MovementRequests.Update(movementRequest);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            
+            var moveMessage = new MoveInventoryMessage
+            {
+                ItemId = movementRequest.ItemId,
+                SourceWarehouseId = movementRequest.SourceWarehouseId,
+                DestinationWarehouseId = movementRequest.DestinationWarehouseId,
+                Quantity = movementRequest.Quantity
+            };
+
+            await _movementRequestProducer.SendMoveInventoryMessageAsync(moveMessage);
+        }
+
+        public async Task AddDocumentToMovementRequestAsync(Guid documentId, Guid movementId, CancellationToken cancellationToken = default)
+        {
+            var movementRequest=await _unitOfWork.MovementRequests.GetByIdAsync(movementId, cancellationToken);
+            if (movementRequest is null)
+            {
+                throw new EntityNotFoundException($"Movement request with id : {movementId} is not found");
+            }
+
+            movementRequest.DocumentId = documentId;
+            _unitOfWork.MovementRequests.Update(movementRequest);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -9,4 +9,5 @@ public interface IUserRepository:IBaseRepository<User>
     Task DeleteAsync(User user, CancellationToken cancellationToken = default);
     Task<User> GetByNameAsync(string firstName, string lastName, CancellationToken cancellationToken = default);
     Task<IEnumerable<User>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default);
+    Task<User> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default);
 }

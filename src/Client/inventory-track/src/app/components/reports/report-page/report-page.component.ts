@@ -151,8 +151,8 @@ export class ReportPageComponent implements OnInit {
         console.log("✅ Отчет скачан:", reportName);
       },
       error: () => {
-        this.errorMessage = '❌ Не удалось скачать файл';
-        console.error("❌ Ошибка скачивания отчета");
+        this.errorMessage = 'Не удалось скачать файл';
+        console.error("Ошибка скачивания отчета");
       }
     });
   }

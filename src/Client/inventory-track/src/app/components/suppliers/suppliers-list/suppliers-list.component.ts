@@ -20,6 +20,9 @@ export class SupplierListComponent implements OnInit {
   suppliers: SupplierResponseDto[] = [];
   isLoading = false;
   showCreateModal = false;
+  showDeleteConfirmModal = false;
+  selectedSupplierId: string | null = null;
+  selectedSupplierName: string = '';
 
   constructor(private supplierService: SupplierService) {}
 
@@ -31,6 +34,25 @@ export class SupplierListComponent implements OnInit {
     this.companyId = companyId
     console.log(companyId);
     this.loadSuppliers();
+  }
+  openDeleteConfirmModal(id: string, name: string) {
+    this.selectedSupplierId = id;
+    this.selectedSupplierName = name;
+    this.showDeleteConfirmModal = true;
+  }
+
+  deleteSupplier() {
+    if (!this.selectedSupplierId) return;
+
+    this.supplierService.deleteSupplier(this.selectedSupplierId).subscribe({
+      next: () => {
+        this.loadSuppliers();
+        this.showDeleteConfirmModal = false;
+      },
+      error: err => {
+        console.error('Ошибка при удалении:', err);
+      }
+    });
   }
 
   loadSuppliers(): void {

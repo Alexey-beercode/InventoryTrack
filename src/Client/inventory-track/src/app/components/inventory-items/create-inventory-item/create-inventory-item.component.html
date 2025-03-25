@@ -14,9 +14,18 @@
 
     <div class="form-group">
       <label for="uniqueCode">Уникальный код</label>
-      <input id="uniqueCode" name="uniqueCode" type="text" [(ngModel)]="newInventoryItem.uniqueCode" required #uniqueCode="ngModel" />
-      <div *ngIf="uniqueCode.invalid && uniqueCode.touched" class="error">⚠️ Уникальный код обязателен!</div>
+      <input id="uniqueCode"
+             name="uniqueCode"
+             type="text"
+             pattern="^[0-9]+$"
+             [(ngModel)]="newInventoryItem.uniqueCode"
+             required
+             #uniqueCode="ngModel" />
+      <div *ngIf="uniqueCode.invalid && uniqueCode.touched" class="error">
+        ⚠️ Уникальный код должен содержать только цифры!
+      </div>
     </div>
+
 
     <div class="form-group">
       <label for="supplierId">Поставщик</label>
@@ -33,15 +42,38 @@
 
     <div class="form-group">
       <label for="estimatedValue">Оценочная стоимость</label>
-      <input id="estimatedValue" name="estimatedValue" type="number" [(ngModel)]="newInventoryItem.estimatedValue" required #estimatedValue="ngModel" />
-      <div *ngIf="estimatedValue.invalid && estimatedValue.touched" class="error">⚠️ Укажите стоимость!</div>
+      <input id="estimatedValue"
+             name="estimatedValue"
+             type="number"
+             min="0"
+             [(ngModel)]="newInventoryItem.estimatedValue"
+             required
+             #estimatedValue="ngModel" />
+      <div *ngIf="estimatedValue.invalid && estimatedValue.touched" class="error">
+        ⚠️ Стоимость не может быть отрицательной!
+      </div>
     </div>
 
-    <input id="expirationDate" name="expirationDate" type="date"
-           [(ngModel)]="newInventoryItem.expirationDate" required #expirationDate="ngModel" />
 
-    <input id="deliveryDate" name="deliveryDate" type="date"
-           [(ngModel)]="newInventoryItem.deliveryDate" required #deliveryDate="ngModel" />
+    <div class="form-group">
+      <label for="expirationDate">Срок годности</label>
+      <input id="expirationDate" name="expirationDate" type="date"
+             [(ngModel)]="newInventoryItem.expirationDate" required #expirationDate="ngModel" />
+      <div *ngIf="showDateError" class="error">
+        ⚠️ Даты не могут быть раньше сегодняшнего дня.
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label for="deliveryDate">Дата поставки</label>
+      <input id="deliveryDate" name="deliveryDate" type="date"
+             [(ngModel)]="newInventoryItem.deliveryDate" required #deliveryDate="ngModel" />
+      <div *ngIf="showDateError" class="error">
+        ⚠️ Даты не могут быть раньше сегодняшнего дня.
+      </div>
+
+    </div>
 
     <div class="form-group">
       <label for="documentFile">Документ</label>

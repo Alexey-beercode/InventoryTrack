@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
 
     if (!this.username || !this.password) {
-      this.errorMessage = 'Please enter username and password';
+      this.errorMessage = 'Пожалуйста введите данные';
       return;
     }
 
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           this.tokenService.setTokens(response.accessToken,response.userId);
           this.router.navigate(['/home']);
         } else {
-          this.errorMessage = 'Invalid login response';
+          this.errorMessage = 'Ошибка валидации при авторизации';
         }
       },
       error: (error) => {

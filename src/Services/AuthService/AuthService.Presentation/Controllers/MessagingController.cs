@@ -34,4 +34,20 @@ public class MessagingController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpGet("users/warehouse-id/{warehouseId:guid}")]
+    public async Task<IActionResult> GetUserByWarehouseId(Guid warehouseId,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _userService.GetByWarehouseIdAsync(warehouseId, cancellationToken);
+        var response = new
+        {
+            user.Id,
+            user.Login,
+            user.FirstName,
+            user.LastName
+        };
+
+        return Ok(response);
+    }
 }

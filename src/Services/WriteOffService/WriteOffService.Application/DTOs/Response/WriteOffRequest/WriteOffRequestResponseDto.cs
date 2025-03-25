@@ -17,5 +17,5 @@ public class WriteOffRequestResponseDto : BaseDto
     public DateTime RequestDate { get; set; }
     public Guid? ApprovedByUserId { get; set; }
     public WriteOffReasonResponseDto Reason { get; set; }
-    public IEnumerable<DocumentInfoResponseDto> Documents { get; set; }
+    public Guid DocumentId { get; set; }
 }

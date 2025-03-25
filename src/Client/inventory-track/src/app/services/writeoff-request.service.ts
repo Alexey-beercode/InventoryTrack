@@ -7,6 +7,7 @@ import { WriteOffRequestResponseDto } from '../models/dto/writeoff-request/write
 import { CreateWriteOffRequestDto } from '../models/dto/writeoff-request/create-writeoff-request-dto';
 import { UpdateWriteOffRequestDto } from '../models/dto/writeoff-request/update-writeoff-request-dto';
 import { WriteOffRequestFilterDto } from '../models/dto/writeoff-request/writeoff-request-filter-dto';
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,17 @@ export class WriteOffRequestService {
       { params: { ...filterDto } }
     );
   }
+
+  generateDocument(writeOffRequestId: string): Observable<File> {
+    return this.http.get(`${this.baseUrl}${this.apiUrls.generateDocument.replace('{id}', writeOffRequestId)}`, {
+      responseType: 'blob'
+    }).pipe(
+      map(blob => new File([blob], `writeoff-document-${writeOffRequestId}.docx`, {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      }))
+    );
+  }
+
 
   /**
    * Get write-off requests by status.
@@ -90,10 +102,10 @@ export class WriteOffRequestService {
       `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`
     );
   }
-  approve(requestId: string, userId: string): Observable<void> {
+  approve(requestId: string, userId: string, documentId: string): Observable<void> {
     return this.http.put<void>(
       `${this.baseUrl}${this.apiUrls.approve.replace("{id}", requestId)}`,
-      { approvedByUserId: userId }
+      { approvedByUserId: userId, documentId: documentId }
     );
   }
 

@@ -64,7 +64,7 @@ export class WriteOffCreateComponent implements OnInit {
   loadUserWarehouseAndCompany(): void {
     const userId = this.tokenService.getUserId();
     if (!userId) {
-      this.errorMessage = "❌ Ошибка: пользователь не найден.";
+      this.errorMessage = "Ошибка: пользователь не найден.";
       return;
     }
 
@@ -75,11 +75,11 @@ export class WriteOffCreateComponent implements OnInit {
           this.loadInventoryItems();
           this.loadWriteOffReasons();
         } else {
-          this.errorMessage = "❌ Ошибка: у пользователя нет склада.";
+          this.errorMessage = "Ошибка: у пользователя нет склада.";
         }
       },
       error: () => {
-        this.errorMessage = "❌ Ошибка загрузки данных пользователя.";
+        this.errorMessage = "Ошибка загрузки данных пользователя.";
       }
     });
   }
@@ -93,7 +93,7 @@ export class WriteOffCreateComponent implements OnInit {
         this.items = data;
       },
       error: () => {
-        this.errorMessage = "❌ Ошибка загрузки списка товаров.";
+        this.errorMessage = "Ошибка загрузки списка товаров.";
       },
     });
   }
@@ -105,7 +105,7 @@ export class WriteOffCreateComponent implements OnInit {
         this.writeOffReasons = data;
       },
       error: () => {
-        this.errorMessage = "❌ Ошибка загрузки причин списания.";
+        this.errorMessage = "Ошибка загрузки причин списания.";
       },
     });
   }
@@ -123,7 +123,7 @@ export class WriteOffCreateComponent implements OnInit {
   /** 📌 Отправка запроса на списание */
   submitWriteOffRequest(form: NgForm): void {
     if (form.invalid || this.quantity > this.maxQuantity) {
-      this.errorMessage = "⚠️ Заполните все обязательные поля и укажите корректное количество!";
+      this.errorMessage = "Заполните все обязательные поля и укажите корректное количество!";
       return;
     }
 
@@ -145,7 +145,7 @@ export class WriteOffCreateComponent implements OnInit {
       },
       error: (err) => {
         console.error("❌ Ошибка при создании запроса:", err);
-        this.errorMessage = "❌ Ошибка при создании запроса.";
+        this.errorMessage = "Ошибка при создании запроса.";
       },
     });
   }

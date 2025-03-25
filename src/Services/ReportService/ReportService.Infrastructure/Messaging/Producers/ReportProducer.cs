@@ -40,7 +40,7 @@ public class ReportProducer
         {
             var stockStateData = await RequestStockStateDataAsync(companyId, dateSelect);
             return reportType == ReportType.Movements
-                ? EnrichMovementsReport(jsonString, stockStateData)
+                ? await EnrichMovementsReport(jsonString, stockStateData)
                 : await EnrichWriteOffsReport(jsonString, stockStateData);
         }
         _logger.LogInformation("Финал {jsonString}",jsonString);
@@ -92,7 +92,7 @@ public class ReportProducer
             _ => throw new ArgumentOutOfRangeException(nameof(reportType), $"Unsupported report type: {reportType}")
         };
 
-private string EnrichMovementsReport(string reportDataJson, string stockStateJson)
+private async Task<string> EnrichMovementsReport(string reportDataJson, string stockStateJson)
 {
     using var reportDoc = JsonDocument.Parse(reportDataJson);
     using var stockDoc = JsonDocument.Parse(stockStateJson);
@@ -159,6 +159,10 @@ private string EnrichMovementsReport(string reportDataJson, string stockStateJso
         movementDict["ItemName"] = item.ValueKind != JsonValueKind.Undefined && item.TryGetProperty("Name", out var itemName) && itemName.ValueKind == JsonValueKind.String
             ? itemName.GetString()!
             : "Неизвестный товар";
+        
+        var responsibleUser = await GetUserByWarehouseIdAsync(destinationWarehouseId);
+        movementDict["ResponsiblePerson"] = responsibleUser ?? "Неизвестный пользователь";
+
 
         enrichedMovements.Add(movementDict);
     }
@@ -242,6 +246,10 @@ private string EnrichMovementsReport(string reportDataJson, string stockStateJso
         }
 
         writeOffDict["ApprovedByUser"] = approvedByUserName;
+        
+        var responsibleUser = await GetUserByWarehouseIdAsync(warehouseId);
+        writeOffDict["ResponsiblePerson"] = responsibleUser ?? "Неизвестный пользователь";
+
 
         enrichedWriteOffs.Add(writeOffDict);
     }
@@ -289,6 +297,24 @@ private async Task<string?> GetUserNameAsync(string userId)
     }
 
     return "Неизвестный пользователь";
+}
+private async Task<string?> GetUserByWarehouseIdAsync(string warehouseId)
+{
+    if (string.IsNullOrEmpty(warehouseId)) return null;
+
+    var client = _httpClientFactory.CreateClient("AuthService");
+    var endpoint = $"users/warehouse-id/{warehouseId}";
+    var response = await client.GetAsync(endpoint);
+
+    if (!response.IsSuccessStatusCode) return null;
+
+    var content = await response.Content.ReadAsStringAsync();
+    using var doc = JsonDocument.Parse(content);
+
+    var firstName = doc.RootElement.GetProperty("firstName").GetString();
+    var lastName = doc.RootElement.GetProperty("lastName").GetString();
+
+    return $"{firstName} {lastName}";
 }
 
 

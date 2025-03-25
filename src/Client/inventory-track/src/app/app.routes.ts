@@ -21,6 +21,7 @@ import {
 } from "./components/movements/create-movement-request/create-movement-request.component";
 import {WarehouseViewComponent} from "./components/warehouses/warehouse-view/warehouse-view.component";
 import {WriteOffCreateComponent} from "./components/write-offs/ writeoff-create/writeoff-create.component";
+import {MyRequestsComponent} from "./components/my-requests/my-requests.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent,canActivate: [AuthGuard] },
@@ -39,4 +40,5 @@ export const routes: Routes = [
   {path: 'create-movement' , component: CreateMovementRequestComponent, canActivate : [AuthGuard]},
   {path: 'warehouse-view' , component: WarehouseViewComponent, canActivate: [AuthGuard]},
   {path:'create-write-off' , component: WriteOffCreateComponent , canActivate: [AuthGuard]},
+  {path: 'my-requests',component: MyRequestsComponent,canActivate:[AuthGuard]},
 ];

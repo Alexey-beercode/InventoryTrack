@@ -7,6 +7,8 @@ import { RequestStatus } from "../../../models/dto/writeoff-request/enums/reques
 import { CommonModule } from "@angular/common";
 import { ErrorMessageComponent } from "../../shared/error/error.component";
 import {DataPipe} from "../../../pipes/data-pipe";
+import {InventoryDocumentService} from "../../../services/inventory-document.service";
+import {InventoryItemService} from "../../../services/inventory-item.service";
 
 @Component({
   selector: 'app-writeoff-actions',
@@ -27,10 +29,18 @@ export class WriteOffActionsComponent implements OnInit {
   documentFile!: File;
   warehouseName: string = 'Загрузка...';
   errorMessage: string | null = null;
+  showUploadModal = false;
+  generatedDocumentFile: File | null = null;
+  selectedFile: File | null = null;
+  isDocumentGenerated = false;
+  isGeneratingDocument = false;
+
 
   constructor(
     private writeOffRequestService: WriteOffRequestService,
-    private warehouseService: WarehouseService
+    private warehouseService: WarehouseService,
+    private inventoryDocumentService: InventoryDocumentService,
+    private inventoryItemService: InventoryItemService
   ) {}
 
   ngOnInit(): void {
@@ -49,17 +59,10 @@ export class WriteOffActionsComponent implements OnInit {
     });
   }
 
-  /** 📌 Обработчик выбора файла */
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.documentFile = input.files[0];
-    }
-  }
 
-  approve(): void {
+/*  approve(): void {
     if (!this.documentFile) {
-      this.errorMessage = "⚠️ Выберите документ для прикрепления.";
+      this.errorMessage = "Выберите документ для прикрепления.";
       return;
     }
 
@@ -80,16 +83,16 @@ export class WriteOffActionsComponent implements OnInit {
           },
           error: (err) => {
             console.error("❌ Ошибка при загрузке документов:", err);
-            this.errorMessage = `❌ Ошибка при загрузке документов: ${err.message}`;
+            this.errorMessage = `Ошибка при загрузке документов: ${err.message}`;
           }
         });
       },
       error: (err) => {
         console.error("❌ Ошибка при одобрении заявки:", err);
-        this.errorMessage = `❌ Ошибка при одобрении заявки: ${err.message}`;
+        this.errorMessage = `Ошибка при одобрении заявки: ${err.message}`;
       }
     });
-  }
+  }*/
 
   /** 📌 Отклонение заявки */
   reject(): void {
@@ -100,10 +103,103 @@ export class WriteOffActionsComponent implements OnInit {
       },
       error: (err) => {
         console.error('❌ Ошибка при отклонении заявки:', err);
-        this.errorMessage = "❌ Ошибка при отклонении заявки. Попробуйте позже.";
+        this.errorMessage = "Ошибка при отклонении заявки. Попробуйте позже.";
       }
     });
   }
+
+  openUploadModal(): void {
+    this.selectedFile = null;
+    this.generatedDocumentFile = null;
+    this.isDocumentGenerated = false;
+    this.showUploadModal = true;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  generateDocument(): void {
+    this.isGeneratingDocument = true;
+
+    const dto = {
+      isWriteOff: true,
+      quantity: this.writeOffRequest.quantity,
+      destinationWarehouseId: this.writeOffRequest.warehouseId,
+      inventoryItemId: this.writeOffRequest.itemId,
+      sourceWarehouseId:this.writeOffRequest.warehouseId
+    };
+
+    this.inventoryDocumentService.generateInventoryDocument(dto).subscribe({
+      next: (blob) => {
+        const today = new Date().toLocaleDateString('ru-RU'); // формат: дд.мм.гггг
+        const fileName = `Акт о списании ${today}.docx`;
+        const file = new File([blob], fileName, { type: blob.type });
+
+        this.generatedDocumentFile = file;
+        this.isDocumentGenerated = true;
+        this.isGeneratingDocument = false;
+      },
+    error: () => {
+        this.errorMessage = 'Ошибка генерации документа';
+        this.isGeneratingDocument = false;
+      }
+    });
+  }
+
+
+  confirmUpload(): void {
+    const fileToUpload = this.selectedFile || this.generatedDocumentFile;
+    if (!fileToUpload) {
+      this.errorMessage = 'Не выбран файл для загрузки';
+      return;
+    }
+
+    // 📤 Сначала загружаем документ и получаем documentId
+    this.inventoryItemService.uploadDocument(fileToUpload).subscribe({
+      next: (documentId: string) => {
+        // ✅ После загрузки вызываем approve с documentId
+        this.writeOffRequestService.approve(this.writeOffRequest.id, this.userId, documentId).subscribe({
+          next: () => {
+            this.errorMessage = null;
+            this.showUploadModal = false;
+            this.reload.emit();
+          },
+          error: (err) => {
+            console.error('❌ Ошибка при утверждении заявки:', err);
+            this.errorMessage = 'Ошибка при утверждении заявки';
+          }
+        });
+      },
+      error: (err) => {
+        console.error('❌ Ошибка при загрузке документа:', err);
+        this.errorMessage = 'Ошибка при загрузке документа';
+      }
+    });
+  }
+
+
+  downloadDocument(documentId: string): void {
+    this.inventoryDocumentService.downloadDocument(documentId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(
+          new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }) // DOCX
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `writeoff-${documentId}.docx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка при скачивании документа';
+      }
+    });
+  }
+
 
   protected readonly RequestStatus = RequestStatus;
 }

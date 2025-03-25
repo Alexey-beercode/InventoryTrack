@@ -190,10 +190,11 @@
 
 /* 📌 Стили для кнопок внутри модалки */
 .modal-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
+
 
 .save-button {
   background-color: var(--success-color);

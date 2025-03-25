@@ -89,6 +89,7 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddScoped<IDocumentService, DocumentService>();
         builder.Services.AddScoped<IInventoryItemService, InventoryItemService>();
         builder.Services.AddScoped<ISupplierService, SupplierService>();
+        builder.Services.AddScoped<IInventoryDocumentService, InventoryDocumentService>();
         builder.Services.AddScoped<IWarehouseService, WarehouseService>();
         builder.Services.AddScoped<IInventoryItemFacade, InventoryItemFacade>();
         builder.Services.AddControllers();
