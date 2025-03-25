@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
       this.navLinks.push(
         { path: '/warehouse-view', label: 'Мой склад' },
         { path: '/movements', label: 'Перемещения' },
-        {path: '/create-item',label: 'Оформить материальную ценность'},
+        {path: '/create-item',label: 'Материальные ценности'},
         {path: '/reports',label: 'Отчеты'},
         { path: '/create-write-off', label: 'Списания' },
         {path:'/my-requests',label:'Мои заявки'}
