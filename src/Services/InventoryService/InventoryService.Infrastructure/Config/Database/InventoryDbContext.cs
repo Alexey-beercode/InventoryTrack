@@ -8,7 +8,6 @@ public class InventoryDbContext : DbContext
 {
     public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
     {
-        Database.Migrate();
     }
     
     public DbSet<Document> Documents { get; set; }

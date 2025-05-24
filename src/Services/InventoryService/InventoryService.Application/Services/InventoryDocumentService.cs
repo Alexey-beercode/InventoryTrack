@@ -2,12 +2,11 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using InventoryService.Application.DTOs.Request.InventoryItem;
 using InventoryService.Application.Interfaces.Services;
-using InventoryService.Application.Services;
 using InventoryService.Domain.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
-using TemplateEngine.Docx;
+
+namespace InventoryService.Application.Services;
 
 public class InventoryDocumentService : IInventoryDocumentService
 {
@@ -24,7 +23,7 @@ public class InventoryDocumentService : IInventoryDocumentService
         _itemRepo = itemRepo;
         _warehouseRepo = warehouseRepo;
 
-        _writeOffTemplatePath = config["DocumentTemplates:WriteOff"]; // путь к шаблону
+        _writeOffTemplatePath = config["DocumentTemplates:WriteOff"];
         _movementTemplatePath = config["DocumentTemplates:Movement"];
     }
 
@@ -61,50 +60,65 @@ public class InventoryDocumentService : IInventoryDocumentService
         return mem.ToArray();
     }
 
-
-public async Task<byte[]> GenerateMovementDocumentAsync(GenerateInventoryDocumentDto dto, CancellationToken cancellationToken)
-{
-    var item = await _itemRepo.GetByIdAsync(dto.InventoryItemId, cancellationToken);
-    var source = await _warehouseRepo.GetByIdAsync(dto.SourceWarehouseId, cancellationToken);
-    var destination = await _warehouseRepo.GetByIdAsync(dto.WarehouseId, cancellationToken);
-
-    await using var templateStream = new FileStream(_movementTemplatePath, FileMode.Open, FileAccess.Read);
-    var workbook = new HSSFWorkbook(templateStream); // Работаем с .xls
-    var sheet = workbook.GetSheetAt(0); // Предполагаем, что нужный лист — первый
-
-    // 🔁 Обход всех ячеек и замена плейсхолдеров
-    for (int i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
+    public async Task<byte[]> GenerateMovementDocumentAsync(GenerateInventoryDocumentDto dto, CancellationToken cancellationToken)
     {
-        var row = sheet.GetRow(i);
-        if (row == null) continue;
+        var item = await _itemRepo.GetByIdAsync(dto.InventoryItemId, cancellationToken);
+        var source = await _warehouseRepo.GetByIdAsync(dto.SourceWarehouseId, cancellationToken);
+        var destination = await _warehouseRepo.GetByIdAsync(dto.WarehouseId, cancellationToken);
 
-        for (int j = 0; j < row.LastCellNum; j++)
+        await using var templateStream = new FileStream(_movementTemplatePath, FileMode.Open, FileAccess.Read);
+        var workbook = new HSSFWorkbook(templateStream);
+        var sheet = workbook.GetSheetAt(0);
+
+        // Обход всех ячеек и замена плейсхолдеров
+        for (int i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
         {
-            var cell = row.GetCell(j);
-            if (cell == null || cell.CellType != NPOI.SS.UserModel.CellType.String) continue;
+            var row = sheet.GetRow(i);
+            if (row == null) continue;
 
-            var text = cell.StringCellValue;
+            for (int j = 0; j < row.LastCellNum; j++)
+            {
+                var cell = row.GetCell(j);
+                if (cell == null || cell.CellType != NPOI.SS.UserModel.CellType.String) continue;
 
-            // Замены
-            text = text.Replace("{{наименование}}", item.Name)
-                       .Replace("{{единица}}", "шт")
-                       .Replace("{{количество}}", dto.Quantity.ToString())
-                       .Replace("{{цена}}", item.EstimatedValue.ToString("F2"))
-                       .Replace("{{стоимость}}", (item.EstimatedValue * dto.Quantity).ToString("F2"))
-                       .Replace("{{грузоотправитель}}", source.Name)
-                       .Replace("{{грузополучатель}}", destination.Name)
-                       .Replace("{{адрес отправителя}}", source.Location ?? "-")
-                       .Replace("{{адрес получателя}}", destination.Location ?? "-");
+                var text = cell.StringCellValue;
 
-            cell.SetCellValue(text);
+                // Основные замены для товарного раздела ТТН
+                text = text.Replace("{{наименование}}", item.Name) // колонка 1
+                    .Replace("{{единица}}", item.MeasureUnit ?? "шт") // колонка 2
+                    .Replace("{{количество}}", dto.Quantity.ToString()) // колонка 3
+                    .Replace("{{цена}}", item.EstimatedValue.ToString("F2")) // колонка 4
+                    .Replace("{{стоимость}}", (item.EstimatedValue * dto.Quantity).ToString("F2")) // колонка 5
+                    .Replace("{{ставка_ндс}}", item.VatRate.ToString("F1")) // колонка 6
+                    .Replace("{{сумма_ндс}}", CalculateVatAmount(item.EstimatedValue * dto.Quantity, item.VatRate).ToString("F2")) // колонка 7
+                    .Replace("{{стоимость_с_ндс}}", CalculateAmountWithVat(item.EstimatedValue * dto.Quantity, item.VatRate).ToString("F2")) // колонка 8
+                    .Replace("{{грузовые_места}}", item.PlacesCount.ToString()) // колонка 9
+                    .Replace("{{масса_груза}}", item.CargoWeight.ToString("F2")) // колонка 10
+                    .Replace("{{примечание}}", item.Notes ?? "") // колонка 11
+                    
+                    // Поля для шапки ТТН
+                    .Replace("{{грузоотправитель}}", source.Name)
+                    .Replace("{{грузополучатель}}", destination.Name)
+                    .Replace("{{адрес отправителя}}", source.Location ?? "-")
+                    .Replace("{{адрес получателя}}", destination.Location ?? "-");
+
+                cell.SetCellValue(text);
+            }
         }
+
+        // Сохраняем результат
+        await using var outputStream = new MemoryStream();
+        workbook.Write(outputStream);
+        return outputStream.ToArray();
     }
 
-    // 💾 Сохраняем результат
-    await using var outputStream = new MemoryStream();
-    workbook.Write(outputStream);
-    return outputStream.ToArray();
-}
+    private decimal CalculateVatAmount(decimal amount, decimal vatRate)
+    {
+        return amount * vatRate / 100;
+    }
 
-
+    private decimal CalculateAmountWithVat(decimal amount, decimal vatRate)
+    {
+        return amount + CalculateVatAmount(amount, vatRate);
+    }
 }

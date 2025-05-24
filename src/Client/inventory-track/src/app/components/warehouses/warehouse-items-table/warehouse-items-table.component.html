@@ -10,50 +10,134 @@
   <div *ngIf="isLoading" class="loading-container">
     <app-loading-spinner></app-loading-spinner>
   </div>
+
+  <!-- Панель фильтров -->
   <div *ngIf="!isLoading && inventoryItems.length > 0" class="filter-panel">
-    <input type="text" placeholder="Поиск по названию или поставщику" [(ngModel)]="filter.search" />
+    <div class="filter-row">
+      <input type="text" placeholder="Поиск по названию, поставщику или партии" [(ngModel)]="filter.search" />
 
-    <input type="number" placeholder="Цена от" [(ngModel)]="filter.priceMin" />
-    <input type="number" placeholder="Цена до" [(ngModel)]="filter.priceMax" />
+      <input type="text" placeholder="Номер партии" [(ngModel)]="filter.batchNumber" />
 
-    <input type="number" placeholder="Количество от" [(ngModel)]="filter.quantityMin" />
-    <input type="number" placeholder="Количество до" [(ngModel)]="filter.quantityMax" />
+      <select [(ngModel)]="filter.measureUnit">
+        <option value="">Все единицы измерения</option>
+        <option *ngFor="let unit of getUniqueMeasureUnits()" [value]="unit">{{ unit }}</option>
+      </select>
+    </div>
 
-    <select [(ngModel)]="filter.sortBy">
-      <option value="">Сортировать по...</option>
-      <option value="priceAsc">Цена ↑</option>
-      <option value="priceDesc">Цена ↓</option>
-      <option value="quantityAsc">Количество ↑</option>
-      <option value="quantityDesc">Количество ↓</option>
-    </select>
+    <div class="filter-row">
+      <input type="number" placeholder="Цена от" [(ngModel)]="filter.priceMin" />
+      <input type="number" placeholder="Цена до" [(ngModel)]="filter.priceMax" />
+
+      <input type="number" placeholder="Количество от" [(ngModel)]="filter.quantityMin" />
+      <input type="number" placeholder="Количество до" [(ngModel)]="filter.quantityMax" />
+
+      <select [(ngModel)]="filter.sortBy">
+        <option value="">Сортировать по...</option>
+        <option value="priceAsc">Цена ↑</option>
+        <option value="priceDesc">Цена ↓</option>
+        <option value="quantityAsc">Количество ↑</option>
+        <option value="quantityDesc">Количество ↓</option>
+        <option value="batchAsc">Партия ↑</option>
+        <option value="batchDesc">Партия ↓</option>
+      </select>
+    </div>
+
+    <!-- Переключатель расширенного режима -->
+    <div class="view-controls">
+      <button class="btn-toggle" (click)="toggleAdvancedView()">
+        {{ showAdvancedColumns ? '📋 Стандартный вид' : '📊 Расширенный вид' }}
+      </button>
+    </div>
   </div>
-
 
   <!-- Таблица товаров -->
   <div *ngIf="!isLoading && inventoryItems.length > 0" class="items-table">
-    <h3>Материальные ценности</h3>
-    <table class="styled-table">
-      <thead>
-      <tr>
-        <th>Название</th>
-        <th>Уникальный код</th>
-        <th>Количество</th>
-        <th>Поставщик</th>
-        <th>Оценочная стоимость</th>
-        <th>Срок годности</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of filteredItems()">
-      <td>{{ item.name }}</td>
-        <td>{{ item.uniqueCode }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.supplier }}</td>
-        <td>{{ item.estimatedValue | number:'1.2-2' }} бел. руб.</td>
-        <td>{{ item.expirationDate | date: 'dd.MM.yyyy' }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <h3>Материальные ценности ({{ getFilteredItemsCount() }})</h3>
+
+    <div class="table-container">
+      <table class="styled-table">
+        <thead>
+        <tr>
+          <th>Название</th>
+          <th>Код</th>
+          <th>Партия</th>
+          <th>Количество</th>
+          <th>Ед. изм.</th>
+          <th>Поставщик</th>
+          <th>Стоимость</th>
+          <th>Срок годности</th>
+          <!-- Расширенные колонки -->
+          <th *ngIf="showAdvancedColumns">НДС %</th>
+          <th *ngIf="showAdvancedColumns">Грузовые места</th>
+          <th *ngIf="showAdvancedColumns">Масса (кг)</th>
+          <th *ngIf="showAdvancedColumns">Примечание</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of getFilteredItems()"
+            [class.batch-highlight]="item.batchNumber">
+          <td>
+            <div class="item-name">{{ item.name }}</div>
+          </td>
+          <td>{{ item.uniqueCode }}</td>
+          <td>
+            <span *ngIf="item.batchNumber" class="batch-number">
+              📦 {{ item.batchNumber }}
+            </span>
+            <span *ngIf="!item.batchNumber" class="no-batch">
+              ➖ Без партии
+            </span>
+          </td>
+          <td>
+            <span class="quantity">{{ item.quantity }}</span>
+          </td>
+          <td>{{ item.measureUnit }}</td>
+          <td>{{ item.supplier }}</td>
+          <td>
+            <span class="price">{{ item.estimatedValue | number:'1.2-2' }} бел. руб.</span>
+          </td>
+          <td>
+            <span class="expiration-date"
+                  [class.expiring-soon]="isExpiringSoon(item.expirationDate)">
+              {{ item.expirationDate | date: 'dd.MM.yyyy' }}
+            </span>
+          </td>
+          <!-- Расширенные колонки -->
+          <td *ngIf="showAdvancedColumns">
+            {{ getVatRateDisplay(item.vatRate) }}
+          </td>
+          <td *ngIf="showAdvancedColumns">
+            {{ getPlacesCountDisplay(item.placesCount) }}
+          </td>
+          <td *ngIf="showAdvancedColumns">
+            {{ getCargoWeightDisplay(item.cargoWeight) }}
+          </td>
+          <td *ngIf="showAdvancedColumns" class="notes-column">
+            <span *ngIf="item.notes" [title]="item.notes">
+              {{ getTruncatedNotes(item.notes) }}
+            </span>
+            <span *ngIf="!item.notes">—</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Сводка по партиям -->
+    <div class="batch-summary" *ngIf="shouldShowBatchSummary()">
+      <h4>📦 Сводка по партиям</h4>
+      <div class="batch-cards">
+        <div *ngFor="let batch of getBatchSummaryData()" class="batch-card">
+          <div class="batch-header">
+            <strong>{{ batch.batchNumber }}</strong>
+          </div>
+          <div class="batch-info">
+            <span>Товаров: {{ batch.itemsCount }}</span>
+            <span>Общее количество: {{ batch.totalQuantity }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>

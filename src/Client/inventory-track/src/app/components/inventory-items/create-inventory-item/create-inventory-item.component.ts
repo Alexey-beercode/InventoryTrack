@@ -1,7 +1,9 @@
+// src/app/components/inventory-item/create-inventory-item/create-inventory-item.component.ts (ОБНОВЛЕННЫЙ)
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { InventoryItemService } from '../../../services/inventory-item.service';
 import { SupplierService } from '../../../services/supplier.service';
+import { BatchService } from '../../../services/batch.service';
 import { CreateInventoryItemDto } from '../../../models/dto/inventory-item/create-inventory-item-dto';
 import { SupplierResponseDto } from '../../../models/dto/supplier/supplier-response-dto';
 import { CommonModule } from '@angular/common';
@@ -10,7 +12,7 @@ import { BackButtonComponent } from '../../shared/back-button/back-button.compon
 import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { UserResponseDTO } from '../../../models/dto/user/user-response-dto';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-create-inventory-item',
@@ -29,7 +31,14 @@ export class CreateInventoryItemComponent implements OnInit {
     supplierId: '',
     warehouseId: '',
     deliveryDate: '',
-    documentId: ''
+    documentId: '',
+    // 🆕 Новые поля для ТТН
+    batchNumber: '',
+    measureUnit: 'шт',
+    vatRate: 0,
+    placesCount: 1,
+    cargoWeight: 0,
+    notes: ''
   };
 
   documentFile: File | null = null;
@@ -37,16 +46,18 @@ export class CreateInventoryItemComponent implements OnInit {
   warehouseId: string = '';
   errorMessage: string | null = null;
   showDateError = false;
-
+  showBatchNumberSuggestion = false;
 
   constructor(
     private inventoryItemService: InventoryItemService,
     private supplierService: SupplierService,
-    private router:Router
+    private batchService: BatchService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadSuppliers();
+    this.generateBatchNumber(); // Автогенерация номера партии
   }
 
   /** 📌 Получаем объект пользователя из `userEmitter` и устанавливаем склад */
@@ -68,6 +79,32 @@ export class CreateInventoryItemComponent implements OnInit {
     });
   }
 
+  /** 🆕 Автогенерация номера партии */
+  generateBatchNumber(): void {
+    const today = new Date();
+    this.newInventoryItem.batchNumber = this.batchService.generateBatchNumber(today, 1);
+    this.showBatchNumberSuggestion = true;
+  }
+
+  /** 🆕 Обновление номера партии при изменении даты поставки */
+  onDeliveryDateChange(): void {
+    if (this.newInventoryItem.deliveryDate) {
+      const deliveryDate = new Date(this.newInventoryItem.deliveryDate);
+      const suggestedBatch = this.batchService.generateBatchNumber(deliveryDate, 1);
+
+      if (!this.newInventoryItem.batchNumber || this.showBatchNumberSuggestion) {
+        this.newInventoryItem.batchNumber = suggestedBatch;
+      }
+    }
+  }
+
+  /** 🆕 Валидация номера партии */
+  validateBatchNumber(): boolean {
+    if (!this.newInventoryItem.batchNumber) return true; // Опционально
+
+    return this.batchService.isValidBatchNumber(this.newInventoryItem.batchNumber);
+  }
+
   /** 📌 Обработчик выбора файла */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -79,7 +116,9 @@ export class CreateInventoryItemComponent implements OnInit {
   /** 📌 Создаёт материальную ценность */
   createInventoryItem(form: NgForm): void {
     this.showDateError = false;
+    this.errorMessage = null;
 
+    // Валидация дат
     if (
       this.isDateInPast(this.newInventoryItem.expirationDate) ||
       this.isDateInPast(this.newInventoryItem.deliveryDate)
@@ -87,13 +126,38 @@ export class CreateInventoryItemComponent implements OnInit {
       this.showDateError = true;
       return;
     }
+
+    // Валидация формы
     if (form.invalid) {
       this.errorMessage = 'Заполните все обязательные поля!';
       return;
     }
 
+    // Валидация склада
     if (!this.newInventoryItem.warehouseId) {
       this.errorMessage = 'Нельзя создать ценность без склада!';
+      return;
+    }
+
+    // 🆕 Валидация номера партии
+    if (this.newInventoryItem.batchNumber && !this.validateBatchNumber()) {
+      this.errorMessage = 'Некорректный формат номера партии! Используйте формат: YYYY-MM-DD-XXXX';
+      return;
+    }
+
+    // 🆕 Валидация числовых полей
+    if (this.newInventoryItem.vatRate && (this.newInventoryItem.vatRate < 0 || this.newInventoryItem.vatRate > 100)) {
+      this.errorMessage = 'Ставка НДС должна быть от 0 до 100%';
+      return;
+    }
+
+    if (this.newInventoryItem.placesCount && this.newInventoryItem.placesCount < 1) {
+      this.errorMessage = 'Количество грузовых мест должно быть больше 0';
+      return;
+    }
+
+    if (this.newInventoryItem.cargoWeight && this.newInventoryItem.cargoWeight < 0) {
+      this.errorMessage = 'Масса груза не может быть отрицательной';
       return;
     }
 
@@ -125,7 +189,6 @@ export class CreateInventoryItemComponent implements OnInit {
 
   /** 📌 Создание элемента */
   private createItem(form: NgForm): void {
-
     this.inventoryItemService.createInventoryItem(this.newInventoryItem).subscribe({
       next: (createdItem) => {
         console.log('✅ Материальная ценность создана:', createdItem);
@@ -133,7 +196,6 @@ export class CreateInventoryItemComponent implements OnInit {
         form.resetForm();
         this.resetNewInventoryItem();
         this.router.navigate(['/'])
-        // ✅ Обнуляем DTO после создания
       },
       error: (error) => {
         console.error('❌ Ошибка создания:', error);
@@ -151,10 +213,18 @@ export class CreateInventoryItemComponent implements OnInit {
       estimatedValue: 0,
       expirationDate: '',
       supplierId: '',
-      warehouseId: this.warehouseId, // Оставляем склад
+      warehouseId: this.warehouseId,
       deliveryDate: '',
-      documentId: ''
+      documentId: '',
+      // 🆕 Сброс новых полей
+      batchNumber: '',
+      measureUnit: 'шт',
+      vatRate: 0,
+      placesCount: 1,
+      cargoWeight: 0,
+      notes: ''
     };
+    this.generateBatchNumber(); // Новый номер партии
   }
 
   isDateInPast(dateStr: string): boolean {
@@ -162,11 +232,10 @@ export class CreateInventoryItemComponent implements OnInit {
 
     const inputDate = new Date(dateStr);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // сбрасываем время
+    today.setHours(0, 0, 0, 0);
 
     return inputDate < today;
   }
-
 
   /** 📌 Отмена и возврат назад */
   cancel(): void {

@@ -18,4 +18,7 @@ public class WriteOffRequestResponseDto : BaseDto
     public Guid? ApprovedByUserId { get; set; }
     public WriteOffReasonResponseDto Reason { get; set; }
     public Guid DocumentId { get; set; }
+    
+    public Guid? RequestedByUserId { get; set; } // Кто создал запрос
+    public string? BatchNumber { get; set; } // Номер партии
 }

@@ -3,6 +3,15 @@
   <p><strong>Склад:</strong> {{ warehouseName }}</p>
   <p><strong>Причина:</strong> {{ writeOffRequest.reason.reason }}</p>
   <p><strong>Дата:</strong> {{ writeOffRequest.requestDate | customDate }}</p>
+  <!-- 🆕 Информация о партии (если это партийное списание) -->
+  <div *ngIf="showBatchInfo && writeOffRequest.batchNumber" class="batch-indicator">
+    📦 Партия: {{ writeOffRequest.batchNumber }}
+  </div>
+
+  <!-- 🆕 Индикатор индивидуального списания -->
+  <div *ngIf="showBatchInfo && !writeOffRequest.batchNumber" class="individual-indicator">
+    📄 Индивидуальное списание
+  </div>
 
   <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
 

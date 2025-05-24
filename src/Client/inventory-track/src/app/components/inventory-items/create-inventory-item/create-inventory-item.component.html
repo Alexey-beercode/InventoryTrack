@@ -1,4 +1,4 @@
-<app-header title="Материальнные ценности" (userEmitter)="onUserReceived($event!)"></app-header>
+<app-header title="Материальные ценности" (userEmitter)="onUserReceived($event!)"></app-header>
 
 <div class="create-inventory-container">
   <app-back-button></app-back-button>
@@ -6,83 +6,183 @@
   <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
 
   <form #inventoryForm="ngForm" (ngSubmit)="createInventoryItem(inventoryForm)" class="create-inventory-form" novalidate>
-    <div class="form-group">
-      <label for="name">Название</label>
-      <input id="name" name="name" type="text" [(ngModel)]="newInventoryItem.name" required #name="ngModel" />
-      <div *ngIf="name.invalid && name.touched" class="error">⚠️ Название обязательно!</div>
-    </div>
 
-    <div class="form-group">
-      <label for="uniqueCode">Уникальный код</label>
-      <input id="uniqueCode"
-             name="uniqueCode"
-             type="text"
-             pattern="^[0-9]+$"
-             [(ngModel)]="newInventoryItem.uniqueCode"
-             required
-             #uniqueCode="ngModel" />
-      <div *ngIf="uniqueCode.invalid && uniqueCode.touched" class="error">
-        ⚠️ Уникальный код должен содержать только цифры!
+    <!-- Основная информация -->
+    <fieldset class="form-section">
+      <legend>📦 Основная информация</legend>
+
+      <div class="form-group">
+        <label for="name">Название *</label>
+        <input id="name" name="name" type="text" [(ngModel)]="newInventoryItem.name" required #name="ngModel" />
+        <div *ngIf="name.invalid && name.touched" class="error">⚠️ Название обязательно!</div>
       </div>
-    </div>
 
-
-    <div class="form-group">
-      <label for="supplierId">Поставщик</label>
-      <select id="supplierId" name="supplierId" [(ngModel)]="newInventoryItem.supplierId" required>
-        <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="quantity">Количество</label>
-      <input id="quantity" name="quantity" type="number" min="1" [(ngModel)]="newInventoryItem.quantity" required #quantity="ngModel" />
-      <div *ngIf="quantity.invalid && quantity.touched" class="error">⚠️ Количество должно быть больше 0!</div>
-    </div>
-
-    <div class="form-group">
-      <label for="estimatedValue">Оценочная стоимость</label>
-      <input id="estimatedValue"
-             name="estimatedValue"
-             type="number"
-             min="0"
-             [(ngModel)]="newInventoryItem.estimatedValue"
-             required
-             #estimatedValue="ngModel" />
-      <div *ngIf="estimatedValue.invalid && estimatedValue.touched" class="error">
-        ⚠️ Стоимость не может быть отрицательной!
+      <div class="form-group">
+        <label for="uniqueCode">Уникальный код *</label>
+        <input id="uniqueCode"
+               name="uniqueCode"
+               type="text"
+               pattern="^[0-9]+$"
+               [(ngModel)]="newInventoryItem.uniqueCode"
+               required
+               #uniqueCode="ngModel" />
+        <div *ngIf="uniqueCode.invalid && uniqueCode.touched" class="error">
+          ⚠️ Уникальный код должен содержать только цифры!
+        </div>
       </div>
-    </div>
 
+      <div class="form-group">
+        <label for="supplierId">Поставщик *</label>
+        <select id="supplierId" name="supplierId" [(ngModel)]="newInventoryItem.supplierId" required>
+          <option value="">Выберите поставщика</option>
+          <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label for="expirationDate">Срок годности</label>
-      <input id="expirationDate" name="expirationDate" type="date"
-             [(ngModel)]="newInventoryItem.expirationDate" required #expirationDate="ngModel" />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="quantity">Количество *</label>
+          <input id="quantity" name="quantity" type="number" min="1" [(ngModel)]="newInventoryItem.quantity" required #quantity="ngModel" />
+          <div *ngIf="quantity.invalid && quantity.touched" class="error">⚠️ Количество должно быть больше 0!</div>
+        </div>
+
+        <div class="form-group">
+          <label for="measureUnit">Единица измерения</label>
+          <select id="measureUnit" name="measureUnit" [(ngModel)]="newInventoryItem.measureUnit">
+            <option value="шт">шт</option>
+            <option value="кг">кг</option>
+            <option value="л">л</option>
+            <option value="м">м</option>
+            <option value="м²">м²</option>
+            <option value="м³">м³</option>
+            <option value="упак">упак</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="estimatedValue">Оценочная стоимость *</label>
+        <input id="estimatedValue"
+               name="estimatedValue"
+               type="number"
+               min="0"
+               step="0.01"
+               [(ngModel)]="newInventoryItem.estimatedValue"
+               required
+               #estimatedValue="ngModel" />
+        <div *ngIf="estimatedValue.invalid && estimatedValue.touched" class="error">
+          ⚠️ Стоимость не может быть отрицательной!
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Партия и даты -->
+    <fieldset class="form-section">
+      <legend>📅 Партия и даты</legend>
+
+      <div class="form-group">
+        <label for="batchNumber">Номер партии</label>
+        <div class="batch-input-container">
+          <input id="batchNumber"
+                 name="batchNumber"
+                 type="text"
+                 [(ngModel)]="newInventoryItem.batchNumber"
+                 placeholder="YYYY-MM-DD-XXXX" />
+          <button type="button" class="btn-generate" (click)="generateBatchNumber()">🔄 Сгенерировать</button>
+        </div>
+        <small class="form-hint">Формат: YYYY-MM-DD-XXXX (например: 2024-12-20-0001)</small>
+        <div *ngIf="newInventoryItem.batchNumber && !validateBatchNumber()" class="error">
+          ⚠️ Некорректный формат номера партии!
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="deliveryDate">Дата поставки *</label>
+          <input id="deliveryDate"
+                 name="deliveryDate"
+                 type="date"
+                 [(ngModel)]="newInventoryItem.deliveryDate"
+                 (change)="onDeliveryDateChange()"
+                 required
+                 #deliveryDate="ngModel" />
+        </div>
+
+        <div class="form-group">
+          <label for="expirationDate">Срок годности *</label>
+          <input id="expirationDate"
+                 name="expirationDate"
+                 type="date"
+                 [(ngModel)]="newInventoryItem.expirationDate"
+                 required
+                 #expirationDate="ngModel" />
+        </div>
+      </div>
+
       <div *ngIf="showDateError" class="error">
         ⚠️ Даты не могут быть раньше сегодняшнего дня.
       </div>
+    </fieldset>
 
-    </div>
+    <!-- Данные для ТТН -->
+    <fieldset class="form-section">
+      <legend>🚛 Данные для ТТН</legend>
 
-    <div class="form-group">
-      <label for="deliveryDate">Дата поставки</label>
-      <input id="deliveryDate" name="deliveryDate" type="date"
-             [(ngModel)]="newInventoryItem.deliveryDate" required #deliveryDate="ngModel" />
-      <div *ngIf="showDateError" class="error">
-        ⚠️ Даты не могут быть раньше сегодняшнего дня.
+      <div class="form-row">
+        <div class="form-group">
+          <label for="vatRate">Ставка НДС (%)</label>
+          <input id="vatRate"
+                 name="vatRate"
+                 type="number"
+                 min="0"
+                 max="100"
+                 step="0.1"
+                 [(ngModel)]="newInventoryItem.vatRate" />
+        </div>
+
+        <div class="form-group">
+          <label for="placesCount">Количество грузовых мест</label>
+          <input id="placesCount"
+                 name="placesCount"
+                 type="number"
+                 min="1"
+                 [(ngModel)]="newInventoryItem.placesCount" />
+        </div>
       </div>
 
-    </div>
+      <div class="form-group">
+        <label for="cargoWeight">Масса груза (кг)</label>
+        <input id="cargoWeight"
+               name="cargoWeight"
+               type="number"
+               min="0"
+               step="0.01"
+               [(ngModel)]="newInventoryItem.cargoWeight" />
+      </div>
 
-    <div class="form-group">
-      <label for="documentFile">Документ</label>
-      <input id="documentFile" name="documentFile" type="file" (change)="onFileSelected($event)" />
-    </div>
+      <div class="form-group">
+        <label for="notes">Примечание</label>
+        <textarea id="notes"
+                  name="notes"
+                  rows="3"
+                  [(ngModel)]="newInventoryItem.notes"
+                  placeholder="Дополнительная информация о товаре..."></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Документ -->
+    <fieldset class="form-section">
+      <legend>📄 Документ</legend>
+
+      <div class="form-group">
+        <label for="documentFile">Прикрепить документ</label>
+        <input id="documentFile" name="documentFile" type="file" (change)="onFileSelected($event)" />
+      </div>
+    </fieldset>
 
     <div class="create-inventory-buttons">
-      <button type="submit" class="btn-primary">Сохранить</button>
-      <button type="button" class="btn-secondary" (click)="cancel()">Отмена</button>
+      <button type="submit" class="btn-primary">💾 Сохранить</button>
+      <button type="button" class="btn-secondary" (click)="cancel()">❌ Отмена</button>
     </div>
   </form>
 </div>

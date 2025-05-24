@@ -2,6 +2,7 @@
   title="Создание списания"
   (companyIdEmitter)="onCompanyIdReceived($event)">
 </app-header>
+
 <div class="container">
   <app-back-button></app-back-button>
 
@@ -13,24 +14,90 @@
     <div class="form-group">
       <label for="item">Материальная ценность</label>
       <select id="item" name="item" [(ngModel)]="selectedItemId" (ngModelChange)="updateMaxQuantity()" required #itemSelect="ngModel" class="form-control">
-        <option *ngFor="let item of items" [value]="item.id">{{ item.name }} ({{ item.quantity }} шт.)</option>
+        <option value="">Выберите товар</option>
+        <option *ngFor="let item of items" [value]="item.id">
+          {{ item.name }} ({{ item.quantity }} {{ item.measureUnit || 'шт' }})
+          <span *ngIf="item.batchNumber"> - Партия: {{ item.batchNumber }}</span>
+        </option>
       </select>
       <div *ngIf="itemSelect.invalid && itemSelect.touched" class="error">⚠️ Выберите товар!</div>
     </div>
 
-    <!-- Количество -->
-    <div class="form-group">
+    <!-- 🆕 Переключатель режима списания -->
+    <div class="form-group" *ngIf="selectedItemId">
+      <label>Режим списания</label>
+      <div class="mode-selector">
+        <button type="button"
+                class="mode-btn"
+                [class.active]="writeOffMode === 'individual'"
+                (click)="switchWriteOffMode('individual')">
+          📄 Указать количество
+        </button>
+        <button type="button"
+                class="mode-btn"
+                [class.active]="writeOffMode === 'batch'"
+                (click)="switchWriteOffMode('batch')">
+          📦 Списать партию
+        </button>
+      </div>
+    </div>
+
+    <!-- Индивидуальное списание - количество -->
+    <div class="form-group" *ngIf="writeOffMode === 'individual'">
       <label for="quantity">Количество</label>
       <input id="quantity" name="quantity" type="number" min="1" [max]="maxQuantity" [(ngModel)]="quantity" required #quantityInput="ngModel" class="form-control"/>
-      <small>Доступно: {{ maxQuantity }} шт.</small>
+      <small>Доступно: {{ maxQuantity }} {{ getSelectedItemMeasureUnit() }}</small>
       <div *ngIf="quantityInput.invalid && quantityInput.touched" class="error">⚠️ Укажите корректное количество!</div>
       <div *ngIf="quantity > maxQuantity" class="error">⚠️ Недостаточно товаров на складе!</div>
+    </div>
+
+    <!-- 🆕 Выбор партии для списания -->
+    <div class="batch-section" *ngIf="writeOffMode === 'batch'">
+
+      <!-- Кнопка загрузки партий -->
+      <div class="form-group" *ngIf="!showBatchSelection">
+        <button type="button" class="btn-load-batches" (click)="loadBatchesForItem()" [disabled]="isLoadingBatches">
+          <span *ngIf="!isLoadingBatches">📦 Показать доступные партии</span>
+          <span *ngIf="isLoadingBatches">🔄 Загрузка партий...</span>
+        </button>
+      </div>
+
+      <!-- Список партий -->
+      <div class="form-group" *ngIf="showBatchSelection && availableBatches.length > 0">
+        <label>Выберите партию для списания</label>
+        <div class="batches-list">
+          <div *ngFor="let batch of availableBatches"
+               class="batch-card"
+               [class.selected]="selectedBatchNumber === batch.batchNumber"
+               (click)="selectBatch(batch.batchNumber)">
+            <div class="batch-header">
+              <strong>📦 {{ batch.batchNumber }}</strong>
+              <span class="batch-quantity">{{ batch.totalQuantity }} {{ getSelectedItemMeasureUnit() }}</span>
+            </div>
+            <div class="batch-details">
+              <small>Поставщик: {{ batch.manufacturerName || 'Не указан' }}</small>
+              <small>Срок годности: {{ batch.expirationDate | date: 'dd.MM.yyyy' }}</small>
+              <small>Товаров в партии: {{ batch.itemsCount }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Подтверждение выбора партии -->
+      <div class="selected-batch-info" *ngIf="selectedBatchNumber">
+        <div class="alert alert-info">
+          <strong>✅ Выбрана партия: {{ selectedBatchNumber }}</strong>
+          <p>Будет создано {{ getSelectedBatchItemsCount() }} запросов на списание</p>
+          <p>Общее количество: {{ getSelectedBatchTotalQuantity() }} {{ getSelectedItemMeasureUnit() }}</p>
+        </div>
+      </div>
     </div>
 
     <!-- Причина списания -->
     <div class="form-group">
       <label for="reason">Причина списания</label>
       <select id="reason" name="reason" [(ngModel)]="selectedReasonId" required #reasonSelect="ngModel" class="form-control">
+        <option value="">Выберите причину</option>
         <option *ngFor="let reason of writeOffReasons" [value]="reason.id">{{ reason.reason }}</option>
         <option value="other">Другое...</option>
       </select>
@@ -46,8 +113,12 @@
 
     <!-- Кнопки -->
     <div class="button-group">
-      <button type="submit" class="btn-primary" [disabled]="writeOffForm.invalid || quantity > maxQuantity">Сохранить</button>
-      <button type="button" class="btn-secondary" (click)="cancel()">Отмена</button>
+      <button type="submit"
+              class="btn-primary"
+              [disabled]="!canSubmit()">
+        {{ writeOffMode === 'batch' ? '📦 Списать партию' : '💾 Сохранить' }}
+      </button>
+      <button type="button" class="btn-secondary" (click)="cancel()">❌ Отмена</button>
     </div>
 
   </form>

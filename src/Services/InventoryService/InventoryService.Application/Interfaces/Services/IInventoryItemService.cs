@@ -19,7 +19,11 @@ public interface IInventoryItemService
     Task UpdateInventoryItemAsync(Guid id, UpdateInventoryItemDto dto, CancellationToken cancellationToken = default);
     Task DeleteInventoryItemAsync(Guid id, CancellationToken cancellationToken = default);
     Task UpdateInventoryItemStatusAsync(ChangeInventoryItemStatusDto inventoryItemStatusDto, CancellationToken cancellationToken = default);
+    Task AddDocumentToInventoryItemAsync(DocumentDto file, string inventoryItemName, CancellationToken cancellationToken = default);
 
-    Task AddDocumentToInventoryItemAsync(DocumentDto file,string inventoryItemName, CancellationToken cancellationToken = default);
+    // ================== НОВЫЕ МЕТОДЫ ДЛЯ ПАРТИЙ ==================
+    Task<IEnumerable<InventoryItemResponseDto>> GetInventoryItemsByBatchNumberAsync(string batchNumber, CancellationToken cancellationToken = default);
+    Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, CancellationToken cancellationToken = default);
+    Task<IEnumerable<InventoryItemResponseDto>> GetByNameAllBatchesAsync(string name, CancellationToken cancellationToken = default);
+    Task WriteOffBatchAsync(string batchNumber, CancellationToken cancellationToken = default);
 }
-

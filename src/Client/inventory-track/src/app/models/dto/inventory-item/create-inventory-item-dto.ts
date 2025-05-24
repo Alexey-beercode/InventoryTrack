@@ -3,9 +3,17 @@ export class CreateInventoryItemDto {
   uniqueCode!: string;
   quantity!: number;
   estimatedValue!: number;
-  expirationDate!: string;  // 🔥 Изменено на string
+  expirationDate!: string;
   supplierId!: string;
   warehouseId!: string;
-  deliveryDate!: string;  // 🔥 Изменено на string
+  deliveryDate!: string;
   documentId!: string;
+
+  // 🆕 Новые поля для ТТН
+  batchNumber?: string;
+  measureUnit?: string;
+  vatRate?: number;
+  placesCount?: number;
+  cargoWeight?: number;
+  notes?: string;
 }

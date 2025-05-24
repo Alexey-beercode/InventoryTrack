@@ -123,5 +123,41 @@ namespace InventoryService.Controllers
             await _inventoryItemService.DeleteInventoryItemAsync(id, cancellationToken);
             return NoContent();
         }
+        
+        // Добавить этот метод в InventoryItemController
+
+        [HttpGet("batches/by-name/{itemName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<BatchInfoDto>>> GetBatchesByItemName(
+            string itemName, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Getting batches for item: {ItemName}", itemName);
+            var batches = await _inventoryItemService.GetBatchesByItemNameAsync(itemName, cancellationToken);
+    
+            if (!batches.Any())
+            {
+                return NotFound($"Партии для товара '{itemName}' не найдены");
+            }
+    
+            return Ok(batches);
+        }
+
+        [HttpGet("all-batches/by-name/{itemName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<InventoryItemResponseDto>>> GetAllBatchesByItemName(
+            string itemName, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Getting all batches with details for item: {ItemName}", itemName);
+            var items = await _inventoryItemService.GetByNameAllBatchesAsync(itemName, cancellationToken);
+    
+            if (!items.Any())
+            {
+                return NotFound($"Товары с названием '{itemName}' не найдены");
+            }
+    
+            return Ok(items);
+        }
     }
 }

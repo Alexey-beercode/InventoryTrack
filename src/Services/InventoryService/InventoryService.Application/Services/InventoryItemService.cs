@@ -28,10 +28,10 @@ public class InventoryItemService : IInventoryItemService
 
     public async Task CreateInventoryItemAsync(CreateInventoryItemDto dto, CancellationToken cancellationToken = default)
     {
-        var existingItem = await _unitOfWork.InventoryItems.GetByNameAsync(dto.Name);
-        if (existingItem is not null)
+        var existingBatch = await _unitOfWork.InventoryItems.GetByNameAndBatchAsync(dto.Name, dto.BatchNumber, cancellationToken);
+        if (existingBatch is not null)
         {
-            throw new AlreadyExistsException("Item already exists");
+            throw new AlreadyExistsException($"Item with name '{dto.Name}' and batch '{dto.BatchNumber}' already exists");
         }
 
         var supplier = await _unitOfWork.Suppliers.GetByIdAsync(dto.SupplierId, cancellationToken)
@@ -278,6 +278,121 @@ public class InventoryItemService : IInventoryItemService
         }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task<IEnumerable<InventoryItemResponseDto>> GetByNameAllBatchesAsync(string name, CancellationToken cancellationToken = default)
+    {
+        // В отличие от GetByNameAsync, этот метод возвращает ВСЕ партии товара
+        var items = await _unitOfWork.InventoryItems.GetAllByNameAsync(name, cancellationToken);
+        var itemsDtos = new List<InventoryItemResponseDto>();
+    
+        foreach (var item in items)
+        {
+            var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
+            var itemDto = await _inventoryItemFacade.GetFullInventoryItemDto(itemWarehouses, item, cancellationToken);
+            itemsDtos.Add(itemDto);
+        }
+    
+        return itemsDtos;
+    }
+
+    public async Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, CancellationToken cancellationToken = default)
+    {
+        var items = await _unitOfWork.InventoryItems.GetAllByNameAsync(itemName, cancellationToken);
+    
+        var batches = new List<BatchInfoDto>();
+    
+        var batchGroups = items.GroupBy(i => i.BatchNumber);
+    
+        foreach (var batchGroup in batchGroups)
+        {
+            long totalQuantity = 0;
+        
+            // Для каждого item в партии получаем количество со складов
+            foreach (var item in batchGroup)
+            {
+                var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
+                totalQuantity += itemWarehouses.Sum(iw => iw.Quantity);
+            }
+        
+            var batch = new BatchInfoDto
+            {
+                BatchNumber = batchGroup.Key,
+                ItemsCount = batchGroup.Count(),
+                ManufactureDate = batchGroup.Min(i => i.DeliveryDate),
+                ExpirationDate = batchGroup.Min(i => i.ExpirationDate),
+                ManufacturerName = batchGroup.First().Supplier?.Name ?? "",
+                TotalQuantity = totalQuantity
+            };
+        
+            batches.Add(batch);
+        }
+
+        return batches;
+    }
+    
+// Обновленный метод GetInventoryItemsByBatchNumberAsync в InventoryItemService
+
+public async Task<IEnumerable<InventoryItemResponseDto>> GetInventoryItemsByBatchNumberAsync(string batchNumber, CancellationToken cancellationToken = default)
+{
+    Console.WriteLine($"🔍 InventoryItemService: Поиск партии '{batchNumber}'");
+    
+    var items = await _unitOfWork.InventoryItems.GetByBatchNumberAsync(batchNumber, cancellationToken);
+    
+    Console.WriteLine($"🔍 InventoryItemService: Найдено {items.Count()} товаров");
+    
+    var itemsDtos = new List<InventoryItemResponseDto>();
+
+    foreach (var item in items)
+    {
+        Console.WriteLine($"🔍 Обработка товара: {item.Name}, ID: {item.Id}, BatchNumber: '{item.BatchNumber}', Status: {item.Status}");
+        
+        var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
+        
+        Console.WriteLine($"🔍 Найдено складских записей: {itemWarehouses.Count()}");
+        
+        var itemDto = await _inventoryItemFacade.GetFullInventoryItemDto(itemWarehouses, item, cancellationToken);
+        itemsDtos.Add(itemDto);
+    }
+
+    Console.WriteLine($"🔍 InventoryItemService: Возвращаем {itemsDtos.Count} DTO");
+    return itemsDtos;
+}
+
+// Добавляем метод для поиска партий без фильтра по статусу
+public async Task<IEnumerable<InventoryItemResponseDto>> GetInventoryItemsByBatchNumberAllStatusesAsync(string batchNumber, CancellationToken cancellationToken = default)
+{
+    // Используем альтернативный метод из репозитория
+    var items = await _unitOfWork.InventoryItems.GetByBatchNumberAllStatusesAsync(batchNumber, cancellationToken);
+    var itemsDtos = new List<InventoryItemResponseDto>();
+
+    foreach (var item in items)
+    {
+        var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
+        var itemDto = await _inventoryItemFacade.GetFullInventoryItemDto(itemWarehouses, item, cancellationToken);
+        itemsDtos.Add(itemDto);
+    }
+
+    return itemsDtos;
+}
+    
+    public async Task WriteOffBatchAsync(string batchNumber, CancellationToken cancellationToken = default)
+    {
+        var batchItems = await GetInventoryItemsByBatchNumberAsync(batchNumber, cancellationToken);
+
+        if (!batchItems.Any())
+        {
+            throw new EntityNotFoundException($"Batch '{batchNumber}' not found.");
+        }
+
+        // Списываем все товары из партии
+        foreach (var item in batchItems)
+        {
+            foreach (var warehouseDetail in item.WarehouseDetails)
+            {
+                await WriteOffItemAsync(item.Id, warehouseDetail.WarehouseId, warehouseDetail.Quantity, cancellationToken);
+            }
+        }
     }
 
 }

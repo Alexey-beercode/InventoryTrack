@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { BackButtonComponent } from "../../shared/back-button/back-button.component";
 import { LoadingSpinnerComponent } from "../../shared/loading-spinner/loading-spinner.component";
 import { ErrorMessageComponent } from "../../shared/error/error.component";
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-warehouse-items-table',
@@ -26,7 +26,7 @@ import {FormsModule} from "@angular/forms";
   ],
 })
 export class WarehouseItemsTableComponent implements OnInit {
-  warehouseId: string = ''; // ID склада получаем из URL
+  warehouseId: string = '';
   warehouseState: WarehouseStateResponseDto | null = null;
   inventoryItems: {
     name: string;
@@ -35,6 +35,13 @@ export class WarehouseItemsTableComponent implements OnInit {
     supplier: string;
     estimatedValue: number;
     expirationDate: Date;
+    // 🆕 Новые поля для ТТН и партий
+    batchNumber?: string;
+    measureUnit?: string;
+    vatRate?: number;
+    placesCount?: number;
+    cargoWeight?: number;
+    notes?: string;
   }[] = [];
 
   isLoading = false;
@@ -46,15 +53,22 @@ export class WarehouseItemsTableComponent implements OnInit {
     quantityMin: null as number | null,
     quantityMax: null as number | null,
     sortBy: '',
+    // 🆕 Новые фильтры
+    batchNumber: '',
+    measureUnit: '',
   };
+  private _filteredItems: any[] = [];
+  private _lastFilterState: any = {};
+
+  // 🆕 Управление отображением колонок
+  showAdvancedColumns = false;
 
   constructor(
-    private route: ActivatedRoute, // Достаем параметры из URL
+    private route: ActivatedRoute,
     private warehouseService: WarehouseService
   ) {}
 
   ngOnInit(): void {
-    // Получаем warehouseId из параметров URL
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -67,6 +81,7 @@ export class WarehouseItemsTableComponent implements OnInit {
       }
     });
   }
+
   filteredItems() {
     let result = [...this.inventoryItems];
 
@@ -75,7 +90,8 @@ export class WarehouseItemsTableComponent implements OnInit {
     if (search) {
       result = result.filter(item =>
         item.name.toLowerCase().includes(search) ||
-        item.supplier.toLowerCase().includes(search)
+        item.supplier.toLowerCase().includes(search) ||
+        (item.batchNumber && item.batchNumber.toLowerCase().includes(search))
       );
     }
 
@@ -91,6 +107,19 @@ export class WarehouseItemsTableComponent implements OnInit {
     if (this.filter.quantityMax != null)
       result = result.filter(item => item.quantity <= this.filter.quantityMax!);
 
+    // 🆕 Фильтр по номеру партии
+    if (this.filter.batchNumber) {
+      const batchSearch = this.filter.batchNumber.toLowerCase();
+      result = result.filter(item =>
+        item.batchNumber && item.batchNumber.toLowerCase().includes(batchSearch)
+      );
+    }
+
+    // 🆕 Фильтр по единице измерения
+    if (this.filter.measureUnit) {
+      result = result.filter(item => item.measureUnit === this.filter.measureUnit);
+    }
+
     switch (this.filter.sortBy) {
       case 'priceAsc':
         result.sort((a, b) => a.estimatedValue - b.estimatedValue);
@@ -103,6 +132,13 @@ export class WarehouseItemsTableComponent implements OnInit {
         break;
       case 'quantityDesc':
         result.sort((a, b) => b.quantity - a.quantity);
+        break;
+      // 🆕 Сортировка по партиям
+      case 'batchAsc':
+        result.sort((a, b) => (a.batchNumber || '').localeCompare(b.batchNumber || ''));
+        break;
+      case 'batchDesc':
+        result.sort((a, b) => (b.batchNumber || '').localeCompare(a.batchNumber || ''));
         break;
     }
 
@@ -159,6 +195,13 @@ export class WarehouseItemsTableComponent implements OnInit {
         supplier: item.supplier?.name || 'Неизвестно',
         estimatedValue: item.estimatedValue,
         expirationDate: item.expirationDate,
+        // 🆕 Новые поля
+        batchNumber: item.batchNumber,
+        measureUnit: item.measureUnit || 'шт',
+        vatRate: item.vatRate,
+        placesCount: item.placesCount,
+        cargoWeight: item.cargoWeight,
+        notes: item.notes
       };
     });
 
@@ -167,5 +210,95 @@ export class WarehouseItemsTableComponent implements OnInit {
     if (this.inventoryItems.length === 0) {
       this.errorMessage = 'В этом складе пока нет материальных ценностей.';
     }
+  }
+
+  // 🆕 Получить уникальные единицы измерения для фильтра
+  getUniqueMeasureUnits(): string[] {
+    const units = this.inventoryItems
+      .map(item => item.measureUnit)
+      .filter((unit, index, arr) => unit && arr.indexOf(unit) === index);
+    return units as string[];
+  }
+
+  // 🆕 Переключение расширенного режима
+  toggleAdvancedView(): void {
+    this.showAdvancedColumns = !this.showAdvancedColumns;
+  }
+
+  getFilteredItems() {
+    // Проверяем, изменились ли фильтры
+    const currentFilterState = JSON.stringify(this.filter);
+    if (currentFilterState !== JSON.stringify(this._lastFilterState)) {
+      this._filteredItems = this.filteredItems();
+      this._lastFilterState = { ...this.filter };
+    }
+    return this._filteredItems;
+  }
+
+  getFilteredItemsCount(): number {
+    return this.getFilteredItems().length;
+  }
+
+// Методы для отображения значений
+  getVatRateDisplay(vatRate?: number): string {
+    return vatRate ? (vatRate + '%') : '0%';
+  }
+
+  getPlacesCountDisplay(placesCount?: number): string {
+    return placesCount ? placesCount.toString() : '1';
+  }
+
+  getCargoWeightDisplay(cargoWeight?: number): string {
+    return cargoWeight ? cargoWeight.toString() : '—';
+  }
+
+  getTruncatedNotes(notes: string): string {
+    return notes.length > 20 ? (notes.substring(0, 20) + '...') : notes;
+  }
+
+// Проверяем, нужно ли показывать сводку по партиям
+  shouldShowBatchSummary(): boolean {
+    const batches = this.getBatchGroups();
+    return batches.size > 1;
+  }
+
+// Получаем данные для сводки по партиям
+  getBatchSummaryData(): Array<{batchNumber: string, itemsCount: number, totalQuantity: number}> {
+    const batches = this.getBatchGroups();
+    const result: Array<{batchNumber: string, itemsCount: number, totalQuantity: number}> = [];
+
+    batches.forEach((items, batchNumber) => {
+      const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+      result.push({
+        batchNumber: batchNumber,
+        itemsCount: items.length,
+        totalQuantity: totalQuantity
+      });
+    });
+
+    return result;
+  }
+
+// Приватный метод для группировки по партиям
+  private getBatchGroups(): Map<string, any[]> {
+    const batchGroups = new Map<string, any[]>();
+
+    this.getFilteredItems().forEach(item => {
+      const batchKey = item.batchNumber || 'Без партии';
+      if (!batchGroups.has(batchKey)) {
+        batchGroups.set(batchKey, []);
+      }
+      batchGroups.get(batchKey)!.push(item);
+    });
+
+    return batchGroups;
+  }
+
+  isExpiringSoon(expirationDate: Date): boolean {
+    const today = new Date();
+    const expDate = new Date(expirationDate);
+    const daysUntilExpiry = Math.ceil((expDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+    return daysUntilExpiry <= 30 && daysUntilExpiry >= 0;
   }
 }

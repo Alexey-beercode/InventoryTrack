@@ -4,6 +4,7 @@
 ></app-header>
 
 <div class="writeoff-container">
+  <!-- Фильтры по статусу -->
   <div class="filter-container">
     <button
       *ngFor="let status of [RequestStatus.Requested, RequestStatus.Created, RequestStatus.Rejected]"
@@ -14,19 +15,73 @@
     </button>
   </div>
 
+  <!-- 🆕 Переключатель режима отображения -->
+  <div class="view-controls" *ngIf="!isLoading && writeOffRequests.length > 0 && hasBatchesToGroup()">
+    <button class="view-toggle-btn" (click)="toggleGroupedView()">
+      {{ showGroupedView ? '📋 Список запросов' : '📦 Группировка по партиям' }}
+    </button>
+  </div>
+
+  <!-- Загрузка -->
   <div *ngIf="isLoading" class="loading-container">
     <app-loading-spinner></app-loading-spinner>
   </div>
 
+  <!-- Нет запросов -->
   <div *ngIf="!isLoading && writeOffRequests.length === 0">
     <p class="no-requests">Заявки отсутствуют.</p>
   </div>
 
-  <div *ngIf="!isLoading && writeOffRequests.length > 0">
+  <!-- 🆕 Группированный вид (по партиям) -->
+  <div *ngIf="!isLoading && writeOffRequests.length > 0 && showGroupedView">
+    <div *ngFor="let group of getBatchGroupsArray()" class="batch-group">
+
+      <!-- Заголовок партии -->
+      <div class="batch-header" *ngIf="group.isBatch">
+        <div class="batch-info">
+          <h3>📦 Списание партии: {{ group.batchNumber }}</h3>
+          <div class="batch-summary">
+            <span class="batch-stat">
+              📊 Запросов: {{ group.requests.length }}
+            </span>
+            <span class="batch-stat">
+              📦 Общее количество: {{ getBatchSummary(group.requests).totalQuantity }}
+            </span>
+            <span class="batch-stat">
+              🏪 Складов: {{ getBatchSummary(group.requests).warehousesCount }}
+            </span>
+            <span class="batch-status" [ngClass]="'status-' + getBatchStatus(group.requests).status.toLowerCase()">
+              🏷️ {{ getBatchStatus(group.requests).status }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Заголовок для индивидуальных запросов -->
+      <div class="individual-header" *ngIf="!group.isBatch && group.batchNumber === 'individual'">
+        <h3>📄 Индивидуальные списания</h3>
+      </div>
+
+      <!-- Запросы в группе -->
+      <div class="requests-in-group">
+        <app-writeoff-actions
+          *ngFor="let request of group.requests"
+          [writeOffRequest]="request"
+          [userId]="userId"
+          [showBatchInfo]="group.isBatch"
+          (reload)="loadWriteOffRequests()"
+        ></app-writeoff-actions>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🆕 Обычный вид (список) -->
+  <div *ngIf="!isLoading && writeOffRequests.length > 0 && !showGroupedView">
     <app-writeoff-actions
       *ngFor="let request of writeOffRequests"
       [writeOffRequest]="request"
       [userId]="userId"
+      [showBatchInfo]="true"
       (reload)="loadWriteOffRequests()"
     ></app-writeoff-actions>
   </div>

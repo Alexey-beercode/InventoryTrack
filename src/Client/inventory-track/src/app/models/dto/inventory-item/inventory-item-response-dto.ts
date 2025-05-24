@@ -1,4 +1,3 @@
-// src/app/models/dto/inventory-item/inventory-item-response-dto.ts
 import { SupplierResponseDto } from '../supplier/supplier-response-dto';
 import { InventoryItemStatusResponseDto } from './inventory-item-status-response-dto';
 import { WarehouseDetailsDto } from '../warehouse/warehouse-details-dto';
@@ -17,4 +16,12 @@ export class InventoryItemResponseDto {
   status!: InventoryItemStatusResponseDto;
   warehouseDetails!: WarehouseDetailsDto[];
   documentInfo!: DocumentInfoResponseDto;
+
+  // 🆕 Новые поля для ТТН и партий
+  batchNumber?: string;
+  measureUnit?: string;
+  vatRate?: number;
+  placesCount?: number;
+  cargoWeight?: number;
+  notes?: string;
 }

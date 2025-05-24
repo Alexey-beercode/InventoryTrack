@@ -19,4 +19,12 @@ public interface IInventoryItemRepository : IBaseRepository<InventoryItem>
         CancellationToken cancellationToken = default);
 
     Task<InventoryItem> GetByIdCreatedAsync(Guid id, CancellationToken cancellationToken = default);
+    
+    Task<InventoryItem?> GetByNameAndBatchAsync(string name, string batchNumber, CancellationToken cancellationToken = default);
+    Task<IEnumerable<InventoryItem>> GetByBatchNumberAsync(string batchNumber, CancellationToken cancellationToken = default);
+    Task<IEnumerable<InventoryItem>> GetAllByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<IEnumerable<InventoryItem>> GetBatchesByDatePrefixAsync(string datePrefix, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<InventoryItem>> GetByBatchNumberAllStatusesAsync(string batchNumber,
+        CancellationToken cancellationToken = default);
 }

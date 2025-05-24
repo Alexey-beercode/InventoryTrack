@@ -11,5 +11,4 @@ public class CreateWriteOffRequestDto
     public Guid? ReasonId { get; set; }
     public string? AnotherReason { get; set; }
     public List<IFormFile> Documents { get; set; } = new();
-    public Guid CompanyId { get; set; }
 }

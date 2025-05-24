@@ -23,7 +23,7 @@ public static class ModelBuilderExtension
         {
             Id = Guid.NewGuid(),
             IsDeleted = false,
-            Name = "Начальник склада"
+            Name = "Материально-ответственное лицо"
         };
         var accountantRole=new Role()
         {

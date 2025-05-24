@@ -86,3 +86,220 @@
   outline: none;
 }
 
+/* Добавить эти стили в warehouse-items-table.component.css */
+
+/* Обновленная панель фильтров */
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.filter-row input,
+.filter-row select {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 180px;
+}
+
+.filter-row input:focus,
+.filter-row select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+/* Кнопка переключения режима */
+.view-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn-toggle {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-toggle:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Обновленная таблица */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  min-width: 1000px; /* Для горизонтального скролла на мобильных */
+}
+
+.styled-table th {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.styled-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+}
+
+.styled-table tr:hover {
+  background-color: rgba(74, 144, 226, 0.05);
+}
+
+/* Специальные стили для ячеек */
+.item-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.batch-number {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.no-batch {
+  color: #999;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.quantity {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.price {
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.expiration-date {
+  font-size: 12px;
+}
+
+.expiring-soon {
+  color: #d32f2f;
+  font-weight: 600;
+  background-color: #ffebee;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.notes-column {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Выделение строк с партиями */
+.batch-highlight {
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Сводка по партиям */
+.batch-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.batch-summary h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.batch-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.batch-card {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.batch-header {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.batch-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-row input,
+  .filter-row select {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .batch-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .styled-table {
+    font-size: 12px;
+  }
+
+  .styled-table th,
+  .styled-table td {
+    padding: 8px 6px;
+  }
+}

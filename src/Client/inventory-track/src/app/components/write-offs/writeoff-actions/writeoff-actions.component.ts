@@ -25,6 +25,7 @@ export class WriteOffActionsComponent implements OnInit {
   @Input() writeOffRequest!: WriteOffRequestResponseDto;
   @Input() userId!: string;
   @Output() reload = new EventEmitter<void>();
+  @Input() showBatchInfo: boolean = false;
 
   documentFile!: File;
   warehouseName: string = 'Загрузка...';

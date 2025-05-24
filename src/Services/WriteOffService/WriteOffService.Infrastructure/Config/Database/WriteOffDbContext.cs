@@ -9,7 +9,6 @@ public class WriteOffDbContext : DbContext
 {
     public WriteOffDbContext(DbContextOptions<WriteOffDbContext> options) : base(options)
     {
-        Database.Migrate();
     }
     
     public DbSet<Document> Documents { get; set; }

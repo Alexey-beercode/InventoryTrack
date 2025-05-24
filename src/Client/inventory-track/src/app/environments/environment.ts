@@ -106,7 +106,8 @@ export const environment = {
       reject: '/api/write-off-requests/reject/{id}',  // 👈 добавлен `/`
       approve: "/api/write-off-requests/{id}/approve",
       uploadDocuments: "/api/write-off-requests/{id}/upload-documents",
-      generateDocument: '/api/write-off-requests/generate-document/{id}'
+      generateDocument: '/api/write-off-requests/generate-document/{id}',
+      createBatch: '/api/write-off-requests/batch'
     },
 
     report: {

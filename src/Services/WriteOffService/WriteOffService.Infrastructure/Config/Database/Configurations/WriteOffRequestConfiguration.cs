@@ -28,6 +28,8 @@ public class WriteOffRequestConfiguration : IEntityTypeConfiguration<WriteOffReq
 
         builder.Property(x => x.RequestDate)
             .IsRequired();
+        builder.Property(x => x.BatchNumber)
+            .IsRequired(false);
 
         // Relationship
         builder.HasOne(x => x.Reason)

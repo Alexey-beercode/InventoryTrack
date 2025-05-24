@@ -117,3 +117,179 @@
   margin-bottom: 15px;
   color: var(--primary-dark);
 }
+
+/* Добавить эти стили в writeoff-list.component.css */
+
+/* Существующие стили остаются без изменений */
+
+/* 🆕 Новые стили для группировки по партиям */
+
+.view-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.view-toggle-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  box-shadow: var(--box-shadow);
+}
+
+.view-toggle-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Группы партий */
+.batch-group {
+  margin-bottom: 30px;
+  border: 2px solid #e3f2fd;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: white;
+  box-shadow: var(--box-shadow);
+}
+
+.batch-header {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  padding: 20px;
+  border-bottom: 1px solid #90caf9;
+}
+
+.batch-info h3 {
+  margin: 0 0 15px 0;
+  color: var(--primary-dark);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.batch-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.batch-stat {
+  background-color: white;
+  color: var(--primary-dark);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.batch-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.batch-status.status-запрошено {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.batch-status.status-создано {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.batch-status.status-отклонено {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.batch-status.status-смешанный {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.individual-header {
+  background-color: #f8f9fa;
+  padding: 15px 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.individual-header h3 {
+  margin: 0;
+  color: #495057;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.requests-in-group {
+  padding: 10px;
+}
+
+.requests-in-group app-writeoff-actions {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.requests-in-group app-writeoff-actions:last-child {
+  margin-bottom: 0;
+}
+
+/* Улучшения для мобильных устройств */
+@media (max-width: 768px) {
+  .batch-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .batch-stat {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .batch-info h3 {
+    font-size: 16px;
+  }
+
+  .view-toggle-btn {
+    font-size: 13px;
+    padding: 10px 20px;
+  }
+}
+
+/* Анимация для групп */
+.batch-group {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Выделение партий в обычном режиме */
+.writeoff-card.batch-request {
+  border-left: 4px solid var(--primary-color);
+}
+
+.writeoff-card .batch-indicator {
+  background-color: #e3f2fd;
+  color: var(--primary-dark);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 10px;
+}

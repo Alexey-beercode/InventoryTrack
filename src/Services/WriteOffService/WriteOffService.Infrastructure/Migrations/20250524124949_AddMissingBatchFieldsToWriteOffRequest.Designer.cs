@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WriteOffService.Infrastructure.Config.Database;
@@ -11,9 +12,11 @@ using WriteOffService.Infrastructure.Config.Database;
 namespace WriteOffService.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteOffDbContext))]
-    partial class WriteOffDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250524124949_AddMissingBatchFieldsToWriteOffRequest")]
+    partial class AddMissingBatchFieldsToWriteOffRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

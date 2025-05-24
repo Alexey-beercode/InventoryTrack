@@ -1,13 +1,14 @@
-// src/app/services/writeoff-request.service.ts
+// src/app/services/writeoff-request.service.ts (ОБНОВЛЕННЫЙ)
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { WriteOffRequestResponseDto } from '../models/dto/writeoff-request/writeoff-request-response-dto';
 import { CreateWriteOffRequestDto } from '../models/dto/writeoff-request/create-writeoff-request-dto';
+import { CreateBatchWriteOffRequestDto } from '../models/dto/writeoff-request/create-batch-writeoff-request-dto';
 import { UpdateWriteOffRequestDto } from '../models/dto/writeoff-request/update-writeoff-request-dto';
 import { WriteOffRequestFilterDto } from '../models/dto/writeoff-request/writeoff-request-filter-dto';
-import {map} from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +52,6 @@ export class WriteOffRequestService {
     );
   }
 
-
   /**
    * Get write-off requests by status.
    * @param status Request status.
@@ -83,6 +83,22 @@ export class WriteOffRequestService {
     return this.http.post<void>(`${this.baseUrl}${this.apiUrls.create}`, createDto);
   }
 
+// Заменить метод createBatch в WriteOffRequestService
+
+  /**
+   * 🆕 Create batch write-off requests for entire batch.
+   * @param createDto CreateBatchWriteOffRequestDto.
+   * @returns Observable indicating completion.
+   */
+  createBatch(createDto: CreateBatchWriteOffRequestDto): Observable<any> {
+    // 🔥 Отправляем как JSON, а не FormData
+    return this.http.post<any>(`${this.baseUrl}${this.apiUrls.createBatch}`, createDto, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   /**
    * Update a write-off request.
    * @param updateDto UpdateWriteOffRequestDto.
@@ -102,6 +118,7 @@ export class WriteOffRequestService {
       `${this.baseUrl}${this.apiUrls.delete.replace('{id}', id)}`
     );
   }
+
   approve(requestId: string, userId: string, documentId: string): Observable<void> {
     return this.http.put<void>(
       `${this.baseUrl}${this.apiUrls.approve.replace("{id}", requestId)}`,
@@ -124,5 +141,53 @@ export class WriteOffRequestService {
       { params }
     );
   }
+
+  // 🆕 Вспомогательные методы для работы с партиями
+
+  /**
+   * Group write-off requests by batch number
+   * @param requests Array of WriteOffRequestResponseDto
+   * @returns Map with batch number as key and requests array as value
+   */
+  groupByBatch(requests: WriteOffRequestResponseDto[]): Map<string, WriteOffRequestResponseDto[]> {
+    const batches = new Map<string, WriteOffRequestResponseDto[]>();
+
+    requests.forEach(request => {
+      const batchNumber = request.batchNumber || 'Без партии';
+      if (!batches.has(batchNumber)) {
+        batches.set(batchNumber, []);
+      }
+      batches.get(batchNumber)!.push(request);
+    });
+
+    return batches;
+  }
+
+  /**
+   * Check if all requests in batch have the same status
+   * @param batchRequests Array of requests for one batch
+   * @param status Target status to check
+   * @returns true if all requests have the target status
+   */
+  isBatchInStatus(batchRequests: WriteOffRequestResponseDto[], status: string): boolean {
+    return batchRequests.every(request => request.status.name === status);
+  }
+
+  /**
+   * Get batch summary info
+   * @param batchRequests Array of requests for one batch
+   * @returns Summary object with totals
+   */
+  getBatchSummary(batchRequests: WriteOffRequestResponseDto[]) {
+    return {
+      totalQuantity: batchRequests.reduce((sum, req) => sum + req.quantity, 0),
+      requestsCount: batchRequests.length,
+      warehousesCount: new Set(batchRequests.map(req => req.warehouseId)).size,
+      allApproved: this.isBatchInStatus(batchRequests, 'Создано'),
+      allRejected: this.isBatchInStatus(batchRequests, 'Отклонено'),
+      allPending: this.isBatchInStatus(batchRequests, 'Запрошено')
+    };
+  }
+
 
 }

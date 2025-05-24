@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WriteOffService.Application.Clients;
+using WriteOffService.Application.Interfaces.Clients;
 using WriteOffService.Application.Interfaces.Services;
 using WriteOffService.Application.MapperProfiles;
 using WriteOffService.Application.Messaging.Producers;
@@ -85,6 +87,8 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddScoped<IDocumentService, DocumentService>();
         builder.Services.AddScoped<IWriteOffReasonService, WriteOffReasonService>();
         builder.Services.AddScoped<IWriteOffRequestService, WriteOffRequestService>();
+        builder.Services.AddHttpClient<IInventoryHttpClient, InventoryHttpClient>();
+        builder.Services.AddScoped<IInventoryHttpClient, InventoryHttpClient>();
         builder.Services.AddControllers();
     }
 
