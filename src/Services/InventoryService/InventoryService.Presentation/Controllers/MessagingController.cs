@@ -60,6 +60,46 @@ public class MessagingController : ControllerBase
 
 // Исправленный метод GetForWarehousesAsync без BsonDocument
 
+// Исправленный метод CreateDataForItems в MessagingController
+
+private object CreateDataForItems(IEnumerable<InventoryItemResponseDto> inventoryItems, WarehouseResponseDto warehouse)
+{
+    return new
+    {
+        Items = inventoryItems.Select(item => new
+        {
+            Id = item.Id,
+            Name = item.Name,
+            UniqueCode = item.UniqueCode,
+            Quantity = item.Quantity,
+            EstimatedValue = item.EstimatedValue,
+            ExpirationDate = item.ExpirationDate,
+            DeliveryDate = item.DeliveryDate,
+            Status = item.Status?.Name ?? "Unknown",
+            
+            // ✅ ИСПРАВЛЕНО: Правильное получение поставщика и полей ТТН
+            Supplier = item.Supplier?.Name ?? "Не указан", // Вместо пустой строки
+            BatchNumber = !string.IsNullOrEmpty(item.BatchNumber) ? item.BatchNumber : "Не указан",
+            MeasureUnit = !string.IsNullOrEmpty(item.MeasureUnit) ? item.MeasureUnit : "шт",
+            VatRate = item.VatRate,
+            PlacesCount = item.PlacesCount,
+            CargoWeight = item.CargoWeight,
+            Notes = !string.IsNullOrEmpty(item.Notes) ? item.Notes : "",
+            
+            WarehouseDetails = item.WarehouseDetails.Select(wd => new
+            {
+                WarehouseId = wd.WarehouseId,
+                WarehouseName = wd.WarehouseName,
+                Quantity = wd.Quantity
+            }).ToList(),
+            DocumentInfo = item.DocumentInfo?.FileName ?? string.Empty
+        }).ToList(),
+        Warehouse = warehouse.Name
+    };
+}
+
+// ✅ ТАКЖЕ ИСПРАВЬТЕ метод GetForWarehousesAsync:
+
 private async Task<object> GetForWarehousesAsync(Guid companyId, CancellationToken cancellationToken)
 {
     var warehousesStates = await _warehouseService.GetWarehousesStatesByCompanyIdAsync(companyId, cancellationToken);
@@ -89,15 +129,15 @@ private async Task<object> GetForWarehousesAsync(Guid companyId, CancellationTok
                     ExpirationDate = item.ExpirationDate,
                     DeliveryDate = item.DeliveryDate,
                     Status = item.Status?.Name ?? "Unknown",
-                    Supplier = item.Supplier?.Name ?? string.Empty,
                     
-                    // Новые поля для ТТН
-                    BatchNumber = item.BatchNumber ?? "",
-                    MeasureUnit = item.MeasureUnit ?? "шт",
+                    // ✅ ИСПРАВЛЕНО: Правильные значения вместо пустых строк
+                    Supplier = item.Supplier?.Name ?? "Не указан",
+                    BatchNumber = !string.IsNullOrEmpty(item.BatchNumber) ? item.BatchNumber : "Не указан",
+                    MeasureUnit = !string.IsNullOrEmpty(item.MeasureUnit) ? item.MeasureUnit : "шт",
                     VatRate = item.VatRate,
                     PlacesCount = item.PlacesCount,
                     CargoWeight = item.CargoWeight,
-                    Notes = item.Notes ?? "",
+                    Notes = !string.IsNullOrEmpty(item.Notes) ? item.Notes : "",
                     
                     WarehouseDetails = new[]
                     {
@@ -131,7 +171,6 @@ private async Task<object> GetForWarehousesAsync(Guid companyId, CancellationTok
 
     return response;
 }
-
 [HttpGet("report-data")]
 public async Task<ActionResult> GetReportData(
     [FromQuery] string reportType,
@@ -216,46 +255,7 @@ public async Task<ActionResult> GetReportData(
             items.Count());
         return Ok(response);
     }
-
-
-
-// Обновить метод CreateDataForItems в MessagingController
-
-private object CreateDataForItems(IEnumerable<InventoryItemResponseDto> inventoryItems, WarehouseResponseDto warehouse)
-{
-    return new
-    {
-        Items = inventoryItems.Select(item => new
-        {
-            Id = item.Id,
-            Name = item.Name,
-            UniqueCode = item.UniqueCode,
-            Quantity = item.Quantity,
-            EstimatedValue = item.EstimatedValue,
-            ExpirationDate = item.ExpirationDate,
-            DeliveryDate = item.DeliveryDate,
-            Status = item.Status?.Name ?? "Unknown",
-            Supplier = item.Supplier?.Name ?? string.Empty,
-            
-            // Новые поля для ТТН
-            BatchNumber = item.BatchNumber ?? "",
-            MeasureUnit = item.MeasureUnit ?? "шт",
-            VatRate = item.VatRate,
-            PlacesCount = item.PlacesCount,
-            CargoWeight = item.CargoWeight,
-            Notes = item.Notes ?? "",
-            
-            WarehouseDetails = item.WarehouseDetails.Select(wd => new
-            {
-                WarehouseId = wd.WarehouseId,
-                WarehouseName = wd.WarehouseName,
-                Quantity = wd.Quantity
-            }).ToList(),
-            DocumentInfo = item.DocumentInfo?.FileName ?? string.Empty
-        }).ToList(),
-        Warehouse = warehouse.Name
-    };
-}
+    
 
 
 // Исправленный MessagingController - замена BsonDocument на обычные объекты
@@ -338,10 +338,10 @@ public async Task<ActionResult> GetWarehouseStateByWarehouseIdAsync(Guid warehou
 }
 
 [HttpGet("batches/by-item/{itemName}")]
-public async Task<ActionResult> GetBatchesByItemNameAsync(string itemName,
+public async Task<ActionResult> GetBatchesByItemNameAsync(string itemName, Guid? warehouseId,
     CancellationToken cancellationToken)
 {
-    var batches = await _inventoryItemService.GetBatchesByItemNameAsync(itemName, cancellationToken);
+    var batches = await _inventoryItemService.GetBatchesByItemNameAsync(itemName, warehouseId, cancellationToken);
     if (!batches.Any()) return NotFound();
 
     var response = new

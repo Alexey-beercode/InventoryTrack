@@ -12,21 +12,25 @@ public class InventoriesItemsWarehousesRepository : BaseRepository<InventoriesIt
     }
     
 
-    public async Task<IEnumerable<InventoriesItemsWarehouses>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<InventoriesItemsWarehouses>> GetByWarehouseIdAsync(Guid warehouseId, CancellationToken cancellationToken)
     {
         return await _dbSet
-            .Include(iw => iw.Warehouse)
-            .Include(iw => iw.InventoryItem)
-            .Where(iw => !iw.IsDeleted && iw.WarehouseId == warehouseId)
+            .AsNoTracking()
+            .Where(iw => iw.WarehouseId == warehouseId && !iw.IsDeleted)
+            .Include(iw => iw.Warehouse) // ✅ Include Warehouse
+            .Include(iw => iw.InventoryItem) // ✅ Include InventoryItem
+            .ThenInclude(i => i.Supplier) // ✅ КРИТИЧНО: Include Supplier через InventoryItem
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<InventoriesItemsWarehouses>> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<InventoriesItemsWarehouses>> GetByItemIdAsync(Guid itemId, CancellationToken cancellationToken)
     {
         return await _dbSet
-            .Include(iw => iw.Warehouse)
-            .Include(iw => iw.InventoryItem)
-            .Where(iw => !iw.IsDeleted && iw.ItemId == itemId)
+            .AsNoTracking()
+            .Where(iw => iw.ItemId == itemId && !iw.IsDeleted)
+            .Include(iw => iw.Warehouse) // ✅ Include Warehouse
+            .Include(iw => iw.InventoryItem) // ✅ Include InventoryItem
+            .ThenInclude(i => i.Supplier) // ✅ КРИТИЧНО: Include Supplier
             .ToListAsync(cancellationToken);
     }
 }

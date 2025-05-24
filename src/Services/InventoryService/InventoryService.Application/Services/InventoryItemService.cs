@@ -8,6 +8,7 @@ using InventoryService.Domain.Entities;
 using InventoryService.Domain.Enums;
 using InventoryService.Domain.Interfaces.UnitOfWork;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace InventoryService.Application.Services;
 
@@ -17,13 +18,15 @@ public class InventoryItemService : IInventoryItemService
     private readonly IMapper _mapper;
     private readonly IDocumentService _documentService;
     private readonly IInventoryItemFacade _inventoryItemFacade;
+    private readonly ILogger<InventoryItemService> _logger;
 
-    public InventoryItemService(IUnitOfWork unitOfWork, IMapper mapper, IDocumentService documentService, IInventoryItemFacade inventoryItemFacade)
+    public InventoryItemService(IUnitOfWork unitOfWork, IMapper mapper, IDocumentService documentService, IInventoryItemFacade inventoryItemFacade, ILogger<InventoryItemService> logger)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _documentService = documentService;
         _inventoryItemFacade = inventoryItemFacade;
+        _logger = logger;
     }
 
     public async Task CreateInventoryItemAsync(CreateInventoryItemDto dto, CancellationToken cancellationToken = default)
@@ -296,40 +299,83 @@ public class InventoryItemService : IInventoryItemService
         return itemsDtos;
     }
 
-    public async Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, CancellationToken cancellationToken = default)
+// ✅ ИСПРАВЛЕННЫЙ метод в InventoryItemService
+public async Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, Guid? warehouseId = null, CancellationToken cancellationToken = default)
+{
+    _logger.LogInformation("🔍 Поиск партий для товара: {ItemName}, склад: {WarehouseId}", itemName, warehouseId);
+
+    // Получаем все товары с данным именем
+    var items = await _unitOfWork.InventoryItems.GetAllByNameAsync(itemName, cancellationToken);
+    
+    if (!items.Any())
     {
-        var items = await _unitOfWork.InventoryItems.GetAllByNameAsync(itemName, cancellationToken);
-    
-        var batches = new List<BatchInfoDto>();
-    
-        var batchGroups = items.GroupBy(i => i.BatchNumber);
-    
-        foreach (var batchGroup in batchGroups)
+        _logger.LogWarning("⚠ Товары с именем '{ItemName}' не найдены", itemName);
+        return new List<BatchInfoDto>();
+    }
+
+    var batches = new List<BatchInfoDto>();
+    var batchGroups = items.GroupBy(i => i.BatchNumber);
+
+    foreach (var batchGroup in batchGroups)
+    {
+        long totalQuantity = 0;
+        bool hasItemsInWarehouse = false;
+
+        // Для каждого item в партии получаем количество со складов
+        foreach (var item in batchGroup)
         {
-            long totalQuantity = 0;
-        
-            // Для каждого item в партии получаем количество со складов
-            foreach (var item in batchGroup)
+            var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
+            
+            // ✅ ИСПРАВЛЕНИЕ: Фильтруем по складу, если указан
+            if (warehouseId.HasValue)
             {
-                var itemWarehouses = await _unitOfWork.InventoriesItemsWarehouses.GetByItemIdAsync(item.Id, cancellationToken);
-                totalQuantity += itemWarehouses.Sum(iw => iw.Quantity);
+                itemWarehouses = itemWarehouses.Where(iw => iw.WarehouseId == warehouseId.Value);
             }
-        
-            var batch = new BatchInfoDto
+
+            var warehouseQuantity = itemWarehouses.Sum(iw => iw.Quantity);
+            totalQuantity += warehouseQuantity;
+
+            // Проверяем, есть ли товары этой партии на нужном складе
+            if (warehouseQuantity > 0)
             {
-                BatchNumber = batchGroup.Key,
-                ItemsCount = batchGroup.Count(),
-                ManufactureDate = batchGroup.Min(i => i.DeliveryDate),
-                ExpirationDate = batchGroup.Min(i => i.ExpirationDate),
-                ManufacturerName = batchGroup.First().Supplier?.Name ?? "",
-                TotalQuantity = totalQuantity
-            };
-        
-            batches.Add(batch);
+                hasItemsInWarehouse = true;
+            }
         }
 
-        return batches;
+        // ✅ ИСПРАВЛЕНИЕ: Добавляем партию только если есть товары на нужном складе
+        if (warehouseId.HasValue && !hasItemsInWarehouse)
+        {
+            _logger.LogDebug("🔍 Партия {BatchNumber} пропущена - нет товаров на складе {WarehouseId}", 
+                batchGroup.Key, warehouseId);
+            continue;
+        }
+
+        // ✅ Также проверяем, что общее количество больше 0
+        if (totalQuantity <= 0)
+        {
+            _logger.LogDebug("🔍 Партия {BatchNumber} пропущена - количество = 0", batchGroup.Key);
+            continue;
+        }
+
+        var batch = new BatchInfoDto
+        {
+            BatchNumber = batchGroup.Key,
+            ItemsCount = batchGroup.Count(),
+            ManufactureDate = batchGroup.Min(i => i.DeliveryDate),
+            ExpirationDate = batchGroup.Min(i => i.ExpirationDate),
+            ManufacturerName = batchGroup.First().Supplier?.Name ?? "",
+            TotalQuantity = totalQuantity
+        };
+
+        _logger.LogInformation("✅ Найдена партия: {BatchNumber}, количество: {TotalQuantity}", 
+            batch.BatchNumber, batch.TotalQuantity);
+
+        batches.Add(batch);
     }
+
+    _logger.LogInformation("🔍 Итого найдено партий для товара '{ItemName}': {BatchCount}", itemName, batches.Count);
+    return batches;
+}
     
 // Обновленный метод GetInventoryItemsByBatchNumberAsync в InventoryItemService
 

@@ -24,16 +24,48 @@ public class InventoryItemProfile : Profile
 
         CreateMap<UpdateInventoryItemDto, InventoryItem>().ReverseMap();
 
-        CreateMap<InventoryItem, InventoryItemResponseDto>()
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => MapInventoryItemStatus(src.Status)))
-            .ForMember(dest => dest.Quantity, opt => opt.Ignore()) // Устанавливается в сервисе
-            .ForMember(dest => dest.BatchNumber, opt => opt.MapFrom(src => src.BatchNumber))
-            .ForMember(dest => dest.MeasureUnit, opt => opt.MapFrom(src => src.MeasureUnit))
-            .ForMember(dest => dest.VatRate, opt => opt.MapFrom(src => src.VatRate))
-            .ForMember(dest => dest.PlacesCount, opt => opt.MapFrom(src => src.PlacesCount))
-            .ForMember(dest => dest.CargoWeight, opt => opt.MapFrom(src => src.CargoWeight))
-            .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes));
+       // В InventoryItemProfile ДОБАВЬТЕ явное указание маппинга Supplier
 
+CreateMap<InventoryItem, InventoryItemResponseDto>()
+    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => MapInventoryItemStatus(src.Status)))
+    .ForMember(dest => dest.Quantity, opt => opt.Ignore()) // Устанавливается в сервисе
+    .ForMember(dest => dest.BatchNumber, opt => opt.MapFrom(src => src.BatchNumber ?? ""))
+    .ForMember(dest => dest.MeasureUnit, opt => opt.MapFrom(src => src.MeasureUnit ?? "шт"))
+    .ForMember(dest => dest.VatRate, opt => opt.MapFrom(src => src.VatRate))
+    .ForMember(dest => dest.PlacesCount, opt => opt.MapFrom(src => src.PlacesCount))
+    .ForMember(dest => dest.CargoWeight, opt => opt.MapFrom(src => src.CargoWeight))
+    .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes ?? ""))
+    .ForMember(dest=>dest.ExpirationDate,opt=>opt.MapFrom(src=>src.ExpirationDate))
+    .ForMember(dest=>dest.DeliveryDate,opt=>opt.MapFrom(src=>src.DeliveryDate))
+    // ✅ ДОБАВЬТЕ явное маппинг Supplier
+    .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier));
+
+
+// ✅ ИСПРАВЬТЕ маппинг для группировки
+CreateMap<IGrouping<Guid, InventoriesItemsWarehouses>, InventoryItemResponseDto>()
+    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Key))
+    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.First().InventoryItem.Name))
+    .ForMember(dest => dest.UniqueCode, opt => opt.MapFrom(src => src.First().InventoryItem.UniqueCode))
+    .ForMember(dest => dest.EstimatedValue, opt => opt.MapFrom(src => src.First().InventoryItem.EstimatedValue))
+    .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.First().InventoryItem.ExpirationDate))
+    // ✅ ИСПРАВЛЕНО: правильное маппинг Supplier
+    .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.First().InventoryItem.Supplier))
+    .ForMember(dest => dest.DeliveryDate, opt => opt.MapFrom(src => src.First().InventoryItem.DeliveryDate))
+    .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.First().InventoryItem.DocumentId))
+    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.First().InventoryItem.Status))
+    .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Sum(iw => iw.Quantity)))
+    .ForMember(dest => dest.BatchNumber, opt => opt.MapFrom(src => src.First().InventoryItem.BatchNumber ?? ""))
+    .ForMember(dest => dest.MeasureUnit, opt => opt.MapFrom(src => src.First().InventoryItem.MeasureUnit ?? "шт"))
+    .ForMember(dest => dest.VatRate, opt => opt.MapFrom(src => src.First().InventoryItem.VatRate))
+    .ForMember(dest => dest.PlacesCount, opt => opt.MapFrom(src => src.First().InventoryItem.PlacesCount))
+    .ForMember(dest => dest.CargoWeight, opt => opt.MapFrom(src => src.First().InventoryItem.CargoWeight))
+    .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.First().InventoryItem.Notes ?? ""))
+    .ForMember(dest => dest.WarehouseDetails, opt => opt.MapFrom(src => src.Select(iw => new WarehouseDetailsDto
+    {
+        WarehouseId = iw.WarehouseId,
+        WarehouseName = iw.Warehouse.Name,
+        Quantity = iw.Quantity
+    })));
         // Маппинг для InventoriesItemsWarehouses
         CreateMap<InventoriesItemsWarehouses, InventoryItemResponseDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.InventoryItem.Id))

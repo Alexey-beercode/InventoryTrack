@@ -126,21 +126,33 @@ namespace InventoryService.Controllers
         
         // Добавить этот метод в InventoryItemController
 
+// ✅ ИСПРАВЛЕННЫЙ эндпоинт в InventoryItemController
         [HttpGet("batches/by-name/{itemName}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<BatchInfoDto>>> GetBatchesByItemName(
-            string itemName, CancellationToken cancellationToken)
+            string itemName, 
+            [FromQuery] Guid? warehouseId = null,  // ✅ Добавляем опциональный параметр склада
+            CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("Getting batches for item: {ItemName}", itemName);
-            var batches = await _inventoryItemService.GetBatchesByItemNameAsync(itemName, cancellationToken);
-    
-            if (!batches.Any())
+            try
             {
-                return NotFound($"Партии для товара '{itemName}' не найдены");
+                _logger.LogInformation("🔍 Запрос партий для товара: {ItemName}, склад: {WarehouseId}", itemName, warehouseId);
+
+                var batches = await _inventoryItemService.GetBatchesByItemNameAsync(itemName, warehouseId, cancellationToken);
+        
+                if (!batches.Any())
+                {
+                    _logger.LogWarning("⚠ Партии для товара '{ItemName}' не найдены", itemName);
+                    return NotFound($"Партии для товара '{itemName}' не найдены");
+                }
+
+                _logger.LogInformation("✅ Найдено {Count} партий для товара '{ItemName}'", batches.Count(), itemName);
+                return Ok(batches);
             }
-    
-            return Ok(batches);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Ошибка при получении партий для товара {ItemName}", itemName);
+                return StatusCode(500, "Внутренняя ошибка сервера");
+            }
         }
 
         [HttpGet("all-batches/by-name/{itemName}")]

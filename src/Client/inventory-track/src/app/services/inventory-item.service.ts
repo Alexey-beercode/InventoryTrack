@@ -122,14 +122,27 @@ export class InventoryItemService {
 
   // Добавить эти методы в InventoryItemService
 
+// ✅ ИСПРАВЛЕННЫЙ метод в InventoryItemService (Angular)
   /**
-   * 🆕 Get all batches for specific item name
+   * 🆕 Get all batches for specific item name (filtered by warehouse)
    * @param itemName Item name
+   * @param warehouseId Optional warehouse ID to filter batches
    * @returns Observable with batches info
    */
-  getBatchesByItemName(itemName: string): Observable<BatchInfoDto[]> {
+  getBatchesByItemName(itemName: string, warehouseId?: string): Observable<BatchInfoDto[]> {
+    // Создаем параметры запроса
+    let params = new HttpParams();
+
+    // Добавляем warehouseId если он указан
+    if (warehouseId) {
+      params = params.set('warehouseId', warehouseId);
+    }
+
+    console.log(`🔍 Запрос партий для товара: ${itemName}, склад: ${warehouseId || 'все склады'}`);
+
     return this.http.get<BatchInfoDto[]>(
-      `${this.baseUrl}/api/inventory-items/batches/by-name/${encodeURIComponent(itemName)}`
+      `${this.baseUrl}/api/inventory-items/batches/by-name/${encodeURIComponent(itemName)}`,
+      { params }
     );
   }
 

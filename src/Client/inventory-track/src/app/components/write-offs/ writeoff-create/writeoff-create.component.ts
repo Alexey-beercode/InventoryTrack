@@ -145,22 +145,38 @@ export class WriteOffCreateComponent implements OnInit {
     }
   }
 
-  /** 🆕 Загрузка партий для выбранного товара */
+// ✅ ИСПРАВЛЕННЫЙ метод loadBatchesForItem в WriteOffCreateComponent
+  /** 🆕 Загрузка партий для выбранного товара (только с текущего склада) */
   loadBatchesForItem(): void {
     if (!this.selectedItemName) {
       this.errorMessage = "Сначала выберите товар";
       return;
     }
 
+    if (!this.warehouseId) {
+      this.errorMessage = "Ошибка: не определен ID склада";
+      return;
+    }
+
+    console.log(`🔍 Загрузка партий для товара: ${this.selectedItemName}, склад: ${this.warehouseId}`);
+
     this.isLoadingBatches = true;
-    this.inventoryItemService.getBatchesByItemName(this.selectedItemName).subscribe({
+    this.errorMessage = null;
+
+    // ✅ ИСПРАВЛЕНИЕ: Передаем warehouseId для фильтрации
+    this.inventoryItemService.getBatchesByItemName(this.selectedItemName, this.warehouseId).subscribe({
       next: (batches) => {
+        console.log(`✅ Получены партии:`, batches);
+
         this.availableBatches = batches;
         this.showBatchSelection = true;
         this.isLoadingBatches = false;
 
         if (batches.length === 0) {
-          this.errorMessage = "Для данного товара нет доступных партий";
+          this.errorMessage = `Для товара "${this.selectedItemName}" нет доступных партий на данном складе`;
+          console.log(`⚠ Партии не найдены для товара: ${this.selectedItemName} на складе: ${this.warehouseId}`);
+        } else {
+          console.log(`✅ Найдено ${batches.length} партий для товара: ${this.selectedItemName}`);
         }
       },
       error: (error) => {
@@ -222,7 +238,7 @@ export class WriteOffCreateComponent implements OnInit {
 
     this.writeOffRequestService.create(request).subscribe({
       next: () => {
-        this.router.navigate(['/writeoff-list']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error("❌ Ошибка при создании запроса:", err);
@@ -251,7 +267,7 @@ export class WriteOffCreateComponent implements OnInit {
     this.writeOffRequestService.createBatch(batchRequest).subscribe({
       next: (response) => {
         console.log("✅ Партия успешно отправлена на списание:", response);
-        this.router.navigate(['/writeoff-list']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error("❌ Ошибка при создании запроса на партию:", err);

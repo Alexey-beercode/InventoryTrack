@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InventoryService.Application.DTOs.Response.Document;
 using InventoryService.Application.DTOs.Response.InventoryItem;
+using InventoryService.Application.DTOs.Response.Supplier;
 using InventoryService.Application.DTOs.Response.Warehouse;
 using InventoryService.Application.Interfaces.Facades;
 using InventoryService.Domain.Entities;
@@ -33,8 +34,41 @@ public class InventoryItemFacade : IInventoryItemFacade
             throw new ArgumentNullException(nameof(inventoryItem), "Inventory item cannot be null");
         }
 
+        // ✅ ОТЛАДКА: проверяем исходные данные
+        _logger.LogInformation("🔍 Обработка товара: {Name}, DeliveryDate: {DeliveryDate}, ExpirationDate: {ExpirationDate}, Supplier: {SupplierName}", 
+            inventoryItem.Name, 
+            inventoryItem.DeliveryDate,
+            inventoryItem.ExpirationDate,
+            inventoryItem.Supplier?.Name ?? "NULL");
+
         var inventoryItemDto = _mapper.Map<InventoryItemResponseDto>(inventoryItem);
+        
+        // ✅ ОТЛАДКА: проверяем результат маппинга
+        _logger.LogInformation("🔍 После маппинга: DeliveryDate: {DeliveryDate}, ExpirationDate: {ExpirationDate}, Supplier: {SupplierName}", 
+            inventoryItemDto.DeliveryDate,
+            inventoryItemDto.ExpirationDate,
+            inventoryItemDto.Supplier?.Name ?? "NULL");
+
         var warehousesInfoList = new List<WarehouseDetailsDto>();
+
+        // ✅ ПРИНУДИТЕЛЬНАЯ загрузка Supplier если нужно
+        if (inventoryItem.Supplier == null && inventoryItem.SupplierId != Guid.Empty)
+        {
+            _logger.LogWarning("⚠ Supplier не загружен, загружаем принудительно для товара {ItemName}", inventoryItem.Name);
+            var supplier = await _unitOfWork.Suppliers.GetByIdAsync(inventoryItem.SupplierId, cancellationToken);
+            if (supplier != null)
+            {
+                inventoryItemDto.Supplier = new SupplierResponseDto
+                {
+                    Id = supplier.Id,
+                    Name = supplier.Name,
+                    PhoneNumber = supplier.PhoneNumber,
+                    PostalAddress = supplier.PostalAddress,
+                    AccountNumber = supplier.AccountNumber
+                };
+                _logger.LogInformation("✅ Supplier загружен принудительно: {SupplierName}", supplier.Name);
+            }
+        }
 
         // Проверяем, есть ли документ у предмета
         Document? document = null;
@@ -69,7 +103,14 @@ public class InventoryItemFacade : IInventoryItemFacade
         inventoryItemDto.DocumentInfo = document != null ? _mapper.Map<DocumentInfoResponseDto>(document) : null;
         inventoryItemDto.Quantity = warehousesInfoList.Sum(a => a.Quantity);
 
+        // ✅ ФИНАЛЬНАЯ ОТЛАДКА
+        _logger.LogInformation("🔍 Финальный DTO: DeliveryDate={DeliveryDate}, ExpirationDate={ExpirationDate}, Supplier={SupplierName}, BatchNumber={BatchNumber}, MeasureUnit={MeasureUnit}", 
+            inventoryItemDto.DeliveryDate,
+            inventoryItemDto.ExpirationDate,
+            inventoryItemDto.Supplier?.Name ?? "NULL",
+            inventoryItemDto.BatchNumber ?? "NULL", 
+            inventoryItemDto.MeasureUnit ?? "NULL");
+
         return inventoryItemDto;
     }
-
 }

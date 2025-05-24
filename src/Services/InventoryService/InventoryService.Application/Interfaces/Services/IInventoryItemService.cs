@@ -23,7 +23,9 @@ public interface IInventoryItemService
 
     // ================== НОВЫЕ МЕТОДЫ ДЛЯ ПАРТИЙ ==================
     Task<IEnumerable<InventoryItemResponseDto>> GetInventoryItemsByBatchNumberAsync(string batchNumber, CancellationToken cancellationToken = default);
-    Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<BatchInfoDto>> GetBatchesByItemNameAsync(string itemName, Guid? warehouseId = null,
+        CancellationToken cancellationToken = default);
     Task<IEnumerable<InventoryItemResponseDto>> GetByNameAllBatchesAsync(string name, CancellationToken cancellationToken = default);
     Task WriteOffBatchAsync(string batchNumber, CancellationToken cancellationToken = default);
 }
